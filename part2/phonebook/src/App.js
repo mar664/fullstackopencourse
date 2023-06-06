@@ -8,8 +8,13 @@ const App = () => {
 
   const handleAddPerson = (event) => {
     event.preventDefault()
-    setPersons([...persons, {name: newName}])
-    setNewName('')
+    const newPerson = {name: newName}
+    if(persons.filter(person => JSON.stringify(person) === JSON.stringify(newPerson)).length > 0){
+      alert(`${newName} is already added to phonebook`)
+    } else {
+      setPersons([...persons, newPerson])
+      setNewName('')
+    }
   }
 
   return (
