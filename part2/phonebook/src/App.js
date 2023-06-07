@@ -60,6 +60,16 @@ const App = () => {
   const [newFilter, setNewFilter] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
+  
+  const displayErrorMessage = (message) => {
+    setErrorMessage(
+      message
+    )
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
+  }
+
 
   const displaySuccessMessage = (message) => {
     setSuccessMessage(
@@ -89,6 +99,9 @@ const App = () => {
               setNewName('')
               setNewNumber('')
               displaySuccessMessage(`Updated ${savedPerson.name}`)
+          }).catch(e => {
+            displayErrorMessage(`the person '${existingPerson.name}' was already deleted from server`)
+            setPersons(persons.filter(p => p.id !== existingPerson.id))
           })
       }
     } else {
@@ -98,6 +111,8 @@ const App = () => {
         setNewName('')
         setNewNumber('')
         displaySuccessMessage(`Added ${savedPerson.name}`)
+      }).catch(e => {
+        displayErrorMessage(`the person '${newPerson.name}' was not able to be saved to the server`)
       })
     }
   }
@@ -107,6 +122,10 @@ const App = () => {
 
     personService.remove(id)
       .then(deletedPerson => {
+        setPersons(persons.filter(person => person.id !== id))
+        displaySuccessMessage(`Removed ${name}`)
+      }).catch(e => {
+        displayErrorMessage(`the person '${name}' was already removed to the server`)
         setPersons(persons.filter(person => person.id !== id))
       })
     }
