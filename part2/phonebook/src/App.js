@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
+import './index.css'
 
 const Filter = ({newFilter, setNewFilter}) => {
   return ( <div>
@@ -28,11 +29,46 @@ const Persons = ({persons, handleDelete}) => {
   return persons.map(person => <p key={person.id}>{person.name} {person.number}<button onClick={() => handleDelete(person)}>delete</button></p>)
 }
 
+const ErrorNotification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className='error'>
+      {message}
+    </div>
+  )
+}
+
+const SuccessNotification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className='success'>
+      {message}
+    </div>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage, setSuccessMessage] = useState(null)
+
+  const displaySuccessMessage = (message) => {
+    setSuccessMessage(
+      message
+    )
+    setTimeout(() => {
+      setSuccessMessage(null)
+    }, 5000)
+  }
 
   useEffect(() => {
     personService.getAll()
@@ -52,15 +88,17 @@ const App = () => {
               setPersons(persons.map(p => (p.id === existingPerson.id) ? savedPerson : p))
               setNewName('')
               setNewNumber('')
+              displaySuccessMessage(`Updated ${savedPerson.name}`)
           })
       }
     } else {
       personService.create(newPerson)
       .then(savedPerson => {
-        setPersons([...persons, savedPerson])
+        setPersons([...persons, savedPerson])          
+        setNewName('')
+        setNewNumber('')
+        displaySuccessMessage(`Added ${savedPerson.name}`)
       })
-      setNewName('')
-      setNewNumber('')
     }
   }
 
@@ -79,6 +117,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <SuccessNotification message={successMessage}/>
+      <ErrorNotification message={errorMessage}/>
       <Filter newFilter={newFilter} setNewFilter={setNewFilter} />
       <h3>add a new</h3>
       <PersonForm newName={newName} setNewName={setNewName} newNumber={newNumber} setNewNumber={setNewNumber} handleAddPerson={handleAddPerson} />

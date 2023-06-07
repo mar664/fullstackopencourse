@@ -2,8 +2,23 @@
   "persons": [
     {
       "name": "Arto Hellas",
-      "number": "5454545",
+      "number": "434343",
       "id": 1
+    },
+    {
+      "name": "New Person",
+      "number": "434343",
+      "id": 2
+    },
+    {
+      "name": "Another person",
+      "number": "343434",
+      "id": 3
+    },
+    {
+      "name": "New Person2",
+      "number": "34343",
+      "id": 4
     }
   ]
 }
