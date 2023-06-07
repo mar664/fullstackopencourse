@@ -47,7 +47,10 @@ const App = () => {
     if(persons.filter(person => JSON.stringify(person) === JSON.stringify(newPerson)).length > 0){
       alert(`${newName} is already added to phonebook`)
     } else {
-      setPersons([...persons, newPerson])
+      personService.create(newPerson)
+      .then(savedPerson => {
+        setPersons([...persons, savedPerson])
+      })
       setNewName('')
       setNewNumber('')
     }
