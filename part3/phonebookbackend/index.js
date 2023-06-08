@@ -32,6 +32,13 @@ app.get('/api/persons', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
   const {name, number} = request.body
+  if(!name || !number){
+    return response.status(400).send({ error: 'name and number must be supplied' })
+  }
+  if(persons.some(p => p.name === name)){
+    return response.status(400).send({ error: 'name must be unique' })
+  }
+
   const newId = Math.floor(Math.random() * 10000)
 
   const person = {name, number, id: newId}

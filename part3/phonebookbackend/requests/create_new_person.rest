@@ -5,3 +5,32 @@ content-type: application/json
     "name": "Bilbo Baggins", 
     "number": "040-34434"
 }
+###
+POST http://localhost:3001/api/persons
+content-type: application/json
+
+{
+    "name": "Billy"
+}
+###
+POST http://localhost:3001/api/persons
+content-type: application/json
+
+{
+    "number": "040-34434"
+}
+###
+POST http://localhost:3001/api/persons
+content-type: application/json
+
+{
+    
+}
+###
+POST http://localhost:3001/api/persons
+content-type: application/json
+
+{
+    "name": "Ada Lovelace", 
+    "number": "040-34434"
+}
