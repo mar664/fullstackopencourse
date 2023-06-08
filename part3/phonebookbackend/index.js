@@ -52,13 +52,14 @@ app.post('/api/persons', (request, response) => {
     return response.status(400).send({ error: 'name must be unique' })
   }
 
-  const newId = Math.floor(Math.random() * 10000)
+  const person = {name, number}
 
-  const person = {name, number, id: newId}
+  const personToSave = Person(person)
 
-  persons = [...persons, person]
-
-  response.json(person)
+  personToSave.save().then(result => {
+      console.log(`added ${result.name} number ${result.number} to phonebook`)
+      response.json(result)
+  })
 })
 
 app.get('/api/persons/:id', (request, response) => {
