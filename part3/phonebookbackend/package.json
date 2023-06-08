@@ -6,6 +6,10 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "build:ui": "@powershell if(Test-Path build) {Remove-Item -Recurse -Force build} && cd ../../part2/phonebook && npm run build && @powershell Copy-Item build -Recurse ../../part3/phonebookbackend",
+    "deploy": "fly deploy",
+    "deploy:full": "npm run build:ui && npm run deploy",    
+    "logs:prod": "fly logs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
