@@ -1,57 +1,11 @@
-import axios from 'axios'
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
 import './index.css'
-
-const Filter = ({newFilter, setNewFilter}) => {
-  return ( <div>
-        filter shown with<input value={newFilter} onChange={(e) => setNewFilter(e.target.value)} />
-    </div>
-    )
-}
-
-const PersonForm = ({newName, setNewName, newNumber, setNewNumber, handleAddPerson}) => {
-  return (<form>
-    <div>
-      name: <input value={newName} onChange={(e) => setNewName(e.target.value)} />
-    </div>
-    <div>
-      number: <input value={newNumber} onChange={(e) => setNewNumber(e.target.value)} />
-    </div>
-    <div>
-      <button type="submit" onClick={handleAddPerson}>add</button>
-    </div>
-  </form>
-  )
-}
-
-const Persons = ({persons, handleDelete}) => {
-  return persons.map(person => <p key={person.id}>{person.name} {person.number}<button onClick={() => handleDelete(person)}>delete</button></p>)
-}
-
-const ErrorNotification = ({ message }) => {
-  if (message === null) {
-    return null
-  }
-
-  return (
-    <div className='error'>
-      {message}
-    </div>
-  )
-}
-
-const SuccessNotification = ({ message }) => {
-  if (message === null) {
-    return null
-  }
-
-  return (
-    <div className='success'>
-      {message}
-    </div>
-  )
-}
+import SuccessNotification from './components/SuccessNotification'
+import ErrorNotification from './components/ErrorNotification'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import Persons from './components/Persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
