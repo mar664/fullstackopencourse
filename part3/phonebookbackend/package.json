@@ -8,7 +8,7 @@
     "dev": "nodemon index.js",
     "build:ui": "@powershell if(Test-Path build) {Remove-Item -Recurse -Force build} && cd ../../part2/phonebook && npm run build && @powershell Copy-Item build -Recurse ../../part3/phonebookbackend",
     "deploy": "fly deploy",
-    "deploy:full": "npm run build:ui && npm run deploy",    
+    "deploy:full": "npm run build:ui && npm run deploy",
     "logs:prod": "fly logs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,6 +17,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.18.2",
+    "mongoose": "^7.2.2",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
