@@ -1,6 +1,7 @@
 @baseUrl = http://localhost:3001/api
 
 # @name createPerson
+
 POST {{baseUrl}}/persons
 content-type: application/json
 
@@ -8,12 +9,14 @@ content-type: application/json
     "name": "Bilbo Baggins", 
     "number": "040-34434"
 }
-
 ###
 
+# @name updatePerson
 @personId = {{createPerson.response.body.$.id}}
+PUT {{baseUrl}}/persons/{{personId}}
+content-type: application/json
 
-GET {{baseUrl}}/persons/{{personId}}
-
-###
-GET {{baseUrl}}/persons/100
+{
+    "name": "Bilbo Baggins", 
+    "number": "040-3443465634343"
+}

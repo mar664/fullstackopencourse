@@ -1,4 +1,6 @@
-POST http://localhost:3001/api/persons
+@baseUrl = http://localhost:3001/api
+
+POST {{baseUrl}}/persons
 content-type: application/json
 
 {
@@ -6,28 +8,28 @@ content-type: application/json
     "number": "040-34434"
 }
 ###
-POST http://localhost:3001/api/persons
+POST {{baseUrl}}/persons
 content-type: application/json
 
 {
     "name": "Billy"
 }
 ###
-POST http://localhost:3001/api/persons
+POST {{baseUrl}}/persons
 content-type: application/json
 
 {
     "number": "040-34434"
 }
 ###
-POST http://localhost:3001/api/persons
+POST {{baseUrl}}/persons
 content-type: application/json
 
 {
     
 }
 ###
-POST http://localhost:3001/api/persons
+POST {{baseUrl}}/persons
 content-type: application/json
 
 {

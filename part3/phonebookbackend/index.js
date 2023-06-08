@@ -51,28 +51,18 @@ app.post('/api/persons', (request, response) => {
   if(!name || !number){
     return response.status(400).send({ error: 'name and number must be supplied' })
   }
-  if(persons.some(p => p.name === name)){
-    return response.status(400).send({ error: 'name must be unique' })
-  }
 
   const person = {name, number}
 
-  Person.find({name})
-    .then(foundPerson => {
-      if(foundPerson){
-        return response.status(400).send({ error: 'name must be unique' })
-      } else {
-        const personToSave = Person(person)
+  const personToSave = Person(person)
 
-        personToSave.save().then(result => {
-            console.log(`added ${result.name} number ${result.number} to phonebook`)
-            response.json(result)
-        }).catch(error => {
-          console.log(error)
-          response.status(500).send({ error: 'unable to save person' })
-        })
-      }
-    })
+  personToSave.save().then(result => {
+      console.log(`added ${result.name} number ${result.number} to phonebook`)
+      response.json(result)
+  }).catch(error => {
+    console.log(error)
+    response.status(500).send({ error: 'unable to save person' })
+  })
 })
 
 app.get('/api/persons/:id', (request, response) => {
@@ -92,6 +82,16 @@ app.delete('/api/persons/:id', (request, response, next) => {
         .then(() => {
             response.status(204).end()
         }).catch(error => next(error))
+})
+
+app.put('/api/persons/:id', (request, response, next) => {
+  const {id} = request.params
+  const { name, number } = request.body
+
+  Person.findByIdAndUpdate(id, { name, number }, { new: true }).then(updatedPerson => {
+    console.log(`updated ${updatedPerson.name} number ${updatedPerson.number} to phonebook`)
+    response.json(updatedPerson)
+  }).catch(error => next(error))
 })
 
 app.get('/info', (request, response) => {

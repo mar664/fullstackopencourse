@@ -66,6 +66,7 @@ const App = () => {
         setNewNumber('')
         displaySuccessMessage(`Added ${savedPerson.name}`)
       }).catch(e => {
+        console.log(e)
         displayErrorMessage(`the person '${newPerson.name}' was not able to be saved to the server`)
       })
     }
