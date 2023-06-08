@@ -57,15 +57,22 @@ app.post('/api/persons', (request, response) => {
 
   const person = {name, number}
 
-  const personToSave = Person(person)
+  Person.find({name})
+    .then(foundPerson => {
+      if(foundPerson){
+        return response.status(400).send({ error: 'name must be unique' })
+      } else {
+        const personToSave = Person(person)
 
-  personToSave.save().then(result => {
-      console.log(`added ${result.name} number ${result.number} to phonebook`)
-      response.json(result)
-  }).catch(error => {
-    console.log(error)
-    response.status(500).send({ error: 'unable to save person' })
-  })
+        personToSave.save().then(result => {
+            console.log(`added ${result.name} number ${result.number} to phonebook`)
+            response.json(result)
+        }).catch(error => {
+          console.log(error)
+          response.status(500).send({ error: 'unable to save person' })
+        })
+      }
+    })
 })
 
 app.get('/api/persons/:id', (request, response) => {
@@ -78,22 +85,32 @@ app.get('/api/persons/:id', (request, response) => {
   }
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
   const {id} = request.params
 
   Person.findByIdAndRemove(id)
         .then(() => {
             response.status(204).end()
-        }).catch(error => {
-          console.log(error)
-          response.status(400).send({ error: 'malformatted id' })
-        })
+        }).catch(error => next(error))
 })
 
 app.get('/info', (request, response) => {
   const content = `<p>Phonebook has info for ${persons.length} people</p><p>${new Date()}</p>`
   response.send(content)
 })
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+      return response.status(400).send({ error: 'malformatted id' })
+  }
+
+  next(error)
+}
+
+// this has to be the last loaded middleware.
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 
