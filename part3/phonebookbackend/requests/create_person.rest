@@ -44,3 +44,12 @@ content-type: application/json
     "name": "Ad", 
     "number": "040-34434"
 }
+###
+
+POST {{baseUrl}}/persons
+content-type: application/json
+
+{
+    "name": "Ada jones", 
+    "number": "10-22-334455"
+}
