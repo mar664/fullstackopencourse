@@ -54,8 +54,7 @@ const App = () => {
               setNewNumber('')
               displaySuccessMessage(`Updated ${savedPerson.name}`)
           }).catch(e => {
-            displayErrorMessage(`the person '${existingPerson.name}' was already deleted from server`)
-            setPersons(persons.filter(p => p.id !== existingPerson.id))
+            displayErrorMessage(e.response.data.error)
           })
       }
     } else {
@@ -66,8 +65,7 @@ const App = () => {
         setNewNumber('')
         displaySuccessMessage(`Added ${savedPerson.name}`)
       }).catch(e => {
-        console.log(e)
-        displayErrorMessage(`the person '${newPerson.name}' was not able to be saved to the server`)
+        displayErrorMessage(e.response.data.error)
       })
     }
   }
