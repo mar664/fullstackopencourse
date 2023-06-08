@@ -20,3 +20,13 @@ content-type: application/json
     "name": "Bilbo Baggins", 
     "number": "040-3443465634343"
 }
+
+###
+@personId = {{createPerson.response.body.$.id}}
+PUT {{baseUrl}}/persons/{{personId}}
+content-type: application/json
+
+{
+    "name": "Bi", 
+    "number": "040-3443465634343"
+}

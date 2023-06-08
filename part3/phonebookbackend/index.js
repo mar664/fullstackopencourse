@@ -46,7 +46,7 @@ app.get('/api/persons', (request, response) => {
   })
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const {name, number} = request.body
   if(!name || !number){
     return response.status(400).send({ error: 'name and number must be supplied' })
@@ -59,10 +59,7 @@ app.post('/api/persons', (request, response) => {
   personToSave.save().then(result => {
       console.log(`added ${result.name} number ${result.number} to phonebook`)
       response.json(result)
-  }).catch(error => {
-    console.log(error)
-    response.status(500).send({ error: 'unable to save person' })
-  })
+  }).catch(error => next(error))
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
@@ -92,7 +89,7 @@ app.put('/api/persons/:id', (request, response, next) => {
   const {id} = request.params
   const { name, number } = request.body
 
-  Person.findByIdAndUpdate(id, { name, number }, { new: true }).then(updatedPerson => {
+  Person.findByIdAndUpdate(id, { name, number }, { new: true, runValidators: true, context: 'query'  }).then(updatedPerson => {
     console.log(`updated ${updatedPerson.name} number ${updatedPerson.number} to phonebook`)
     response.json(updatedPerson)
   }).catch(error => next(error))
@@ -112,6 +109,8 @@ const errorHandler = (error, request, response, next) => {
 
   if (error.name === 'CastError') {
       return response.status(400).send({ error: 'malformatted id' })
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
   }
 
   next(error)
