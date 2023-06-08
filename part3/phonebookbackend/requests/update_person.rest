@@ -22,6 +22,7 @@ content-type: application/json
 }
 
 ###
+// Should fail due to too short name
 @personId = {{createPerson.response.body.$.id}}
 PUT {{baseUrl}}/persons/{{personId}}
 content-type: application/json
