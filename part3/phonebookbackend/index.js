@@ -65,14 +65,18 @@ app.post('/api/persons', (request, response) => {
   })
 })
 
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
   const {id} = request.params
-  const person = persons.find(p => p.id === Number(id))
-  if(person){
-    response.json(person)
-  } else {
-    response.status(404).end()
-  }
+
+  Person.findById(id).then(person => {
+    if (person) {
+        response.json(person)
+    } else {
+        response.status(404).json(
+            { error: 'content missing' }
+        )
+    }
+}).catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
@@ -95,8 +99,12 @@ app.put('/api/persons/:id', (request, response, next) => {
 })
 
 app.get('/info', (request, response) => {
-  const content = `<p>Phonebook has info for ${persons.length} people</p><p>${new Date()}</p>`
-  response.send(content)
+  const date = new Date()
+    Person.count({}).then(result => {
+        const content = `<p>Phonebook has info for ${result} people</p><p>${date}</p>`
+        response.send(content)
+    }
+  )
 })
 
 const errorHandler = (error, request, response, next) => {
