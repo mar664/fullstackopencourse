@@ -40,6 +40,9 @@ let persons = [
 app.get('/api/persons', (request, response) => {
   Person.find({}).then(persons => {
     response.json(persons)
+  }).catch(error => {
+    console.log(error)
+    response.status(500).send({ error: 'unable to return persons' })
   })
 })
 
@@ -59,6 +62,9 @@ app.post('/api/persons', (request, response) => {
   personToSave.save().then(result => {
       console.log(`added ${result.name} number ${result.number} to phonebook`)
       response.json(result)
+  }).catch(error => {
+    console.log(error)
+    response.status(500).send({ error: 'unable to save person' })
   })
 })
 
@@ -74,9 +80,14 @@ app.get('/api/persons/:id', (request, response) => {
 
 app.delete('/api/persons/:id', (request, response) => {
   const {id} = request.params
-  persons = persons.filter(p => p.id !== Number(id))
 
-  response.status(204).end()
+  Person.findByIdAndRemove(id)
+        .then(() => {
+            response.status(204).end()
+        }).catch(error => {
+          console.log(error)
+          response.status(400).send({ error: 'malformatted id' })
+        })
 })
 
 app.get('/info', (request, response) => {
