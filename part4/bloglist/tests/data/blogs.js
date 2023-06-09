@@ -56,4 +56,4 @@ const blogsSampleData = (numBlogs) => {
   return blogsDeepCopy().slice(0, numBlogs)
 }
 
-module.exports = { blogsSampleData }
+module.exports = { blogsDeepCopy, blogsSampleData }
