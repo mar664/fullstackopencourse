@@ -1,6 +1,10 @@
 const config = require('./utils/config')
 const app = require('./app')
+const db = require('./db')
 
-app.listen(config.PORT, () => {
-  console.log(`Server running on port ${config.PORT}`)
+db().then(() => {
+  app.listen(config.PORT, () => {
+    console.log(`Server running on port ${config.PORT}`)
+  })
 })
+
