@@ -71,4 +71,21 @@ describe('blog testing', () => {
       .expect('Content-Type', /application\/json/)
     expect(response.body.likes).toEqual(0)
   })
+
+  test('blog is saved without a title or url yields 400 Bad Request', async () => {
+    const blogNoURL = initialBlogs.get(0).toJS()
+    delete blogNoURL.url
+    await api
+      .post('/api/blogs')
+      .send(blogNoURL)
+      .expect(400)
+
+    const blogNoTitle = initialBlogs.get(1).toJS()
+    delete blogNoTitle.title
+
+    await api
+      .post('/api/blogs')
+      .send(blogNoTitle)
+      .expect(400)
+  })
 })
