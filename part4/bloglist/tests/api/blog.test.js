@@ -4,6 +4,7 @@ const Blog = require('../../models/blog')
 const { initialBlogs } = require('../test_helper')
 const { connect, close_connection } = require('../../db')
 const api = supertest(app)
+let blogs = null
 
 beforeAll(async () => {
   await connect()
@@ -15,7 +16,7 @@ beforeEach(async () => {
   const blogObjects = initialBlogs.toJS()
     .map(blog => new Blog(blog))
   const promiseArray = blogObjects.map(blog => blog.save())
-  await Promise.all(promiseArray)
+  blogs = await Promise.all(promiseArray)
 })
 
 afterAll(async () => {
@@ -88,4 +89,19 @@ describe('blog testing', () => {
       .send(blogNoTitle)
       .expect(400)
   })
+
+  test('blog is deleted', async () => {
+    const { id } = blogs[0]
+
+    // Check blog exists in db
+    await expect(Blog.findById(id)).resolves.toHaveProperty('id', id)
+
+    await api
+      .delete(`/api/blogs/${id}`)
+      .expect(204)
+
+    // Check blog has been deleted from db
+    await expect(Blog.findById(id)).resolves.toBeNull()
+  })
+
 })
