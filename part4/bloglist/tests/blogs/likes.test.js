@@ -46,3 +46,26 @@ describe('favorite blog', () => {
     expect(result).toEqual(listWith6Blogs[2])
   })
 })
+
+describe('most likes', () => {
+  const listWithOneBlog = blogsSampleData(1)
+
+  test('when list has only one blog, equals the only blog of that', () => {
+    const result = listHelper.mostLikes(listWithOneBlog)
+    expect(result).toEqual({ author: 'Michael Chan', likes: 7 })
+  })
+
+  const listWithNoBlogs = []
+
+  test('when list has no blogs', () => {
+    const result = listHelper.mostLikes(listWithNoBlogs)
+    expect(result).toEqual(undefined)
+  })
+
+  const listWith6Blogs = blogsSampleData(6)
+
+  test('when list has 6 blogs, should be 3rd element', () => {
+    const result = listHelper.mostLikes(listWith6Blogs)
+    expect(result).toEqual({ author: 'Edsger W. Dijkstra', likes: 17 })
+  })
+})
