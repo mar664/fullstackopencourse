@@ -1,10 +1,8 @@
 const Blog = require('../models/blog')
 const { blogsData } = require('./data/blogs')
 
-const initialBlogs = blogsData().map(b => {
-  delete b['_id']
-  delete b['__v']
-  return b
+const initialBlogs = blogsData.map(b => {
+  return b.deleteAll([ '_id', '__v' ])
 })
 
 const blogsInDb = async () => {

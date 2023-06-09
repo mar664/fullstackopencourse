@@ -1,4 +1,4 @@
-const { cloneDeep } = require('lodash');
+const { List, Map } = require('immutable')
 
 const blogs = [
   {
@@ -51,14 +51,14 @@ const blogs = [
   }
 ]
 
-// Deep copy to ensure original list is not changed
-const blogsSampleData = (numBlogs) => {
-  return cloneDeep(blogs).slice(0, numBlogs)
-}
+const blogsList = List(blogs)
+const blogsData = blogsList.map(b => {
+  return Map(b)
+})
 
 // Deep copy to ensure original list is not changed
-const blogsData = () => {
-  return cloneDeep(blogs)
+const blogsSampleData = (numBlogs) => {
+  return blogsData.slice(0, numBlogs).toJS()
 }
 
 module.exports = { blogsSampleData, blogsData }

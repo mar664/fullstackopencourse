@@ -3,7 +3,6 @@ const app = require('../../app')
 const Blog = require('../../models/blog')
 const { initialBlogs } = require('../test_helper')
 const { connect, close_connection } = require('../../db')
-const { blogsData } = require('../data/blogs')
 const api = supertest(app)
 
 beforeAll(async () => {
@@ -13,7 +12,7 @@ beforeAll(async () => {
 beforeEach(async () => {
   await Blog.deleteMany({})
 
-  const blogObjects = blogsData()
+  const blogObjects = initialBlogs.toJS()
     .map(blog => new Blog(blog))
   const promiseArray = blogObjects.map(blog => blog.save())
   await Promise.all(promiseArray)
@@ -34,12 +33,12 @@ describe('blog testing', () => {
   test('all blogs are returned', async () => {
     const response = await api.get('/api/blogs')
 
-    expect(response.body).toHaveLength(initialBlogs.length)
+    expect(response.body).toHaveLength(initialBlogs.size)
   })
 
   test('blog is saved', async () => {
     const blogsBeforeTest = await Blog.find().count()
-    const blog = initialBlogs[0]
+    const blog = initialBlogs.get(0).toJS()
 
     const response = await api
       .post('/api/blogs')
@@ -59,5 +58,17 @@ describe('blog testing', () => {
     expect(savedBlog.author).toEqual(blog.author)
     expect(savedBlog.url).toEqual(blog.url)
     expect(savedBlog.likes).toEqual(blog.likes)
+  })
+
+  test('blog is saved without a likes property, defaults to zero', async () => {
+    console.log(initialBlogs)
+    const blog = initialBlogs.get(0).toJS()
+    delete blog.likes
+    const response = await api
+      .post('/api/blogs')
+      .send(blog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+    expect(response.body.likes).toEqual(0)
   })
 })

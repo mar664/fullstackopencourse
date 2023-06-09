@@ -6,6 +6,7 @@ describe('author with most blogs', () => {
 
   test('when list has only one blog, equals the likes of that', () => {
     const result = listHelper.mostBlogs(listWithOneBlog)
+    console.log(result)
     expect(result).toEqual({ author: 'Michael Chan', blogs: 1 })
   })
 
