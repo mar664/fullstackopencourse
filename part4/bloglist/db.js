@@ -14,4 +14,8 @@ const connect = () => {
     })
 }
 
-module.exports = connect
+const close_connection = async () => {
+  await mongoose.connection.close()
+}
+
+module.exports = { connect, close_connection }
