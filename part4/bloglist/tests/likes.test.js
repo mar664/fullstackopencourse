@@ -23,3 +23,26 @@ describe('total likes', () => {
     expect(result).toBe(36)
   })
 })
+
+describe('favorite blog', () => {
+  const listWithOneBlog = blogsSampleData(1)
+
+  test('when list has only one blog, equals the only blog of that', () => {
+    const result = listHelper.favoriteBlog(listWithOneBlog)
+    expect(result).toEqual(listWithOneBlog[0])
+  })
+
+  const listWithNoBlogs = []
+
+  test('when list has no blogs', () => {
+    const result = listHelper.favoriteBlog(listWithNoBlogs)
+    expect(result).toEqual(undefined)
+  })
+
+  const listWith6Blogs = blogsSampleData(6)
+
+  test('when list has 6 blogs, should be 3rd element', () => {
+    const result = listHelper.favoriteBlog(listWith6Blogs)
+    expect(result).toEqual(listWith6Blogs[2])
+  })
+})
