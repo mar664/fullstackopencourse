@@ -27,7 +27,8 @@ blogsRouter.put('/:id', async (request, response) => {
 
   const blog = { author, title, likes, url }
 
-  const updatedBlog = await Blog.findByIdAndUpdate(id, blog)
+  const updatedBlog = await Blog.findByIdAndUpdate(id, blog, { new: true, runValidators: true, context: 'query'  })
+
   response.json(updatedBlog)
 })
 

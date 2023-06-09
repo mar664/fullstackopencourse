@@ -104,4 +104,28 @@ describe('blog testing', () => {
     await expect(Blog.findById(id)).resolves.toBeNull()
   })
 
+
+  test('blog is updated', async () => {
+    const blog = blogs[4]
+
+    const { id } = blog
+
+    const author = 'New Name'
+    const title = 'New Title'
+    const url = 'http://example.com/newurl'
+    const likes = 10
+
+    await api
+      .put(`/api/blogs/${id}`)
+      .send({ author, title, url, likes })
+      .expect(200)
+
+    const blogData = await Blog.findById(id)
+
+    expect(blogData).toHaveProperty('author', author)
+    expect(blogData).toHaveProperty('title', title)
+    expect(blogData).toHaveProperty('url', url)
+    expect(blogData).toHaveProperty('likes', likes)
+  })
+
 })
