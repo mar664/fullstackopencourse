@@ -1,9 +1,10 @@
 const Blog = require('../models/blog')
-const { blogsDeepCopy } = require('./data/blogs')
+const { blogsData } = require('./data/blogs')
 
-const initialBlogs = blogsDeepCopy().map(b => {
+const initialBlogs = blogsData().map(b => {
   delete b['_id']
-  delete b['_v']
+  delete b['__v']
+  return b
 })
 
 const blogsInDb = async () => {

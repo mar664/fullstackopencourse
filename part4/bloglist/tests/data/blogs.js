@@ -1,3 +1,5 @@
+const { cloneDeep } = require('lodash');
+
 const blogs = [
   {
     _id: '5a422a851b54a676234d17f7',
@@ -49,11 +51,14 @@ const blogs = [
   }
 ]
 
-const blogsDeepCopy = () => JSON.parse(JSON.stringify(blogs))
-
 // Deep copy to ensure original list is not changed
 const blogsSampleData = (numBlogs) => {
-  return blogsDeepCopy().slice(0, numBlogs)
+  return cloneDeep(blogs).slice(0, numBlogs)
 }
 
-module.exports = { blogsDeepCopy, blogsSampleData }
+// Deep copy to ensure original list is not changed
+const blogsData = () => {
+  return cloneDeep(blogs)
+}
+
+module.exports = { blogsSampleData, blogsData }
