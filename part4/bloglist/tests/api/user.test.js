@@ -3,6 +3,8 @@ const app = require('../../app')
 const User = require('../../models/user')
 const bcrypt = require('bcrypt')
 const { connect, close_connection } = require('../../db')
+const { createUser } = require('../test_helper')
+const { usersData, usersSampleData } = require('../data/users')
 const api = supertest(app)
 
 beforeAll(async () => {
@@ -11,7 +13,6 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   await User.deleteMany({})
-
 })
 
 afterAll(async () => {
@@ -20,11 +21,7 @@ afterAll(async () => {
 
 describe('user testing', () => {
   test('create new user', async () => {
-    const user = {
-      username: 'Johny',
-      password:'mypassword',
-      name:'Johnny Sayer'
-    }
+    const user = usersSampleData(1)[0]
 
     const response = await api
       .post('/api/users')
@@ -49,5 +46,26 @@ describe('user testing', () => {
 
     // Check password hash is saved correctly
     expect(bcrypt.compare(user.password, savedUser.passwordHash)).resolves.toBe(true)
+  })
+
+  test('get all users', async () => {
+    // Create users and map to object by id
+    const promiseArray = usersData.toJS()
+      .map(user => createUser(user))
+    const users = await Promise.all(promiseArray)
+    const usersMap = new Map(users.map((obj) => [obj.id, obj]))
+
+    const response = await api
+      .get('/api/users')
+      .expect(200)
+
+    expect(response.body.length).toEqual(users.length)
+
+    for(let u of response.body){
+      expect(usersMap.has(u.id)).toEqual(true)
+      const dbUser = usersMap.get(u.id)
+      expect(dbUser).toHaveProperty('username', u.username)
+      expect(dbUser).toHaveProperty('name', u.name)
+    }
   })
 })
