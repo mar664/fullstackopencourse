@@ -121,18 +121,43 @@ describe('blog testing', () => {
       .expect(400)
   })
 
-  test('blog is deleted', async () => {
-    const { id } = getNthFromMap(blogsInDb, 0)
+  test('blog is deleted by user who posted', async () => {
+    const blog = getNthFromMap(blogsInDb, 0)
+    const userWhoPostedBlog = usersInDb.get(blog.user.toString())
 
     // Check blog exists in db
-    await expect(Blog.findById(id)).resolves.toHaveProperty('id', id)
+    await expect(Blog.findById(blog.id)).resolves.toHaveProperty('id', blog.id)
 
     await api
-      .delete(`/api/blogs/${id}`)
+      .delete(`/api/blogs/${blog.id}`)
+      .set('Authorization', `Bearer ${generateToken(userWhoPostedBlog)}`)
       .expect(204)
 
     // Check blog has been deleted from db
-    await expect(Blog.findById(id)).resolves.toBeNull()
+    await expect(Blog.findById(blog.id)).resolves.toBeNull()
+  })
+
+  test('blog is not deleted by another user', async () => {
+    const blog = getNthFromMap(blogsInDb, 0)
+    const userIter = usersInDb.values()
+    let userWhoDidntPostBlog = null
+    for (const u of userIter) {
+      if (u.id.toString() !== blog.user.toString()) {
+        userWhoDidntPostBlog = u
+        break
+      }
+    }
+
+    // Check blog exists in db
+    await expect(Blog.findById(blog.id)).resolves.toHaveProperty('id', blog.id)
+
+    await api
+      .delete(`/api/blogs/${blog.id}`)
+      .set('Authorization', `Bearer ${generateToken(userWhoDidntPostBlog)}`)
+      .expect(400)
+
+    // Check blog has been deleted from db
+    await expect(Blog.findById(blog.id)).resolves.not.toBeNull()
   })
 
 
@@ -158,5 +183,4 @@ describe('blog testing', () => {
     expect(blogData).toHaveProperty('url', url)
     expect(blogData).toHaveProperty('likes', likes)
   })
-
 })
