@@ -68,4 +68,71 @@ describe('user testing', () => {
       expect(dbUser).toHaveProperty('name', u.name)
     }
   })
+
+  describe('attempt to create invalid user fails', () => {
+    test('missing fields', async () => {
+      const missingAllFieldsResponse = await api
+        .post('/api/users')
+        .send({})
+        .expect(400)
+
+      expect(missingAllFieldsResponse.body.error).toEqual('username, name or password missing')
+
+      const userMissingName = usersSampleData(1)[0]
+      delete userMissingName.name
+      const missingNameResponse = await api
+        .post('/api/users')
+        .send(userMissingName)
+        .expect(400)
+
+      expect(missingNameResponse.body.error).toEqual('username, name or password missing')
+
+      const userMissingUsername = usersSampleData(1)[0]
+      delete userMissingUsername.username
+
+      const missingUsernameResponse = await api
+        .post('/api/users')
+        .send(userMissingUsername)
+        .expect(400)
+
+      expect(missingUsernameResponse.body.error).toEqual('username, name or password missing')
+
+      const userMissingPassword = usersSampleData(1)[0]
+      delete userMissingPassword.password
+
+      const missingPasswordResponse = await api
+        .post('/api/users')
+        .send(userMissingPassword)
+        .expect(400)
+
+      expect(missingPasswordResponse.body.error).toEqual('username, name or password missing')
+    })
+
+    test('fields too short', async () => {
+      const userPasswordTooShort = usersSampleData(1)[0]
+      userPasswordTooShort.password = userPasswordTooShort.password.slice(0, 2)
+
+      expect(userPasswordTooShort.password.length).toBeLessThanOrEqual(2)
+
+      const passwordTooShortResponse = await api
+        .post('/api/users')
+        .send(userPasswordTooShort)
+        .expect(400)
+
+      expect(passwordTooShortResponse.body.error).toEqual('username and password must be 3 or more characters long')
+
+      const userUsernameTooShort = usersSampleData(1)[0]
+      userUsernameTooShort.username = userUsernameTooShort.username.slice(0, 2)
+
+      expect(userUsernameTooShort.username.length).toBeLessThanOrEqual(2)
+
+      const usernameTooShortResponse = await api
+        .post('/api/users')
+        .send(userUsernameTooShort)
+        .expect(400)
+
+      expect(usernameTooShortResponse.body.error).toEqual('username and password must be 3 or more characters long')
+    })
+  })
+
 })
