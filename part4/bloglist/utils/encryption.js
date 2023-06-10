@@ -11,7 +11,7 @@ const getTokenFrom = request => {
 }
 
 const decodeToken = (request) => {
-  return jwt.verify(getTokenFrom(request), process.env.SECRET)
+  return jwt.verify(request.token, process.env.SECRET)
 }
 
 const encryptPassword = async (password) => {
