@@ -4,9 +4,12 @@ const Blog = require('../../models/blog')
 const { initialBlogs, loadBlogsInDB, loadUsersInDB, getNthFromMap } = require('../test_helper')
 const { connect, close_connection } = require('../../db')
 const User = require('../../models/user')
+const { generateToken } = require('../../utils/encryption')
 const api = supertest(app)
 let blogsInDb = null
 let usersInDb = null
+let user = null
+let userToken = null
 
 beforeAll(async () => {
   await connect()
@@ -18,6 +21,9 @@ beforeEach(async () => {
 
   usersInDb = await loadUsersInDB()
   blogsInDb = await loadBlogsInDB(usersInDb)
+
+  user = getNthFromMap(usersInDb, 2)
+  userToken = generateToken(user)
 })
 
 afterAll(async () => {
@@ -50,6 +56,15 @@ describe('blog testing', () => {
     }
   })
 
+  test('blog is not saved without authorization', async () => {
+    const blog = initialBlogs.get(0).toJS()
+
+    const response = await api
+      .post('/api/blogs')
+      .send(blog)
+      .expect(500)
+  })
+
   test('blog is saved', async () => {
     const blogsBeforeTest = await Blog.find().count()
     const blog = initialBlogs.get(0).toJS()
@@ -57,6 +72,7 @@ describe('blog testing', () => {
     const response = await api
       .post('/api/blogs')
       .send(blog)
+      .set('Authorization', `Bearer ${userToken}`)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -80,6 +96,7 @@ describe('blog testing', () => {
     const response = await api
       .post('/api/blogs')
       .send(blog)
+      .set('Authorization', `Bearer ${userToken}`)
       .expect(201)
       .expect('Content-Type', /application\/json/)
     expect(response.body.likes).toEqual(0)
@@ -91,6 +108,7 @@ describe('blog testing', () => {
     await api
       .post('/api/blogs')
       .send(blogNoURL)
+      .set('Authorization', `Bearer ${userToken}`)
       .expect(400)
 
     const blogNoTitle = initialBlogs.get(1).toJS()
@@ -99,6 +117,7 @@ describe('blog testing', () => {
     await api
       .post('/api/blogs')
       .send(blogNoTitle)
+      .set('Authorization', `Bearer ${userToken}`)
       .expect(400)
   })
 

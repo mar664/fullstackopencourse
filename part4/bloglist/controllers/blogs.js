@@ -1,5 +1,6 @@
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const { decodeToken } = require('../utils/encryption')
 
 const blogsRouter = require('express').Router()
 
@@ -9,8 +10,14 @@ blogsRouter.get('/', async (request, response) => {
 })
 
 blogsRouter.post('/', async (request, response) => {
+  const decodedToken = decodeToken(request)
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token invalid' })
+  }
+  const user = await User.findById(decodedToken.id)
+
   const blog = new Blog(request.body)
-  const user = await User.findOne()
+
   blog.user = user._id
   const result = await blog.save()
 
