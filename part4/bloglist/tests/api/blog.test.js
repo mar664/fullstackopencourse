@@ -34,12 +34,14 @@ describe('blog testing', () => {
   test('blogs are returned as json', async () => {
     await api
       .get('/api/blogs')
+      .set('Authorization', `Bearer ${userToken}`)
       .expect(200)
       .expect('Content-Type', /application\/json/)
   })
 
   test('all blogs are returned', async () => {
-    const response = await api.get('/api/blogs')
+    const response = await api.get('/api/blogs').set('Authorization', `Bearer ${userToken}`)
+
 
     expect(response.body).toHaveLength(initialBlogs.size)
 
@@ -62,7 +64,7 @@ describe('blog testing', () => {
     const response = await api
       .post('/api/blogs')
       .send(blog)
-      .expect(500)
+      .expect(401)
   })
 
   test('blog is saved', async () => {
@@ -174,6 +176,7 @@ describe('blog testing', () => {
     await api
       .put(`/api/blogs/${id}`)
       .send({ author, title, url, likes })
+      .set('Authorization', `Bearer ${userToken}`)
       .expect(200)
 
     const blogData = await Blog.findById(id)
