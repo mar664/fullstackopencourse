@@ -3,15 +3,19 @@ const app = require('../../app')
 const User = require('../../models/user')
 const bcrypt = require('bcrypt')
 const { connect, close_connection } = require('../../db')
-const { createUser } = require('../test_helper')
-const { usersData, usersSampleData } = require('../data/users')
+const { loadUsersInDB, loadBlogsInDB } = require('../test_helper')
+const { usersSampleData } = require('../data/users')
+const Blog = require('../../models/blog')
 const api = supertest(app)
+let usersInDb = null
+let blogsInDb = null
 
 beforeAll(async () => {
   await connect()
 })
 
 beforeEach(async () => {
+  await Blog.deleteMany({})
   await User.deleteMany({})
 })
 
@@ -49,23 +53,21 @@ describe('user testing', () => {
   })
 
   test('get all users', async () => {
-    // Create users and map to object by id
-    const promiseArray = usersData.toJS()
-      .map(user => createUser(user))
-    const users = await Promise.all(promiseArray)
-    const usersMap = new Map(users.map((obj) => [obj.id, obj]))
+    usersInDb = await loadUsersInDB()
+    blogsInDb = await loadBlogsInDB(usersInDb)
 
     const response = await api
       .get('/api/users')
       .expect(200)
 
-    expect(response.body.length).toEqual(users.length)
+    expect(response.body.length).toEqual(usersInDb.size)
 
     for(let u of response.body){
-      expect(usersMap.has(u.id)).toEqual(true)
-      const dbUser = usersMap.get(u.id)
+      expect(usersInDb.has(u.id)).toEqual(true)
+      const dbUser = usersInDb.get(u.id)
       expect(dbUser).toHaveProperty('username', u.username)
       expect(dbUser).toHaveProperty('name', u.name)
+      expect(dbUser).toHaveProperty('blogs')
     }
   })
 

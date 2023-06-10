@@ -1,10 +1,12 @@
 const supertest = require('supertest')
 const app = require('../../app')
 const Blog = require('../../models/blog')
-const { initialBlogs } = require('../test_helper')
+const { initialBlogs, loadBlogsInDB, loadUsersInDB, getNthFromMap } = require('../test_helper')
 const { connect, close_connection } = require('../../db')
+const User = require('../../models/user')
 const api = supertest(app)
-let blogs = null
+let blogsInDb = null
+let usersInDb = null
 
 beforeAll(async () => {
   await connect()
@@ -12,11 +14,10 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   await Blog.deleteMany({})
+  await User.deleteMany({})
 
-  const blogObjects = initialBlogs.toJS()
-    .map(blog => new Blog(blog))
-  const promiseArray = blogObjects.map(blog => blog.save())
-  blogs = await Promise.all(promiseArray)
+  usersInDb = await loadUsersInDB()
+  blogsInDb = await loadBlogsInDB(usersInDb)
 })
 
 afterAll(async () => {
@@ -35,6 +36,18 @@ describe('blog testing', () => {
     const response = await api.get('/api/blogs')
 
     expect(response.body).toHaveLength(initialBlogs.size)
+
+    const blogsList = response.body
+
+    for(let b of blogsList){
+      const bInDB = blogsInDb.get(b.id)
+
+      expect(b).toHaveProperty('author', bInDB.author)
+      expect(b).toHaveProperty('title', bInDB.title)
+      expect(b).toHaveProperty('url', bInDB.url)
+      expect(b).toHaveProperty('likes', bInDB.likes)
+      expect(b).toHaveProperty('user')
+    }
   })
 
   test('blog is saved', async () => {
@@ -62,7 +75,6 @@ describe('blog testing', () => {
   })
 
   test('blog is saved without a likes property, defaults to zero', async () => {
-    console.log(initialBlogs)
     const blog = initialBlogs.get(0).toJS()
     delete blog.likes
     const response = await api
@@ -91,7 +103,7 @@ describe('blog testing', () => {
   })
 
   test('blog is deleted', async () => {
-    const { id } = blogs[0]
+    const { id } = getNthFromMap(blogsInDb, 0)
 
     // Check blog exists in db
     await expect(Blog.findById(id)).resolves.toHaveProperty('id', id)
@@ -106,7 +118,7 @@ describe('blog testing', () => {
 
 
   test('blog is updated', async () => {
-    const blog = blogs[4]
+    const blog = getNthFromMap(blogsInDb, 2)
 
     const { id } = blog
 
