@@ -32,7 +32,7 @@ const App = () => {
       'loggedBlogAppUser'
     )
   }
-  
+
   useEffect(() => {
     if(user !== null){
       blogService.getAll().then(blogs =>
@@ -55,7 +55,7 @@ const App = () => {
       <ErrorNotification message={errorMessage}/>
       <SuccessNotification message={successMessage}/>
       { user === null ? <LoginForm setUser={setUser} showErrorMessage={showErrorMessage}/>
-        : <Blogs blogs={blogs} user={user} handleLogout={handleLogout} />}
+        : <Blogs blogs={blogs} user={user} handleLogout={handleLogout} showSuccessMessage={showSuccessMessage} showErrorMessage={showErrorMessage} setBlogs={setBlogs} />}
     </div>
   )
 }
