@@ -53,4 +53,15 @@ describe('<Blog />', () => {
         expect(blogAdditionalContainer).not.toHaveStyle('display: none')
       })
       
+      test('after clicking the button, then the likes button twice, event handler is called twice', async () => {
+        const user = userEvent.setup()
+        const button = screen.getByText('show')
+        await user.click(button)
+      
+        const likeButton = container.querySelector('.like-button')
+        await user.click(likeButton)
+        await user.click(likeButton)
+      
+        expect(onClickLikesMockHandler).toBeCalledTimes(2)
+      })
 })
