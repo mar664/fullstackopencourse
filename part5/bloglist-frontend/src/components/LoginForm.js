@@ -2,7 +2,7 @@ import { useState } from 'react'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
 
-const LoginForm = ({showErrorMessage}) => {
+const LoginForm = ({setUser, showErrorMessage}) => {
     const [username, setUsername] = useState('') 
     const [password, setPassword] = useState('') 
 
@@ -18,6 +18,7 @@ const LoginForm = ({showErrorMessage}) => {
           window.localStorage.setItem(
             'loggedBlogappUser', JSON.stringify(user)
           ) 
+          setUser(user)
           setUsername('')
           setPassword('')
         } catch (exception) {
