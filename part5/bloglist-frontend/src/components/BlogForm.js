@@ -24,7 +24,7 @@ const BlogForm = ({ showSuccessMessage, showErrorMessage, updateBlogs }) => {
     }
   }
 
-  return ( <form onSubmit={handleCreateBlog}>
+  return ( <form onSubmit={ handleCreateBlog }>
       title:<input placeholder="enter title" type="text" value={blogTitle} onChange={({ target }) => setBlogTitle(target.value)}/><br/>
       author:<input placeholder="enter author" type="text" value={blogAuthor} onChange={({ target }) => setBlogAuthor(target.value)}/><br/>
       url:<input placeholder="enter url" type="text" value={blogUrl} onChange={({ target }) => setBlogUrl(target.value)}/><br/>
