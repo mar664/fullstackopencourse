@@ -1,6 +1,6 @@
 import { useState, } from 'react'
 
-const Blog = ({blog, onClickLikes, onClickRemove, userId}) => {
+const Blog = ({ blog, onClickLikes, onClickRemove, userId }) => {
   const [visible, setVisible] = useState(false)
 
   const showWhenVisible = { display: visible ? '' : 'none' }
@@ -27,7 +27,7 @@ const Blog = ({blog, onClickLikes, onClickRemove, userId}) => {
     </div>
   </div>
   )
- 
-  }
+
+}
 
 export default Blog

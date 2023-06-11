@@ -13,17 +13,17 @@ const App = () => {
 
   const showSuccessMessage = (message) => {
     setSuccessMessage(message)
-          setTimeout(() => {
-            setSuccessMessage(null)
-          }, 5000)
+    setTimeout(() => {
+      setSuccessMessage(null)
+    }, 5000)
   }
 
-  
+
   const showErrorMessage = (message) => {
     setErrorMessage(message)
-          setTimeout(() => {
-            setErrorMessage(null)
-          }, 5000)
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
   }
 
   const handleLogout = async () => {
@@ -36,8 +36,8 @@ const App = () => {
   useEffect(() => {
     if(user !== null){
       blogService.getAll().then(blogs =>
-          setBlogs( blogs )
-      )  
+        setBlogs( blogs )
+      )
     }
   }, [user])
 

@@ -1,7 +1,7 @@
-import Blog from "./Blog"
-import BlogForm from "./BlogForm"
-import Togglable from "./Togglable"
-import blogService from "../services/blogs"
+import Blog from './Blog'
+import BlogForm from './BlogForm'
+import Togglable from './Togglable'
+import blogService from '../services/blogs'
 
 const Blogs = ({ blogs, user, handleLogout, showSuccessMessage, showErrorMessage, setBlogs }) => {
   const incrementLikes = async (blog) => {
@@ -21,7 +21,7 @@ const Blogs = ({ blogs, user, handleLogout, showSuccessMessage, showErrorMessage
       showErrorMessage(exception.response.data.error)
     }
   }
-  
+
   const handleDelete = async (blog) => {
     if(window.confirm(`Remove blog ${blog.title} by ${blog.author}`)){
       try {
@@ -43,12 +43,12 @@ const Blogs = ({ blogs, user, handleLogout, showSuccessMessage, showErrorMessage
     <div>
       <p>{user.name} logged in <button onClick={() => handleLogout()}>logout</button></p>
       <Togglable buttonLabel='create blog'>
-      <BlogForm showSuccessMessage={showSuccessMessage} showErrorMessage={showErrorMessage} updateBlogs={(blog) => {
+        <BlogForm showSuccessMessage={showSuccessMessage} showErrorMessage={showErrorMessage} updateBlogs={(blog) => {
           blog.user = user
           setBlogs(blogs.concat(blog))
         }
         }/>
-        </Togglable>
+      </Togglable>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} userId={user.id} onClickRemove={handleDelete} onClickLikes={incrementLikes} />
       )}
