@@ -1,4 +1,4 @@
-import { useState, } from 'react'
+import { useState } from 'react'
 
 const Blog = ({ blog, onClickLikes, onClickRemove, userId }) => {
   const [visible, setVisible] = useState(false)
@@ -18,10 +18,10 @@ const Blog = ({ blog, onClickLikes, onClickRemove, userId }) => {
   }
 
   return (<div style={blogStyle} className='blog'>
-    <span>{blog.title}</span> <span>{blog.author}</span><button onClick={toggleVisibility}>{ visible ? 'hide' : 'show' }</button><br/>
-    <div style={showWhenVisible}>
+    <span className='blog-title'>{blog.title}</span> <span className='blog-author'>{blog.author}</span><button className='toggleBlogInfo' onClick={toggleVisibility}>{ visible ? 'hide' : 'show' }</button><br/>
+    <div style={showWhenVisible} className='blog-additional-content'>
       {blog.url}<br/>
-      likes <span>{blog.likes}</span><button onClick={() => onClickLikes(blog)}>like</button><br/>
+      likes <span className='likes'>{blog.likes}</span><button onClick={() => onClickLikes(blog)}>like</button><br/>
       {blog.user.name}<br/>
       { (blog.user.id === userId) ? <button className='remove-blog' onClick={() => onClickRemove(blog)}>remove</button> : '' }
     </div>
