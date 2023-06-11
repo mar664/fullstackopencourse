@@ -1,4 +1,14 @@
+import { useState, } from 'react'
+
 const Blog = ({blog}) => {
+  const [visible, setVisible] = useState(false)
+
+  const showWhenVisible = { display: visible ? '' : 'none' }
+
+  const toggleVisibility = () => {
+    setVisible(!visible)
+  }
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -7,12 +17,14 @@ const Blog = ({blog}) => {
     marginBottom: 5
   }
 
-  return (
-    <div style={blogStyle}>
-       <div>
-    {blog.title} {blog.author}
-  </div>  
-</div>
+  return (<div style={blogStyle} className='blog'>
+    <span>{blog.title}</span> <span>{blog.author}</span><button onClick={toggleVisibility}>{ visible ? 'hide' : 'show' }</button><br/>
+    <div style={showWhenVisible}>
+      {blog.url}<br/>
+      likes <span>{blog.likes}</span><button>like</button><br/>
+      {blog.user.name}<br/>
+    </div>
+  </div>
   )
  
   }
