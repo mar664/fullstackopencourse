@@ -21,6 +21,21 @@ const Blogs = ({ blogs, user, handleLogout, showSuccessMessage, showErrorMessage
       showErrorMessage(exception.response.data.error)
     }
   }
+  
+  const handleDelete = async (blog) => {
+    if(window.confirm(`Remove blog ${blog.title} by ${blog.author}`)){
+      try {
+        console.log(blog.id)
+        await blogService.remove(blog.id)
+        showSuccessMessage(`${blog.title} removed`)
+        setBlogs(blogs.filter(b => b.id !== blog.id))
+      } catch (exception) {
+        console.log(exception)
+        showErrorMessage(exception.response.data.error)
+      }
+    }
+  }
+
   // Sort by likes descending
   blogs.sort((a, b) => a.likes - b.likes)
   blogs.reverse()
@@ -35,7 +50,7 @@ const Blogs = ({ blogs, user, handleLogout, showSuccessMessage, showErrorMessage
         }/>
         </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} onClickLikes={incrementLikes} />
+        <Blog key={blog.id} blog={blog} userId={user.id} onClickRemove={handleDelete} onClickLikes={incrementLikes} />
       )}
     </div>
   )
