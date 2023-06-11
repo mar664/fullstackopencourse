@@ -52,6 +52,7 @@ const App = () => {
 
   return (
     <div>
+      { user === null ? <h1>Login</h1> : <h1>Blogs</h1> }
       <ErrorNotification message={errorMessage}/>
       <SuccessNotification message={successMessage}/>
       { user === null ? <LoginForm setUser={setUser} showErrorMessage={showErrorMessage}/>

@@ -1,9 +1,14 @@
   const SuccessNotification = ({ message }) => {
     const messageStyle = {
-      color: 'green'
-    }
+        color: 'red',
+        backgroundColor: 'lightgray',
+        padding: 10,
+        borderRadius: 3,
+        border: '2px solid red',
+        fontSize: 16
+      }
     return (
-      <div style={messageStyle}>
+      <div style={message ? messageStyle : {display: 'none'}}>
         {message}
       </div>
     )
