@@ -21,7 +21,9 @@ const Blogs = ({ blogs, user, handleLogout, showSuccessMessage, showErrorMessage
       showErrorMessage(exception.response.data.error)
     }
   }
-
+  // Sort by likes descending
+  blogs.sort((a, b) => a.likes - b.likes)
+  blogs.reverse()
   return (
     <div>
       <p>{user.name} logged in <button onClick={() => handleLogout()}>logout</button></p>
