@@ -91,6 +91,7 @@ describe('Bloglist app', function() {
 
     it('A blog can be liked', function() {
       cy.createBlog(blog1)
+      cy.reloadFrontend()
 
       cy.get('.blog-title').contains(blog1.title).parent('.blog').within(() => {
         cy.get('.toggleBlogInfo').click()
@@ -103,6 +104,7 @@ describe('Bloglist app', function() {
 
     it('A blog can be deleted by user who created it', function() {
       cy.createBlog(blog1)
+      cy.reloadFrontend()
       
       cy.get('.blog-title').contains(blog1.title).parent('.blog').within(() => {
         cy.get('.toggleBlogInfo').click()
@@ -116,6 +118,7 @@ describe('Bloglist app', function() {
     
     it('A blog cannot be deleted by user who didn\'t create it it', function() {
       cy.createBlog(blog1)
+      cy.reloadFrontend()
       
       cy.get('.blog-title').contains(blog1.title).parent('.blog')
 
@@ -125,6 +128,65 @@ describe('Bloglist app', function() {
         cy.get('.toggleBlogInfo').click()
 
         cy.get('.remove-blog').should('not.exist')
+      })
+    })
+
+    describe('Check all post are order by most likes', function() {
+      const blogs = [{
+        title: "Blog 1",
+        author: "Meb",
+        url: "http://example.com/dssdds",
+        likes: 10
+      },
+      {
+        title: "Blog 2",
+        author: "Mesd",
+        url: "http://example.com/sdsdds",
+        likes: 8
+      },
+      {
+        title: "Blog 3",
+        author: "Medf",
+        url: "http://example.com/dsds",
+        likes: 2
+      },
+      {
+        title: "Blog 4",
+        author: "Med",
+        url: "http://example.com/sdffsdsd",
+        likes: 5
+      }]
+  
+      beforeEach(function() {
+        // log in user here
+        cy.login(user1)
+        
+        for(let blog of blogs){
+          cy.createBlog(blog)
+          cy.reloadFrontend()
+
+          cy.get('.blog-title').contains(blog.title).parent('.blog').as('blogDiv').find('.toggleBlogInfo').click()
+  
+          for(let i = 0; i < blog.likes; i++){
+            cy.get('@blogDiv').find('.like-button').click()
+            cy.wait(100, { log: false })
+          }
+  
+          cy.get("@blogDiv").should('contain', `likes ${blog.likes}`)
+        }
+        
+      })
+  
+      it('Blogs should be in order of likes', function() {
+        cy.reloadFrontend()
+        cy.get('.toggleBlogInfo').click({ multiple: true })
+
+        const sortedBlogs = blogs.sort((a, b) => a.likes-b.likes).reverse()
+
+        for(let i = 0; i < sortedBlogs.length; i++){
+          const blog = sortedBlogs[i]
+          cy.get('.blog').eq(i).should('contain', blog.title).and('contain.text',  `likes ${blog.likes}`)
+        }
       })
     })
   })

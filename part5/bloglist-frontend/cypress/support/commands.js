@@ -46,5 +46,9 @@ Cypress.Commands.add('createBlog', ({ title, author, url }) => {
         url: `${Cypress.env('base_backend_url')}/blogs`, 
         body: { title, author, url },
         headers: { Authorization: `Bearer ${token}`}})
-    cy.visit(Cypress.env('base_frontend_url'))
 })
+
+Cypress.Commands.add('reloadFrontend', () => {
+    cy.visit(Cypress.env('base_frontend_url'))
+
+  })
