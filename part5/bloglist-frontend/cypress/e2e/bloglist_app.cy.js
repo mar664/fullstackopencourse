@@ -1,15 +1,23 @@
 describe('Bloglist app', function() {
-  let user
+  let user1
+  let user2
   beforeEach(function() {
     cy.resetDB()
 
-    user = {
+    user1 = {
       name: 'Matti Luukkainen',
       username: 'mluukkai',
       password: 'salainen'
     }
 
-    cy.createUser(user)
+    user2 = {
+      name: 'Matt Jones',
+      username: 'mjones',
+      password: 'mypass&8df'
+    }
+
+    cy.createUser(user1)
+    cy.createUser(user2)
 
     cy.visit(Cypress.env('base_frontend_url'))
   })
@@ -24,17 +32,17 @@ describe('Bloglist app', function() {
 
   describe('Login',function() {
     it('succeeds with correct credentials', function() {
-      cy.get('input[name="Username"]').type(user.username)
-      cy.get('input[name="Password"]').type(user.password)
+      cy.get('input[name="Username"]').type(user1.username)
+      cy.get('input[name="Password"]').type(user1.password)
       cy.get('button').contains('login').click()
 
       cy.get('h1').contains('Blog')
-      cy.contains(`${user.name} logged in`)
+      cy.contains(`${user1.name} logged in`)
     })
 
     it('fails with incorrect credentials', function() {
-      cy.get('input[name="Username"]').type(user.username)
-      cy.get('input[name="Password"]').type(user.password.slice(0, 4))
+      cy.get('input[name="Username"]').type(user1.username)
+      cy.get('input[name="Password"]').type(user1.password.slice(0, 4))
       cy.get('button').contains('login').click()
 
       cy.contains('Wrong credentials')
@@ -63,7 +71,7 @@ describe('Bloglist app', function() {
 
     beforeEach(function() {
       cy.login({
-        username: user.username, password: user.password
+        username: user1.username, password: user1.password
       })
     })
 
@@ -93,7 +101,7 @@ describe('Bloglist app', function() {
       })
     })
 
-    it('A blog can be be delete by user who created it', function() {
+    it('A blog can be deleted by user who created it', function() {
       cy.createBlog(blog1)
       
       cy.get('.blog-title').contains(blog1.title).parent('.blog').within(() => {
@@ -101,8 +109,23 @@ describe('Bloglist app', function() {
 
         cy.get('.remove-blog').click()
       })
-      
+
       cy.get('.blog').should('not.exist')
+    })
+
+    
+    it('A blog cannot be deleted by user who didn\'t create it it', function() {
+      cy.createBlog(blog1)
+      
+      cy.get('.blog-title').contains(blog1.title).parent('.blog')
+
+      cy.login(user2)
+
+      cy.get('.blog-title').contains(blog1.title).parent('.blog').within(() => {
+        cy.get('.toggleBlogInfo').click()
+
+        cy.get('.remove-blog').should('not.exist')
+      })
     })
   })
 })
