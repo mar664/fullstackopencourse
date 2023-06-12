@@ -8,7 +8,7 @@ const SuccessNotification = ({ message }) => {
     fontSize: 16
   }
   return (
-    <div style={message ? messageStyle : { display: 'none' }}>
+    <div id='success-message' style={message ? messageStyle : { display: 'none' }}>
       {message}
     </div>
   )
