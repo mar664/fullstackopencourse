@@ -7,8 +7,13 @@ const Notification = () => {
     padding: 10,
     borderWidth: 1
   }
+
+  const styleHide = {
+    display: 'block'
+  }
+
   return (
-    <div style={style}>
+  <div style={notification ? style : styleHide}>
       {notification}
     </div>
   )
