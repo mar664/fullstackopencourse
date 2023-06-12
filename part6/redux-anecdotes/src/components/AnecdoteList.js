@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 const AnecdoteList = () => {
     const anecdotes = useSelector(state => { 
         if ( state.filter !== "ALL"){
-            return state.anecdotes.filter(s => s.content.indexOf(state.filter) !== -1)
+            return state.anecdotes.filter(s => s.content.indexOf(state.filters) !== -1)
         }
         return state.anecdotes
      })
