@@ -19,15 +19,14 @@ describe('anecdotes reducer', () => {
     const state = initialState
 
     deepFreeze(state)
-    const { id } = state[0]
 
     const action = {
       type: 'anecdotes/incrementVotes',
-      payload: id
+      payload: { ...state, votes: state.votes + 1 }
     }
 
     const newState = anecdoteReducer(state, action)
-    const finalState = state.map(a => (a.id === id) ? { ...a, votes: a.votes + 1 } : a)
+    const finalState = state.map(a => (a.id === state.id) ? { ...a, votes: a.votes + 1 } : a)
     expect(newState).toEqual(finalState)
   })
 
