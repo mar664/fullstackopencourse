@@ -23,3 +23,19 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('resetDB', () => {
+    cy.request('POST', `${Cypress.env('base_backend_url')}/testing/reset`)
+})
+Cypress.Commands.add('createUser', ({ username, password, name }) => {
+  cy.request('POST', `${Cypress.env('base_backend_url')}/users`, { username, password, name })
+})
+
+Cypress.Commands.add('login', ({ username, password }) => {
+  cy.request('POST', `${Cypress.env('base_backend_url')}/login`, {
+    username, password
+  }).then(({ body }) => {
+    localStorage.setItem('loggedBlogappUser', JSON.stringify(body))
+    cy.visit(Cypress.env('base_frontend_url'))
+  })
+})
