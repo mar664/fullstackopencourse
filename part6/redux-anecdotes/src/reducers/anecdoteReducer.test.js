@@ -1,5 +1,5 @@
 import deepFreeze from 'deep-freeze'
-import anecdoteReducer,  {initialState} from '../reducers/anecdoteReducer'
+import anecdoteReducer,  {initialState} from './anecdoteReducer'
 
 const getId = () => (100000 * Math.random()).toFixed(0)
 
