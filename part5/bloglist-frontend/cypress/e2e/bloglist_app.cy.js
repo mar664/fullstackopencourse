@@ -1,7 +1,7 @@
 describe('Bloglist app', function() {
   let user
   beforeEach(function() {
-    cy.request('POST', `${Cypress.env('base_backend_url')}/testing/reset`)
+    cy.resetDB()
 
     user = {
       name: 'Matti Luukkainen',
@@ -9,7 +9,7 @@ describe('Bloglist app', function() {
       password: 'salainen'
     }
 
-    cy.request('POST', `${Cypress.env('base_backend_url')}/users/`, user) 
+    cy.createUser(user)
 
     cy.visit(Cypress.env('base_frontend_url'))
   })
@@ -43,32 +43,54 @@ describe('Bloglist app', function() {
   })
 
   describe('When logged in', function() {
-    const blog = {
-      title: 'My New Blog Title',
+    const blog1 = {
+      title: 'My New Blog Title 1',
       url: 'http://test.com/postUrl',
       author: 'Myself'
     }
 
+    const blog2 = {
+      title: 'My New Blog Title 2',
+      url: 'http://dffdf.com/postUrl',
+      author: 'Billy'
+    }
+
+    const blog3 = {
+      title: 'My New Blog Title 3',
+      url: 'http://test.com/fdjfdfdfrl',
+      author: 'You'
+    }
+
     beforeEach(function() {
-      cy.request('POST', `${Cypress.env('base_backend_url')}/login`, {
+      cy.login({
         username: user.username, password: user.password
-      }).then(response => {
-        localStorage.setItem('loggedBlogappUser', JSON.stringify(response.body))
-        cy.visit(Cypress.env('base_frontend_url'))
       })
     })
 
     it('A blog can be created', function() {
       cy.get('button').contains('create blog').click()
-      cy.get('input[placeholder="enter title"]').type(blog.title)
-      cy.get('input[placeholder="enter url"]').type(blog.url)
-      cy.get('input[placeholder="enter author"]').type(blog.author)
+      cy.get('input[placeholder="enter title"]').type(blog1.title)
+      cy.get('input[placeholder="enter url"]').type(blog1.url)
+      cy.get('input[placeholder="enter author"]').type(blog1.author)
       cy.get('input[value="create"]').click()
+
       cy.get('#success-message')
       .should('have.css', 'color', 'rgb(0, 128, 0)')
       .and('have.css', 'border-color', 'rgb(0, 128, 0)')
-      .and('contain.text', `a new blog ${blog.title} by ${blog.author} added`)
-      cy.get('.blog').contains(blog.title)
+      .and('contain.text', `a new blog ${blog1.title} by ${blog1.author} added`)
+      cy.get('.blog').contains(blog1.title)
+    })
+
+    it('A blog can be liked', function() {
+      cy.createBlog(blog1)
+      
+      cy.get('.blog-title').contains(blog1.title).parent('.blog').within(() => {
+        cy.get('.toggleBlogInfo').click()
+
+        cy.get('.like-button').click()
+  
+        cy.get('.likes').should('contain.text', 1)
+      })
     })
   })
 })
