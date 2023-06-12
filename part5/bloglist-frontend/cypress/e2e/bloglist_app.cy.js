@@ -83,7 +83,7 @@ describe('Bloglist app', function() {
 
     it('A blog can be liked', function() {
       cy.createBlog(blog1)
-      
+
       cy.get('.blog-title').contains(blog1.title).parent('.blog').within(() => {
         cy.get('.toggleBlogInfo').click()
 
@@ -91,6 +91,18 @@ describe('Bloglist app', function() {
   
         cy.get('.likes').should('contain.text', 1)
       })
+    })
+
+    it('A blog can be be delete by user who created it', function() {
+      cy.createBlog(blog1)
+      
+      cy.get('.blog-title').contains(blog1.title).parent('.blog').within(() => {
+        cy.get('.toggleBlogInfo').click()
+
+        cy.get('.remove-blog').click()
+      })
+      
+      cy.get('.blog').should('not.exist')
     })
   })
 })
