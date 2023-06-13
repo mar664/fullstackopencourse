@@ -13,9 +13,9 @@ import {
   hideErrorNotification,
   showErrorNotification,
 } from "./reducers/errorNotificationReducer";
+import { setBlogs } from "./reducers/blogReducer";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
   const dispatch = useDispatch();
 
@@ -40,7 +40,7 @@ const App = () => {
 
   useEffect(() => {
     if (user !== null) {
-      blogService.getAll().then((blogs) => setBlogs(blogs));
+      blogService.getAll().then((blogs) => dispatch(setBlogs(blogs)));
     }
   }, [user]);
 
@@ -62,7 +62,6 @@ const App = () => {
         <LoginForm setUser={setUser} showErrorMessage={showErrorMessage} />
       ) : (
         <Blogs
-          blogs={blogs}
           user={user}
           handleLogout={handleLogout}
           showSuccessMessage={showSuccessMessage}

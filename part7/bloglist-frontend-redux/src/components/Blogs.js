@@ -2,15 +2,17 @@ import Blog from "./Blog";
 import BlogForm from "./BlogForm";
 import Togglable from "./Togglable";
 import blogService from "../services/blogs";
+import { useSelector } from "react-redux";
 
 const Blogs = ({
-  blogs,
   user,
   handleLogout,
   showSuccessMessage,
   showErrorMessage,
   setBlogs,
 }) => {
+  const blogs = useSelector((state) => state.blogs);
+
   const incrementLikes = async (blog) => {
     try {
       await blogService.update(blog.id, {
