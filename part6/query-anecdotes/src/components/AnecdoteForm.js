@@ -11,7 +11,11 @@ const AnecdoteForm = () => {
       dispatch({ type: "SHOW", payload: `Anecdote added: '${anecdote.content}'`})
       setTimeout(() => dispatch({ type: "HIDE" }), 5000)
       queryClient.invalidateQueries('anecdotes')
-    }
+    },
+    onError: (error, variables, context) => {
+      dispatch({ type: "SHOW", payload: error.response.data.error})
+      setTimeout(() => dispatch({ type: "HIDE" }), 5000)
+    },
   })
 
   const onCreate = (event) => {
