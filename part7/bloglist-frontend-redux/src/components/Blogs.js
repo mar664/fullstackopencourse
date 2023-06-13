@@ -5,13 +5,9 @@ import blogService from "../services/blogs";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteBlog, updateBlog } from "../reducers/blogReducer";
 
-const Blogs = ({
-  user,
-  handleLogout,
-  showSuccessMessage,
-  showErrorMessage,
-}) => {
+const Blogs = ({ handleLogout, showSuccessMessage, showErrorMessage }) => {
   const blogs = useSelector((state) => state.blogs);
+  const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const incrementLikes = async (blog) => {
@@ -63,7 +59,6 @@ const Blogs = ({
           <Blog
             key={blog.id}
             blog={blog}
-            userId={user.id}
             onClickRemove={handleDelete}
             onClickLikes={incrementLikes}
           />

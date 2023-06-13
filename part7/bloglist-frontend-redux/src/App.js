@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import blogService from "./services/blogs";
 import LoginForm from "./components/LoginForm";
 import SuccessNotification from "./components/SuccessNotification";
 import ErrorNotification from "./components/ErrorNotification";
 import Blogs from "./components/Blogs";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   hideSuccessNotification,
   showSuccessNotification,
@@ -14,9 +14,10 @@ import {
   showErrorNotification,
 } from "./reducers/errorNotificationReducer";
 import { setBlogs } from "./reducers/blogReducer";
+import { clearUser, setUser } from "./reducers/userReducer";
 
 const App = () => {
-  const [user, setUser] = useState(null);
+  const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const showSuccessMessage = (message) => {
@@ -34,7 +35,7 @@ const App = () => {
   };
 
   const handleLogout = async () => {
-    setUser(null);
+    dispatch(clearUser());
     window.localStorage.removeItem("loggedBlogappUser");
   };
 
@@ -47,9 +48,9 @@ const App = () => {
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON);
-      setUser(user);
-      blogService.setToken(user.token);
+      const jsonUser = JSON.parse(loggedUserJSON);
+      dispatch(setUser(jsonUser));
+      blogService.setToken(jsonUser.token);
     }
   }, []);
 
@@ -59,10 +60,9 @@ const App = () => {
       <ErrorNotification />
       <SuccessNotification />
       {user === null ? (
-        <LoginForm setUser={setUser} showErrorMessage={showErrorMessage} />
+        <LoginForm showErrorMessage={showErrorMessage} />
       ) : (
         <Blogs
-          user={user}
           handleLogout={handleLogout}
           showSuccessMessage={showSuccessMessage}
           showErrorMessage={showErrorMessage}

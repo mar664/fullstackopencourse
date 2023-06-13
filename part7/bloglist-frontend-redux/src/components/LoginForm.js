@@ -1,10 +1,13 @@
 import { useState } from "react";
 import loginService from "../services/login";
 import blogService from "../services/blogs";
+import { useDispatch } from "react-redux";
+import { setUser } from "../reducers/userReducer";
 
-const LoginForm = ({ setUser, showErrorMessage }) => {
+const LoginForm = ({ showErrorMessage }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -17,7 +20,7 @@ const LoginForm = ({ setUser, showErrorMessage }) => {
       blogService.setToken(user.token);
 
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
-      setUser(user);
+      dispatch(setUser(user));
       setUsername("");
       setPassword("");
     } catch (exception) {

@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
-const Blog = ({ blog, onClickLikes, onClickRemove, userId }) => {
+const Blog = ({ blog, onClickLikes, onClickRemove }) => {
   const [visible, setVisible] = useState(false);
+  const user = useSelector((state) => state.user);
 
   const showWhenVisible = { display: visible ? "" : "none" };
 
@@ -35,7 +37,7 @@ const Blog = ({ blog, onClickLikes, onClickRemove, userId }) => {
         <br />
         {blog.user.name}
         <br />
-        {blog.user.id === userId ? (
+        {blog.user.id === user.id ? (
           <button className="remove-blog" onClick={() => onClickRemove(blog)}>
             remove
           </button>
