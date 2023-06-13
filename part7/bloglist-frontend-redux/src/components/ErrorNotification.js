@@ -1,4 +1,8 @@
-const ErrorNotification = ({ message }) => {
+import { useSelector } from "react-redux";
+
+const ErrorNotification = () => {
+  const error = useSelector((state) => state.errorNotification);
+
   const messageStyle = {
     color: "red",
     backgroundColor: "lightgray",
@@ -8,11 +12,8 @@ const ErrorNotification = ({ message }) => {
     fontSize: 16,
   };
   return (
-    <div
-      id="error-message"
-      style={message ? messageStyle : { display: "none" }}
-    >
-      {message}
+    <div id="error-message" style={error ? messageStyle : { display: "none" }}>
+      {error}
     </div>
   );
 };

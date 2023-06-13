@@ -9,10 +9,13 @@ import {
   hideSuccessNotification,
   showSuccessNotification,
 } from "./reducers/successNotificationReducer";
+import {
+  hideErrorNotification,
+  showErrorNotification,
+} from "./reducers/errorNotificationReducer";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
-  const [errorMessage, setErrorMessage] = useState(null);
   const [user, setUser] = useState(null);
   const dispatch = useDispatch();
 
@@ -24,9 +27,9 @@ const App = () => {
   };
 
   const showErrorMessage = (message) => {
-    setErrorMessage(message);
+    dispatch(showErrorNotification(message));
     setTimeout(() => {
-      setErrorMessage(null);
+      dispatch(hideErrorNotification());
     }, 5000);
   };
 
@@ -53,7 +56,7 @@ const App = () => {
   return (
     <div>
       {user === null ? <h1>Login</h1> : <h1>Blogs</h1>}
-      <ErrorNotification message={errorMessage} />
+      <ErrorNotification />
       <SuccessNotification />
       {user === null ? (
         <LoginForm setUser={setUser} showErrorMessage={showErrorMessage} />
