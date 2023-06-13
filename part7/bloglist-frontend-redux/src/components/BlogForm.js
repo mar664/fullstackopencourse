@@ -1,14 +1,14 @@
-import { useState } from "react";
 import blogService from "../services/blogs";
 import { useDispatch } from "react-redux";
 import { createBlog } from "../reducers/blogReducer";
 import { showSuccessNotification } from "../reducers/successNotificationReducer";
 import { showErrorNotification } from "../reducers/errorNotificationReducer";
+import { useField } from "../hooks";
 
 const BlogForm = () => {
-  const [blogTitle, setBlogTitle] = useState("");
-  const [blogAuthor, setBlogAuthor] = useState("");
-  const [blogUrl, setBlogUrl] = useState("");
+  const title = useField({ placeholder: "enter title" });
+  const author = useField({ placeholder: "enter author" });
+  const url = useField({ placeholder: "enter url" });
   const dispatch = useDispatch();
 
   const handleCreateBlog = async (event) => {
@@ -16,18 +16,18 @@ const BlogForm = () => {
 
     try {
       const newBlog = await blogService.create({
-        author: blogAuthor,
-        title: blogTitle,
-        url: blogUrl,
+        author: author.value,
+        title: title.value,
+        url: url.value,
       });
       dispatch(
         showSuccessNotification(
-          `a new blog ${blogTitle} by ${blogAuthor} added`
+          `a new blog ${title.value} by ${author.value} added`
         )
       );
-      setBlogAuthor("");
-      setBlogTitle("");
-      setBlogUrl("");
+      title.clear();
+      author.clear();
+      url.clear();
       dispatch(createBlog(newBlog));
     } catch (exception) {
       console.log(exception);
@@ -38,28 +38,13 @@ const BlogForm = () => {
   return (
     <form onSubmit={handleCreateBlog}>
       title:
-      <input
-        placeholder="enter title"
-        type="text"
-        value={blogTitle}
-        onChange={({ target }) => setBlogTitle(target.value)}
-      />
+      <input {...title.spread} />
       <br />
       author:
-      <input
-        placeholder="enter author"
-        type="text"
-        value={blogAuthor}
-        onChange={({ target }) => setBlogAuthor(target.value)}
-      />
+      <input {...author.spread} />
       <br />
       url:
-      <input
-        placeholder="enter url"
-        type="text"
-        value={blogUrl}
-        onChange={({ target }) => setBlogUrl(target.value)}
-      />
+      <input {...url.spread} />
       <br />
       <input type="submit" value="create" />
       <br />

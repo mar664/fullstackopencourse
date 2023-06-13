@@ -1,13 +1,14 @@
-import { useState } from "react";
 import loginService from "../services/login";
 import blogService from "../services/blogs";
 import { useDispatch } from "react-redux";
 import { setUser } from "../reducers/userReducer";
 import { showErrorNotification } from "../reducers/errorNotificationReducer";
+import { useField } from "../hooks";
 
 const LoginForm = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const username = useField({ placeholder: "enter username" });
+  const password = useField({ type: "password" });
+
   const dispatch = useDispatch();
 
   const handleLogin = async (event) => {
@@ -15,15 +16,15 @@ const LoginForm = () => {
 
     try {
       const user = await loginService.login({
-        username,
-        password,
+        username: username.value,
+        password: password.value,
       });
       blogService.setToken(user.token);
 
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
       dispatch(setUser(user));
-      setUsername("");
-      setPassword("");
+      username.clear();
+      password.clear();
     } catch (exception) {
       dispatch(showErrorNotification("Wrong credentials"));
     }
@@ -33,21 +34,11 @@ const LoginForm = () => {
     <form onSubmit={handleLogin}>
       <div>
         username
-        <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
+        <input {...username.spread} name="Username" />
       </div>
       <div>
         password
-        <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
+        <input {...password.spread} name="Password" />
       </div>
       <button type="submit">login</button>
     </form>
