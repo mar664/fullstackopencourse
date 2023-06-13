@@ -63,6 +63,7 @@ const CreateNew = (props) => {
   const content = useField('text')
   const author = useField('text')
   const info = useField('text')
+  const reset = useField('reset', 'reset', content, author, info)
 
   const navigate = useNavigate()
 
@@ -86,17 +87,18 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input {...content} />
+          <input {...content.spread} />
         </div>
         <div>
           author
-          <input {...author} />
+          <input {...author.spread} />
         </div>
         <div>
           url for more info
-          <input {...info} />
+          <input {...info.spread} />
         </div>
         <button>create</button>
+        <input {...reset.spread} />
       </form>
     </div>
   )

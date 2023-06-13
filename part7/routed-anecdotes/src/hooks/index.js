@@ -7,9 +7,29 @@ export const useField = (type, val='', ...fields) => {
     setValue(event.target.value)
   }
 
+  const onClick = (event) => {
+    if(type === "reset") fields.forEach(f => f.setValue(''))
+  }
+  
+  let spread
+  if(type === "reset"){
+    spread = { 
+      type,
+      value,
+      onClick,
+    }
+  } else {
+    spread = { 
+      type,
+      value,
+      onChange,
+    }
+  }
+
   return {
+    spread,
     type,
     value,
-    onChange,
+    setValue
   }
 }
