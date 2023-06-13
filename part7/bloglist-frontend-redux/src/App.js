@@ -4,17 +4,22 @@ import LoginForm from "./components/LoginForm";
 import SuccessNotification from "./components/SuccessNotification";
 import ErrorNotification from "./components/ErrorNotification";
 import Blogs from "./components/Blogs";
+import { useDispatch } from "react-redux";
+import {
+  hideSuccessNotification,
+  showSuccessNotification,
+} from "./reducers/successNotificationReducer";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
-  const [successMessage, setSuccessMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [user, setUser] = useState(null);
+  const dispatch = useDispatch();
 
   const showSuccessMessage = (message) => {
-    setSuccessMessage(message);
+    dispatch(showSuccessNotification(message));
     setTimeout(() => {
-      setSuccessMessage(null);
+      dispatch(hideSuccessNotification());
     }, 5000);
   };
 
@@ -49,7 +54,7 @@ const App = () => {
     <div>
       {user === null ? <h1>Login</h1> : <h1>Blogs</h1>}
       <ErrorNotification message={errorMessage} />
-      <SuccessNotification message={successMessage} />
+      <SuccessNotification />
       {user === null ? (
         <LoginForm setUser={setUser} showErrorMessage={showErrorMessage} />
       ) : (

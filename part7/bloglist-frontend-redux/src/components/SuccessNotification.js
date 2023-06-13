@@ -1,4 +1,8 @@
-const SuccessNotification = ({ message }) => {
+import { useSelector } from "react-redux";
+
+const SuccessNotification = () => {
+  const success = useSelector((state) => state.successNotification);
+
   const messageStyle = {
     color: "green",
     backgroundColor: "lightgray",
@@ -10,9 +14,9 @@ const SuccessNotification = ({ message }) => {
   return (
     <div
       id="success-message"
-      style={message ? messageStyle : { display: "none" }}
+      style={success ? messageStyle : { display: "none" }}
     >
-      {message}
+      {success}
     </div>
   );
 };
