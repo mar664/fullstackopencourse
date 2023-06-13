@@ -1,27 +1,26 @@
-const initialState = ''
+import { createSlice } from "@reduxjs/toolkit";
 
-const successNotificationReducer = (state = initialState, action) => {
-  if (action.type === 'SHOW_SUCCESS') {
-    return action.payload
-  } else if (action.type === 'HIDE_SUCCESS') {
-    return ''
-  }
+const successNotificationSlice = createSlice({
+  name: "successNotification",
+  initialState: null,
+  reducers: {
+    setSuccessNotification(state, action) {
+      return action.payload;
+    },
+    clearSuccessNotification(_state, _action) {
+      return null;
+    },
+  },
+});
 
-  return state
-}
+export const { setSuccessNotification, clearSuccessNotification } =
+  successNotificationSlice.actions;
 
 export const showSuccessNotification = (message) => {
-  return {
-    type: 'SHOW_SUCCESS',
-    payload: message
-  }
-}
+  return async (dispatch) => {
+    dispatch(setSuccessNotification(message));
+    setTimeout(() => dispatch(clearSuccessNotification()), 5000);
+  };
+};
 
-export const hideSuccessNotification = () => {
-  return {
-    type: 'HIDE_SUCCESS',
-    payload: ''
-  }
-}
-
-export default successNotificationReducer
+export default successNotificationSlice.reducer;

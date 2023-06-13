@@ -1,27 +1,26 @@
-const initialState = ''
+import { createSlice } from "@reduxjs/toolkit";
 
-const errorNotificationReducer = (state = initialState, action) => {
-  if (action.type === 'SHOW_ERROR') {
-    return action.payload
-  } else if (action.type === 'HIDE_ERROR') {
-    return ''
-  }
+const errorNotificationSlice = createSlice({
+  name: "errorNotification",
+  initialState: null,
+  reducers: {
+    setErrorNotification(state, action) {
+      return action.payload;
+    },
+    clearErrorNotification(_state, _action) {
+      return null;
+    },
+  },
+});
 
-  return state
-}
+export const { setErrorNotification, clearErrorNotification } =
+  errorNotificationSlice.actions;
 
 export const showErrorNotification = (message) => {
-  return {
-    type: 'SHOW_ERROR',
-    payload: message
-  }
-}
+  return async (dispatch) => {
+    dispatch(setErrorNotification(message));
+    setTimeout(() => dispatch(clearErrorNotification()), 5000);
+  };
+};
 
-export const hideErrorNotification = () => {
-  return {
-    type: 'HIDE_ERROR',
-    payload: ''
-  }
-}
-
-export default errorNotificationReducer
+export default errorNotificationSlice.reducer;

@@ -5,34 +5,12 @@ import SuccessNotification from "./components/SuccessNotification";
 import ErrorNotification from "./components/ErrorNotification";
 import Blogs from "./components/Blogs";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  hideSuccessNotification,
-  showSuccessNotification,
-} from "./reducers/successNotificationReducer";
-import {
-  hideErrorNotification,
-  showErrorNotification,
-} from "./reducers/errorNotificationReducer";
 import { setBlogs } from "./reducers/blogReducer";
 import { clearUser, setUser } from "./reducers/userReducer";
 
 const App = () => {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
-
-  const showSuccessMessage = (message) => {
-    dispatch(showSuccessNotification(message));
-    setTimeout(() => {
-      dispatch(hideSuccessNotification());
-    }, 5000);
-  };
-
-  const showErrorMessage = (message) => {
-    dispatch(showErrorNotification(message));
-    setTimeout(() => {
-      dispatch(hideErrorNotification());
-    }, 5000);
-  };
 
   const handleLogout = async () => {
     dispatch(clearUser());
@@ -59,15 +37,7 @@ const App = () => {
       {user === null ? <h1>Login</h1> : <h1>Blogs</h1>}
       <ErrorNotification />
       <SuccessNotification />
-      {user === null ? (
-        <LoginForm showErrorMessage={showErrorMessage} />
-      ) : (
-        <Blogs
-          handleLogout={handleLogout}
-          showSuccessMessage={showSuccessMessage}
-          showErrorMessage={showErrorMessage}
-        />
-      )}
+      {user === null ? <LoginForm /> : <Blogs handleLogout={handleLogout} />}
     </div>
   );
 };
