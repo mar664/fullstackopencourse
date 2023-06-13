@@ -7,7 +7,7 @@ module.exports = defineConfig({
     },
   },
   env: {
-    base_frontend_url: 'http://localhost:3000',
-    base_backend_url: 'http://localhost:3003/api',
+    base_frontend_url: "http://localhost:3000",
+    base_backend_url: "http://localhost:3003/api",
   },
 });
