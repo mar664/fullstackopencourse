@@ -3,7 +3,7 @@ import blogService from "../services/blogs";
 import { useDispatch } from "react-redux";
 import { createBlog } from "../reducers/blogReducer";
 
-const BlogForm = ({ showSuccessMessage, showErrorMessage, updateBlogs }) => {
+const BlogForm = ({ showSuccessMessage, showErrorMessage }) => {
   const [blogTitle, setBlogTitle] = useState("");
   const [blogAuthor, setBlogAuthor] = useState("");
   const [blogUrl, setBlogUrl] = useState("");
@@ -23,7 +23,6 @@ const BlogForm = ({ showSuccessMessage, showErrorMessage, updateBlogs }) => {
       setBlogTitle("");
       setBlogUrl("");
       dispatch(createBlog(newBlog));
-      updateBlogs(newBlog);
     } catch (exception) {
       console.log(exception);
       showErrorMessage(exception.response.data.error);

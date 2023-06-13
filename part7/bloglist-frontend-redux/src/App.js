@@ -66,7 +66,6 @@ const App = () => {
           handleLogout={handleLogout}
           showSuccessMessage={showSuccessMessage}
           showErrorMessage={showErrorMessage}
-          setBlogs={setBlogs}
         />
       )}
     </div>
