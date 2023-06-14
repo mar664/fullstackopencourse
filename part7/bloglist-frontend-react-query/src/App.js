@@ -5,6 +5,8 @@ import Notification from "./components/Notification";
 import Blogs from "./components/Blogs";
 import { useQuery } from "react-query";
 import { useUserDispatch, useUserValue } from "./contexts/userContext";
+import { Routes, Route } from "react-router-dom";
+import Users from "./components/Users";
 
 const App = () => {
   const userDispatch = useUserDispatch();
@@ -39,7 +41,13 @@ const App = () => {
       {user === null ? (
         <LoginForm />
       ) : (
-        <Blogs blogs={blogs} handleLogout={handleLogout} />
+        <Routes>
+          <Route path="/users" element={<Users blogs={blogs} />} />
+          <Route
+            path="/"
+            element={<Blogs blogs={blogs} handleLogout={handleLogout} />}
+          />
+        </Routes>
       )}
     </div>
   );
