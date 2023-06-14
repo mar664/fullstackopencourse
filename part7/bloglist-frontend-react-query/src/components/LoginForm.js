@@ -5,10 +5,12 @@ import {
   showErrorMessage,
   useNotificationDispatch,
 } from "../contexts/notificationContext";
+import { useUserDispatch } from "../contexts/userContext";
 
-const LoginForm = ({ setUser }) => {
+const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const userDispatch = useUserDispatch();
   const dispatch = useNotificationDispatch();
 
   const handleLogin = async (event) => {
@@ -22,7 +24,7 @@ const LoginForm = ({ setUser }) => {
       blogService.setToken(user.token);
 
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
-      setUser(user);
+      userDispatch({ type: "SET_USER", payload: user });
       setUsername("");
       setPassword("");
     } catch (exception) {

@@ -6,8 +6,11 @@ import {
   useNotificationDispatch,
 } from "../contexts/notificationContext";
 import blogService from "../services/blogs";
+import { useUserValue } from "../contexts/userContext";
 
-const Blog = ({ blog, userId }) => {
+const Blog = ({ blog }) => {
+  const user = useUserValue();
+
   const [visible, setVisible] = useState(false);
 
   const showWhenVisible = { display: visible ? "" : "none" };
@@ -94,7 +97,7 @@ const Blog = ({ blog, userId }) => {
         <br />
         {blog.user.name}
         <br />
-        {blog.user.id === userId ? (
+        {blog.user.id === user.id ? (
           <button className="remove-blog" onClick={() => deleteBlog(blog)}>
             remove
           </button>

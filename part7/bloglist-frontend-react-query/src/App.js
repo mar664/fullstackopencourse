@@ -1,24 +1,26 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import blogService from "./services/blogs";
 import LoginForm from "./components/LoginForm";
 import Notification from "./components/Notification";
 import Blogs from "./components/Blogs";
 import { useQuery } from "react-query";
+import { useUserDispatch, useUserValue } from "./contexts/userContext";
 
 const App = () => {
-  const [user, setUser] = useState(null);
+  const userDispatch = useUserDispatch();
+  const user = useUserValue();
 
   const handleLogout = async () => {
-    setUser(null);
+    userDispatch({ type: "CLEAR_USER" });
     window.localStorage.removeItem("loggedBlogappUser");
   };
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON);
-      setUser(user);
-      blogService.setToken(user.token);
+      const loggedUser = JSON.parse(loggedUserJSON);
+      userDispatch({ type: "SET_USER", payload: loggedUser });
+      blogService.setToken(loggedUser.token);
     }
   }, []);
 
@@ -35,9 +37,9 @@ const App = () => {
       {user === null ? <h1>Login</h1> : <h1>Blogs</h1>}
       <Notification />
       {user === null ? (
-        <LoginForm setUser={setUser} />
+        <LoginForm />
       ) : (
-        <Blogs blogs={blogs} user={user} handleLogout={handleLogout} />
+        <Blogs blogs={blogs} handleLogout={handleLogout} />
       )}
     </div>
   );
