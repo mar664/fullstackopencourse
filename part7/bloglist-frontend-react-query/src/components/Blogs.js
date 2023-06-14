@@ -58,13 +58,7 @@ const Blogs = ({ blogs, user, handleLogout, setBlogs }) => {
         <button onClick={() => handleLogout()}>logout</button>
       </p>
       <Togglable buttonLabel="create blog">
-        <BlogForm
-          showSuccessMessage={showSuccessMessage}
-          updateBlogs={(blog) => {
-            blog.user = user;
-            setBlogs(blogs.concat(blog));
-          }}
-        />
+        <BlogForm />
       </Togglable>
       {blogs.map((blog) => (
         <Blog

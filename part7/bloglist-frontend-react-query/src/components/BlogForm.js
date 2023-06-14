@@ -5,34 +5,38 @@ import {
   showSuccessMessage,
   useNotificationDispatch,
 } from "../contexts/notificationContext";
+import { useMutation, useQueryClient } from "react-query";
 
-const BlogForm = ({ updateBlogs }) => {
+const BlogForm = () => {
   const [blogTitle, setBlogTitle] = useState("");
   const [blogAuthor, setBlogAuthor] = useState("");
   const [blogUrl, setBlogUrl] = useState("");
   const dispatch = useNotificationDispatch();
+  const queryClient = useQueryClient();
+
+  const newBlogMutation = useMutation(blogService.create, {
+    onSuccess: (newBlog) => {
+      showSuccessMessage(
+        dispatch,
+        `a new blog ${newBlog.title} by ${newBlog.author} added`
+      );
+      const blogs = queryClient.getQueryData("blogs");
+      queryClient.setQueryData("blogs", blogs.concat(newBlog));
+    },
+    onError: (error, _variables, _context) => {
+      console.log(error);
+      showErrorMessage(dispatch, error.response.data.error);
+    },
+  });
 
   const handleCreateBlog = async (event) => {
     event.preventDefault();
 
-    try {
-      const newBlog = await blogService.create({
-        author: blogAuthor,
-        title: blogTitle,
-        url: blogUrl,
-      });
-      showSuccessMessage(
-        dispatch,
-        `a new blog ${blogTitle} by ${blogAuthor} added`
-      );
-      setBlogAuthor("");
-      setBlogTitle("");
-      setBlogUrl("");
-      updateBlogs(newBlog);
-    } catch (exception) {
-      console.log(exception);
-      showErrorMessage(dispatch, exception.response.data.error);
-    }
+    newBlogMutation.mutate({
+      author: blogAuthor,
+      title: blogTitle,
+      url: blogUrl,
+    });
   };
 
   return (

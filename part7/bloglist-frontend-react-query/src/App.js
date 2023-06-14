@@ -3,21 +3,15 @@ import blogService from "./services/blogs";
 import LoginForm from "./components/LoginForm";
 import Notification from "./components/Notification";
 import Blogs from "./components/Blogs";
+import { useQuery } from "react-query";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
 
   const handleLogout = async () => {
     setUser(null);
     window.localStorage.removeItem("loggedBlogappUser");
   };
-
-  useEffect(() => {
-    if (user !== null) {
-      blogService.getAll().then((blogs) => setBlogs(blogs));
-    }
-  }, [user]);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
@@ -28,6 +22,14 @@ const App = () => {
     }
   }, []);
 
+  const result = useQuery("blogs", blogService.getAll, { enabled: !!user });
+
+  if (result.isLoading) {
+    return <div>loading data...</div>;
+  }
+
+  const blogs = result.data;
+
   return (
     <div>
       {user === null ? <h1>Login</h1> : <h1>Blogs</h1>}
@@ -35,12 +37,7 @@ const App = () => {
       {user === null ? (
         <LoginForm setUser={setUser} />
       ) : (
-        <Blogs
-          blogs={blogs}
-          user={user}
-          handleLogout={handleLogout}
-          setBlogs={setBlogs}
-        />
+        <Blogs blogs={blogs} user={user} handleLogout={handleLogout} />
       )}
     </div>
   );
