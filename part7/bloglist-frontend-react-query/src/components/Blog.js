@@ -7,7 +7,7 @@ import {
 } from "../contexts/notificationContext";
 import blogService from "../services/blogs";
 
-const Blog = ({ blog, onClickRemove, userId }) => {
+const Blog = ({ blog, userId }) => {
   const [visible, setVisible] = useState(false);
 
   const showWhenVisible = { display: visible ? "" : "none" };
@@ -33,9 +33,11 @@ const Blog = ({ blog, onClickRemove, userId }) => {
     },
   });
 
+  const deleteBlogMutation = useMutation(blogService.remove);
+
   const dispatch = useNotificationDispatch();
 
-  const incrementLikes = async (blog) => {
+  const incrementLikes = (blog) => {
     updateBlogMutation.mutate({
       id: blog.id,
       postData: {
@@ -45,6 +47,25 @@ const Blog = ({ blog, onClickRemove, userId }) => {
         likes: blog.likes + 1,
       },
     });
+  };
+
+  const deleteBlog = (blog) => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+      deleteBlogMutation.mutate(blog.id, {
+        onSuccess: () => {
+          showSuccessMessage(dispatch, `blog ${blog.title} has been removed`);
+          const blogs = queryClient.getQueryData("blogs");
+          queryClient.setQueryData(
+            "blogs",
+            blogs.filter((b) => b.id !== blog.id)
+          );
+        },
+        onError: (error, _variables, _context) => {
+          console.log(error);
+          showErrorMessage(dispatch, error.response.data.error);
+        },
+      });
+    }
   };
 
   const blogStyle = {
@@ -74,7 +95,7 @@ const Blog = ({ blog, onClickRemove, userId }) => {
         {blog.user.name}
         <br />
         {blog.user.id === userId ? (
-          <button className="remove-blog" onClick={() => onClickRemove(blog)}>
+          <button className="remove-blog" onClick={() => deleteBlog(blog)}>
             remove
           </button>
         ) : (
