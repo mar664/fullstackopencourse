@@ -20,6 +20,9 @@ const BlogForm = () => {
         dispatch,
         `a new blog ${newBlog.title} by ${newBlog.author} added`
       );
+      title.clear();
+      author.clear();
+      url.clear();
       const blogs = queryClient.getQueryData("blogs");
       queryClient.setQueryData("blogs", blogs.concat(newBlog));
     },

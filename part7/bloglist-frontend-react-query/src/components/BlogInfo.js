@@ -7,9 +7,15 @@ import {
 import blogService from "../services/blogs";
 import { useUserValue } from "../contexts/userContext";
 import CommentsForm from "./CommentsForm";
+import {
+  // ...
+  useNavigate,
+} from "react-router-dom";
 
 const BlogInfo = ({ blog }) => {
+  if (!blog) return;
   const user = useUserValue();
+  const navigate = useNavigate();
 
   const queryClient = useQueryClient();
 
@@ -49,6 +55,7 @@ const BlogInfo = ({ blog }) => {
       deleteBlogMutation.mutate(blog.id, {
         onSuccess: () => {
           showSuccessMessage(dispatch, `blog ${blog.title} has been removed`);
+          navigate("/");
           const blogs = queryClient.getQueryData("blogs");
           queryClient.setQueryData(
             "blogs",
@@ -64,7 +71,7 @@ const BlogInfo = ({ blog }) => {
   };
 
   return (
-    <div className="blog">
+    <div className="blog-info">
       <h2>
         <span className="blog-title">{blog.title}</span>{" "}
         <span className="blog-author">{blog.author}</span>
