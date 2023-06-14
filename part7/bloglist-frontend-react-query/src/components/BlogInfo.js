@@ -6,6 +6,7 @@ import {
 } from "../contexts/notificationContext";
 import blogService from "../services/blogs";
 import { useUserValue } from "../contexts/userContext";
+import CommentsForm from "./CommentsForm";
 
 const BlogInfo = ({ blog }) => {
   const user = useUserValue();
@@ -85,6 +86,8 @@ const BlogInfo = ({ blog }) => {
         ""
       )}
       <div>
+        <h3>comments</h3>
+        <CommentsForm blog={blog} />
         <ul>
           {blog.comments.map((c) => (
             <li key={Math.floor(Math.random() * 100000)}>{c}</li>
