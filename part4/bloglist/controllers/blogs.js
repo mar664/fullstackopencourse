@@ -18,7 +18,7 @@ blogsRouter.post('/', async (request, response) => {
   user.blogs = user.blogs.concat(result._id);
   await user.save();
 
-  response.status(201).json(result);
+  response.status(201).json(result.populate('user', { blogs: 0 }));
 });
 
 blogsRouter.delete('/:id', async (request, response) => {
@@ -47,7 +47,7 @@ blogsRouter.put('/:id', async (request, response) => {
     new: true,
     runValidators: true,
     context: 'query',
-  });
+  }).populate('user', { blogs: 0 });
 
   response.json(updatedBlog);
 });
