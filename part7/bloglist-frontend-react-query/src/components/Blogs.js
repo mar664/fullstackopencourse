@@ -10,30 +10,6 @@ import {
 
 const Blogs = ({ blogs, user, handleLogout, setBlogs }) => {
   const dispatch = useNotificationDispatch();
-
-  const incrementLikes = async (blog) => {
-    try {
-      await blogService.update(blog.id, {
-        author: blog.author,
-        title: blog.title,
-        url: blog.url,
-        likes: blog.likes + 1,
-      });
-      showErrorMessage(dispatch, `${blog.title} likes incremented`);
-      setBlogs(
-        blogs.map((b) => {
-          if (blog.id === b.id) {
-            b.likes++;
-          }
-          return b;
-        })
-      );
-    } catch (exception) {
-      console.log(exception);
-      showErrorMessage(dispatch, exception.response.data.error);
-    }
-  };
-
   const handleDelete = async (blog) => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
       try {
@@ -66,7 +42,6 @@ const Blogs = ({ blogs, user, handleLogout, setBlogs }) => {
           blog={blog}
           userId={user.id}
           onClickRemove={handleDelete}
-          onClickLikes={incrementLikes}
         />
       ))}
     </div>
