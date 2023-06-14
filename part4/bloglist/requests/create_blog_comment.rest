@@ -1,0 +1,39 @@
+@baseUrl = http://localhost:3003/api
+
+# @name login
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+    "username": "matthewr",
+    "password": "this_is_my_password"
+}
+
+###
+
+@token = {{login.response.body.$.token}}
+
+# @name create
+
+POST {{baseUrl}}/blogs
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "title": "New Blog 1",
+    "author": "Me",
+    "url": "http://myurl.com",
+    "likes": 100
+}
+
+###
+
+@id = {{create.response.body.$.id}}
+
+POST {{baseUrl}}/blogs/comments/{{id}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "comment": "Hey"
+}
