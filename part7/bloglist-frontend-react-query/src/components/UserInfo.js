@@ -10,10 +10,10 @@ const UserInfo = () => {
   };
 
   return (
-    <p>
-      {user.name} logged in <br />
+    <span>
+      {user.name} logged in{" "}
       <button onClick={() => handleLogout()}>logout</button>
-    </p>
+    </span>
   );
 };
 
