@@ -7,15 +7,11 @@ import { useQuery } from "react-query";
 import { useUserDispatch, useUserValue } from "./contexts/userContext";
 import { Routes, Route } from "react-router-dom";
 import Users from "./components/Users";
+import UserInfo from "./components/UserInfo";
 
 const App = () => {
   const userDispatch = useUserDispatch();
   const user = useUserValue();
-
-  const handleLogout = async () => {
-    userDispatch({ type: "CLEAR_USER" });
-    window.localStorage.removeItem("loggedBlogappUser");
-  };
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
@@ -41,13 +37,13 @@ const App = () => {
       {user === null ? (
         <LoginForm />
       ) : (
-        <Routes>
-          <Route path="/users" element={<Users blogs={blogs} />} />
-          <Route
-            path="/"
-            element={<Blogs blogs={blogs} handleLogout={handleLogout} />}
-          />
-        </Routes>
+        <>
+          <UserInfo />
+          <Routes>
+            <Route path="/users" element={<Users blogs={blogs} />} />
+            <Route path="/" element={<Blogs blogs={blogs} />} />
+          </Routes>
+        </>
       )}
     </div>
   );
