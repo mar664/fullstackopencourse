@@ -84,6 +84,13 @@ const BlogInfo = ({ blog }) => {
       ) : (
         ""
       )}
+      <div>
+        <ul>
+          {blog.comments.map((c) => (
+            <li key={Math.floor(Math.random() * 100000)}>{c}</li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
