@@ -2,10 +2,21 @@ import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import { Routes, Route, Link } from "react-router-dom";
-
+import Notify from "./components/Notify";
+import { useState } from "react";
 const App = () => {
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  const notify = (message) => {
+    setErrorMessage(message);
+    setTimeout(() => {
+      setErrorMessage(null);
+    }, 10000);
+  };
+
   return (
     <div>
+      <Notify errorMessage={errorMessage} />
       <div>
         <Link to="/">
           <button>authors</button>
@@ -18,9 +29,9 @@ const App = () => {
         </Link>
       </div>
       <Routes>
-        <Route path="/" element={<Authors />} />
-        <Route path="/books" element={<Books />} />
-        <Route path="/add" element={<NewBook />} />
+        <Route path="/" element={<Authors setError={notify} />} />
+        <Route path="/books" element={<Books setError={notify} />} />
+        <Route path="/add" element={<NewBook setError={notify} />} />
       </Routes>
     </div>
   );
