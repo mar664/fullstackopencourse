@@ -11,6 +11,7 @@ import {
   // ...
   useNavigate,
 } from "react-router-dom";
+import { Button } from "@mui/material";
 
 const BlogInfo = ({ blog }) => {
   if (!blog) return;
@@ -79,16 +80,24 @@ const BlogInfo = ({ blog }) => {
       <a href={blog.url}>{blog.url}</a>
       <br />
       <span className="likes">{blog.likes}</span> likes
-      <button className="like-button" onClick={() => incrementLikes(blog)}>
+      <Button
+        variant="contained"
+        className="like-button"
+        onClick={() => incrementLikes(blog)}
+      >
         like
-      </button>
+      </Button>
       <br />
       added by {blog.user.name}
       <br />
       {blog.user.id === user.id ? (
-        <button className="remove-blog" onClick={() => deleteBlog(blog)}>
+        <Button
+          variant="contained"
+          className="remove-blog"
+          onClick={() => deleteBlog(blog)}
+        >
           remove
-        </button>
+        </Button>
       ) : (
         ""
       )}

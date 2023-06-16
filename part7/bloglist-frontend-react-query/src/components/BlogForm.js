@@ -6,6 +6,7 @@ import {
 } from "../contexts/notificationContext";
 import { useMutation, useQueryClient } from "react-query";
 import { useField } from "../hooks";
+import { Button, TextField } from "@mui/material";
 
 const BlogForm = () => {
   const title = useField({ placeholder: "enter title" });
@@ -44,16 +45,16 @@ const BlogForm = () => {
 
   return (
     <form onSubmit={handleCreateBlog}>
-      title:
-      <input {...title.spread} />
+      <TextField variant="standard" label="Title" {...title.spread} />
       <br />
-      author:
-      <input {...author.spread} />
+      <TextField variant="standard" label="Author" {...author.spread} />
       <br />
-      url:
-      <input {...url.spread} />
+      <TextField variant="standard" label="URL" {...url.spread} />
       <br />
-      <input type="submit" value="create" />
+      <br />
+      <Button variant="contained" type="submit">
+        create
+      </Button>
       <br />
     </form>
   );

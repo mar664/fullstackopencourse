@@ -6,6 +6,7 @@ import {
 } from "../contexts/notificationContext";
 import { useField } from "../hooks";
 import { useMutation, useQueryClient } from "react-query";
+import { Button, TextField } from "@mui/material";
 
 const CommentsForm = ({ blog }) => {
   const comment = useField("text");
@@ -35,8 +36,10 @@ const CommentsForm = ({ blog }) => {
 
   return (
     <form onSubmit={addComment}>
-      <input {...comment.spread} />
-      <button type="submit">add comment</button>
+      <TextField label="comment" {...comment.spread} />
+      <Button variant="contained" type="submit">
+        add comment
+      </Button>
     </form>
   );
 };

@@ -6,6 +6,7 @@ import {
 } from "../contexts/notificationContext";
 import { useUserDispatch } from "../contexts/userContext";
 import { useField } from "../hooks";
+import { Button, TextField } from "@mui/material";
 
 const LoginForm = () => {
   const username = useField({ placeholder: "enter username" });
@@ -35,14 +36,14 @@ const LoginForm = () => {
   return (
     <form onSubmit={handleLogin}>
       <div>
-        username
-        <input {...username.spread} name="Username" />
+        <TextField {...username.spread} name="Username" />
       </div>
       <div>
-        password
-        <input {...password.spread} name="Password" />
+        <TextField {...password.spread} name="Password" />
       </div>
-      <button type="submit">login</button>
+      <Button variant="contained" color="primary" type="submit">
+        login
+      </Button>
     </form>
   );
 };

@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import { useUserDispatch, useUserValue } from "../contexts/userContext";
 
 const UserInfo = () => {
@@ -12,7 +13,9 @@ const UserInfo = () => {
   return (
     <span>
       {user.name} logged in{" "}
-      <button onClick={() => handleLogout()}>logout</button>
+      <Button color="inherit" onClick={() => handleLogout()}>
+        logout
+      </Button>
     </span>
   );
 };

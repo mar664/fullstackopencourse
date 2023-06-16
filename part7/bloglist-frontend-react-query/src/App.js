@@ -14,6 +14,7 @@ import {
 } from "react-router-dom";
 import BlogInfo from "./components/BlogInfo";
 import Menu from "./components/Menu";
+import { Container } from "@mui/material";
 
 const App = () => {
   const userDispatch = useUserDispatch();
@@ -49,7 +50,7 @@ const App = () => {
       : null;
 
   return (
-    <div>
+    <Container>
       {user === null ? (
         <h1>Login</h1>
       ) : (
@@ -71,7 +72,7 @@ const App = () => {
           </Routes>
         </>
       )}
-    </div>
+    </Container>
   );
 };
 

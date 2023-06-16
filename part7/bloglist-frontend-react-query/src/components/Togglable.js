@@ -1,32 +1,40 @@
-import { useState } from 'react'
-import PropTypes from 'prop-types'
+import { useState } from "react";
+import PropTypes from "prop-types";
+import { Button } from "@mui/material";
 
 const Togglable = (props) => {
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(false);
 
-  const hideWhenVisible = { display: visible ? 'none' : '' }
-  const showWhenVisible = { display: visible ? '' : 'none' }
+  const hideWhenVisible = { display: visible ? "none" : "" };
+  const showWhenVisible = { display: visible ? "" : "none" };
 
   const toggleVisibility = () => {
-    setVisible(!visible)
-  }
+    setVisible(!visible);
+  };
 
   return (
     <div>
       <div style={hideWhenVisible}>
-        <button onClick={toggleVisibility} className="showContent">{props.buttonLabel}</button>
+        <Button
+          variant="outlined"
+          onClick={toggleVisibility}
+          className="showContent"
+        >
+          {props.buttonLabel}
+        </Button>
       </div>
       <div style={showWhenVisible} className="togglableContent">
         {props.children}
-        <button onClick={toggleVisibility}>close</button>
+        <Button variant="outlined" onClick={toggleVisibility}>
+          close
+        </Button>
       </div>
     </div>
-  )
-}
+  );
+};
 
 Togglable.propTypes = {
-  buttonLabel: PropTypes.string.isRequired
-}
+  buttonLabel: PropTypes.string.isRequired,
+};
 
-
-export default Togglable
+export default Togglable;
