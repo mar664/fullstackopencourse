@@ -99,6 +99,10 @@ let books = [
 */
 
 const typeDefs = `
+    type Author {
+        name: String!,
+        bookCount: Int!
+    }
     type Book {
         title: String!,
         author: String!,
@@ -109,7 +113,8 @@ const typeDefs = `
     type Query {
         bookCount: Int,
         authorCount: Int,
-        allBooks: [Book!]!
+        allBooks: [Book!]!,
+        allAuthors: [Author!]!
     }
 `;
 
@@ -118,6 +123,15 @@ const resolvers = {
     bookCount: () => books.length,
     authorCount: () => lodash.uniqBy(books, (b) => b.author).length,
     allBooks: () => books,
+    allAuthors: () =>
+      lodash
+        .chain(books)
+        .groupBy("author")
+        .map((books, author) => ({
+          name: author,
+          bookCount: books.length,
+        }))
+        .value(),
   },
 };
 
