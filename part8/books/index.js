@@ -113,7 +113,7 @@ const typeDefs = `
     type Query {
         bookCount: Int,
         authorCount: Int,
-        allBooks(author: String): [Book!]!,
+        allBooks(author: String, genre: String): [Book!]!,
         allAuthors: [Author!]!
     }
 `;
@@ -123,8 +123,14 @@ const resolvers = {
     bookCount: () => books.length,
     authorCount: () => lodash.uniqBy(books, (b) => b.author).length,
     allBooks: (root, args) => {
-      if (args.author) return books.filter((b) => b.author === args.author);
-      return books;
+      let filteredBooks = [...books];
+      if (args.author)
+        filteredBooks = filteredBooks.filter((b) => b.author === args.author);
+      if (args.genre)
+        filteredBooks = filteredBooks.filter(
+          (b) => b.genres.indexOf(args.genre) !== -1
+        );
+      return filteredBooks;
     },
     allAuthors: () =>
       lodash
