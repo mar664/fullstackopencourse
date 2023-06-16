@@ -26,11 +26,13 @@ const AuthorBirthYear = (props) => {
       <h2>Set birthyear</h2>
       <form onSubmit={setAuthorBirthYear}>
         name{" "}
-        <input
-          type="text"
-          value={name}
-          onChange={({ target }) => setName(target.value)}
-        />
+        <select value={name} onChange={({ target }) => setName(target.value)}>
+          {props.authors.map((a) => (
+            <option key={a.name} value={a.name}>
+              {a.name}
+            </option>
+          ))}
+        </select>
         <br />
         born{" "}
         <input
