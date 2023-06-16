@@ -1,5 +1,6 @@
 const { ApolloServer } = require("@apollo/server");
 const { startStandaloneServer } = require("@apollo/server/standalone");
+const lodash = require("lodash");
 
 let authors = [
   {
@@ -99,13 +100,15 @@ let books = [
 
 const typeDefs = `
   type Query {
-    dummy: Int
+    bookCount: Int,
+    authorCount: Int
   }
 `;
 
 const resolvers = {
   Query: {
-    dummy: () => 0,
+    bookCount: () => books.length,
+    authorCount: () => lodash.uniqBy(books, (b) => b.author).length,
   },
 };
 
