@@ -6,6 +6,7 @@ import Notify from "./components/Notify";
 import { useState, useEffect } from "react";
 import LoginForm from "./components/LoginForm";
 import { useNavigate } from "react-router-dom";
+import Recommendations from "./components/Recommendations";
 
 const App = () => {
   const [errorMessage, setErrorMessage] = useState(null);
@@ -44,6 +45,9 @@ const App = () => {
             <Link to="/add">
               <button>add book</button>
             </Link>
+            <Link to="/recommended">
+              <button>recommended</button>
+            </Link>
             <button onClick={logout}>logout</button>
           </>
         ) : (
@@ -53,13 +57,14 @@ const App = () => {
         )}
       </div>
       <Routes>
+        <Route path="/" element={<Books setError={notify} />} />
         <Route path="/authors" element={<Authors setError={notify} />} />
         <Route
           path="/login"
           element={<LoginForm setToken={setToken} setError={notify} />}
         />
-        <Route path="/" element={<Books setError={notify} />} />
         <Route path="/add" element={<NewBook setError={notify} />} />
+        <Route path="/recommended" element={<Recommendations />} />
       </Routes>{" "}
     </div>
   );
