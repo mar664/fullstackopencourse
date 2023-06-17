@@ -1,12 +1,13 @@
 import { useQuery } from "@apollo/client";
-import { ALL_BOOKS } from "../queries";
+import { ALL_BOOKS_AND_GENRES } from "../queries";
 import { useState } from "react";
-import _ from "lodash";
 
 const Books = (props) => {
   const [genre, setGenre] = useState("all genres");
 
-  const result = useQuery(ALL_BOOKS);
+  const result = useQuery(ALL_BOOKS_AND_GENRES, {
+    variables: { genre: genre === "all genres" ? null : genre },
+  });
 
   if (result.loading) {
     return <div>loading...</div>;
@@ -14,11 +15,8 @@ const Books = (props) => {
 
   const books = result.data.allBooks;
 
-  const allGenres = _.uniq(_.flatMap(books, "genres"));
+  const allGenres = result.data.allGenres;
 
-  let filteredBooks = [...books];
-  if (genre !== "all genres")
-    filteredBooks = filteredBooks.filter((b) => b.genres.indexOf(genre) !== -1);
   return (
     <div>
       <h2>books</h2>
@@ -30,7 +28,7 @@ const Books = (props) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {filteredBooks.map((a) => (
+          {books.map((a) => (
             <tr key={a.title}>
               <td>{a.title}</td>
               <td>{a.author.name}</td>

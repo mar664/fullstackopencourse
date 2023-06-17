@@ -1,6 +1,5 @@
 import { useQuery } from "@apollo/client";
 import { ALL_BOOKS, ME } from "../queries";
-import _ from "lodash";
 
 const Recommendations = (props) => {
   const me = useQuery(ME);
@@ -8,7 +7,8 @@ const Recommendations = (props) => {
   const favouriteGenre = me?.data?.me?.favoriteGenre;
 
   const result = useQuery(ALL_BOOKS, {
-    skip: !favouriteGenre,
+    variables: { genre: favouriteGenre },
+    skip: !props.show && !favouriteGenre,
   });
 
   if (me.loading) {
@@ -32,15 +32,13 @@ const Recommendations = (props) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {[...books]
-            .filter((b) => b.genres.indexOf(favouriteGenre) !== -1)
-            .map((a) => (
-              <tr key={a.title}>
-                <td>{a.title}</td>
-                <td>{a.author.name}</td>
-                <td>{a.published}</td>
-              </tr>
-            ))}
+          {books.map((a) => (
+            <tr key={a.title}>
+              <td>{a.title}</td>
+              <td>{a.author.name}</td>
+              <td>{a.published}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

@@ -3,6 +3,7 @@ const User = require("./models/user");
 const Author = require("./models/author");
 const { GraphQLError } = require("graphql");
 const jwt = require("jsonwebtoken");
+const lodash = require("lodash");
 
 const resolvers = {
   Query: {
@@ -25,6 +26,11 @@ const resolvers = {
     allAuthors: async () => Author.find(),
     me: (root, args, context) => {
       return context.currentUser;
+    },
+    allGenres: async () => {
+      const books = await Book.find();
+      const genresArray = books.map((b) => b.genres);
+      return lodash.uniq(lodash.flatten(genresArray));
     },
   },
   Mutation: {
