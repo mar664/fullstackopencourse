@@ -75,3 +75,18 @@ export const ME = gql`
     }
   }
 `;
+
+const BOOK_DETAILS = gql`
+  fragment BookDetails on Book {
+    author {
+        id
+        name
+        born
+        bookCount
+      }
+      genres
+      id
+      published
+      title
+  }
+`
