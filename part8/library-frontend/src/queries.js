@@ -6,6 +6,7 @@ export const ALL_AUTHORS = gql`
       name
       born
       bookCount
+      id
     }
   }
 `;
@@ -18,6 +19,7 @@ export const ALL_BOOKS = gql`
         name
       }
       published
+      id
     }
   }
 `;
@@ -46,6 +48,7 @@ export const ADD_BOOK = gql`
         born
       }
       title
+      id
     }
   }
 `;
@@ -79,17 +82,17 @@ export const ME = gql`
 const BOOK_DETAILS = gql`
   fragment BookDetails on Book {
     author {
-        id
-        name
-        born
-        bookCount
-      }
-      genres
       id
-      published
-      title
+      name
+      born
+      bookCount
+    }
+    genres
+    id
+    published
+    title
   }
-`
+`;
 
 export const BOOK_ADDED = gql`
   subscription {
@@ -98,4 +101,4 @@ export const BOOK_ADDED = gql`
     }
   }
   ${BOOK_DETAILS}
-`
+`;

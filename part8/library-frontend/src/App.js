@@ -7,18 +7,29 @@ import { useState, useEffect } from "react";
 import LoginForm from "./components/LoginForm";
 import { useNavigate } from "react-router-dom";
 import Recommendations from "./components/Recommendations";
-import { useSubscription } from "@apollo/client";
-import { BOOK_ADDED } from "./queries";
+import { useApolloClient, useSubscription } from "@apollo/client";
+import { ALL_BOOKS, BOOK_ADDED } from "./queries";
+import { updateBookCache } from "./utils/books";
 
 const App = () => {
   const [errorMessage, setErrorMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
   const [genresSelected, setGenresSelected] = useState([]);
   const [token, setToken] = useState(null);
   const navigate = useNavigate();
-  const notify = (message) => {
+  const client = useApolloClient();
+
+  const notifyError = (message) => {
     setErrorMessage(message);
     setTimeout(() => {
       setErrorMessage(null);
+    }, 10000);
+  };
+
+  const notifySuccess = (message) => {
+    setSuccessMessage(message);
+    setTimeout(() => {
+      setSuccessMessage(null);
     }, 10000);
   };
 
@@ -31,7 +42,6 @@ const App = () => {
   const setGenreSelected = (genre) => {
     if (genresSelected.indexOf(genre) === -1)
       setGenresSelected(genresSelected.concat(genre));
-    console.log(genresSelected);
   };
 
   useEffect(() => {
@@ -41,13 +51,31 @@ const App = () => {
 
   useSubscription(BOOK_ADDED, {
     onData: ({ data }) => {
-      window.alert("New book added");
+      const bookAdded = data.data.bookAdded;
+      notifySuccess(`${bookAdded.title} added`);
+
+      updateBookCache(
+        client.cache,
+        { query: ALL_BOOKS, variables: { genre: null } },
+        bookAdded
+      );
+
+      // update already selected genres on books page
+      for (let g of genresSelected) {
+        if (bookAdded.genres.indexOf(g) !== -1)
+          updateBookCache(
+            client.cache,
+            { query: ALL_BOOKS, variables: { genre: g } },
+            bookAdded
+          );
+      }
     },
   });
 
   return (
     <div>
       <Notify errorMessage={errorMessage} />
+      <Notify successMessage={successMessage} />
       <div>
         <Link to="/authors">
           <button>authors</button>
@@ -75,18 +103,18 @@ const App = () => {
         <Route
           path="/"
           element={
-            <Books setError={notify} setGenreSelected={setGenreSelected} />
+            <Books setError={notifyError} setGenreSelected={setGenreSelected} />
           }
         />
-        <Route path="/authors" element={<Authors setError={notify} />} />
+        <Route path="/authors" element={<Authors setError={notifyError} />} />
         <Route
           path="/login"
-          element={<LoginForm setToken={setToken} setError={notify} />}
+          element={<LoginForm setToken={setToken} setError={notifyError} />}
         />
         <Route
           path="/add"
           element={
-            <NewBook setError={notify} genresSelected={genresSelected} />
+            <NewBook setError={notifyError} genresSelected={genresSelected} />
           }
         />
         <Route path="/recommended" element={<Recommendations />} />
