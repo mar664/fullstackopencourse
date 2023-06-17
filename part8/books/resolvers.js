@@ -25,7 +25,33 @@ const resolvers = {
         return Book.find({ $and: filters }).populate("author");
       return Book.find(filters[0]).populate("author");
     },
-    allAuthors: async () => Author.find(),
+    allAuthors: async (root, args, context, info) => {
+      if (
+        info.fieldNodes[0].selectionSet.selections.some(
+          (f) => f.name.value === "bookCount"
+        )
+      ) {
+        return Author.aggregate([
+          {
+            $lookup: {
+              from: "books",
+              localField: "_id",
+              foreignField: "author",
+              as: "books",
+            },
+          },
+          {
+            $project: {
+              name: 1,
+              born: 1,
+              id: "$_id",
+              bookCount: { $size: "$books" },
+            },
+          },
+        ]);
+      }
+      return Author.find();
+    },
     me: (root, args, context) => {
       return context.currentUser;
     },
@@ -145,11 +171,6 @@ const resolvers = {
       };
 
       return { value: jwt.sign(userForToken, process.env.JWT_SECRET) };
-    },
-  },
-  Author: {
-    bookCount: async (root) => {
-      return Book.find({ author: root.id }).countDocuments();
     },
   },
   Subscription: {
