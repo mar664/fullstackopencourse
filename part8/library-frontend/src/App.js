@@ -10,6 +10,7 @@ import Recommendations from "./components/Recommendations";
 
 const App = () => {
   const [errorMessage, setErrorMessage] = useState(null);
+  const [genresSelected, setGenresSelected] = useState([]);
   const [token, setToken] = useState(null);
   const navigate = useNavigate();
   const notify = (message) => {
@@ -23,6 +24,12 @@ const App = () => {
     localStorage.clear();
     setToken(null);
     navigate("/");
+  };
+
+  const setGenreSelected = (genre) => {
+    if (genresSelected.indexOf(genre) === -1)
+      setGenresSelected(genresSelected.concat(genre));
+    console.log(genresSelected);
   };
 
   useEffect(() => {
@@ -57,13 +64,23 @@ const App = () => {
         )}
       </div>
       <Routes>
-        <Route path="/" element={<Books setError={notify} />} />
+        <Route
+          path="/"
+          element={
+            <Books setError={notify} setGenreSelected={setGenreSelected} />
+          }
+        />
         <Route path="/authors" element={<Authors setError={notify} />} />
         <Route
           path="/login"
           element={<LoginForm setToken={setToken} setError={notify} />}
         />
-        <Route path="/add" element={<NewBook setError={notify} />} />
+        <Route
+          path="/add"
+          element={
+            <NewBook setError={notify} genresSelected={genresSelected} />
+          }
+        />
         <Route path="/recommended" element={<Recommendations />} />
       </Routes>{" "}
     </div>

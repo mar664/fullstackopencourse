@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { ADD_BOOK, ALL_AUTHORS, ALL_BOOKS } from "../queries";
+import { ADD_BOOK, ALL_AUTHORS, ALL_BOOKS, ALL_GENRES } from "../queries";
 import { useNavigate } from "react-router-dom";
 
 const NewBook = (props) => {
@@ -11,8 +11,24 @@ const NewBook = (props) => {
   const [genres, setGenres] = useState([]);
   const navigate = useNavigate();
 
+  // Update genres that have already been cached and are part of book added
+  const queriesToRefetch = () => {
+    let extraQueries = [];
+    for (let g of props.genresSelected) {
+      if (genres.indexOf(g) !== -1)
+        extraQueries = extraQueries.concat({
+          query: ALL_BOOKS,
+          variables: { genre: g },
+        });
+    }
+    return extraQueries;
+  };
   const [addBook] = useMutation(ADD_BOOK, {
-    refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
+    refetchQueries: [
+      { query: ALL_GENRES },
+      { query: ALL_BOOKS },
+      { query: ALL_AUTHORS },
+    ].concat(queriesToRefetch()),
     onError: (error) => {
       const messages = error.graphQLErrors[0].message;
       props.setError(messages);
