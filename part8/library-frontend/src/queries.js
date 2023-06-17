@@ -90,3 +90,12 @@ const BOOK_DETAILS = gql`
       title
   }
 `
+
+export const BOOK_ADDED = gql`
+  subscription {
+    bookAdded {
+      ...BookDetails
+    }
+  }
+  ${BOOK_DETAILS}
+`

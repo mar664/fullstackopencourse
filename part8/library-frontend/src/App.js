@@ -7,6 +7,8 @@ import { useState, useEffect } from "react";
 import LoginForm from "./components/LoginForm";
 import { useNavigate } from "react-router-dom";
 import Recommendations from "./components/Recommendations";
+import { useSubscription } from "@apollo/client";
+import { BOOK_ADDED } from "./queries";
 
 const App = () => {
   const [errorMessage, setErrorMessage] = useState(null);
@@ -36,6 +38,12 @@ const App = () => {
     const token = localStorage.getItem("library-user-token");
     setToken(token);
   }, []);
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      window.alert("New book added");
+    },
+  });
 
   return (
     <div>
