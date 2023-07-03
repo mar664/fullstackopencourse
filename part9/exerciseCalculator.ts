@@ -1,3 +1,23 @@
+import { isNotNumber } from "./utils";
+
+interface ExerciseValues {
+    hours: Array<number>;
+    target: number;
+}
+  
+const parseArguments = (args: string[]): ExerciseValues => {
+    if (args.length < 4) throw new Error('Not enough arguments');
+
+    if (!args.slice(3).some(v => isNotNumber(v))) {
+        return {
+            hours: args.slice(3).map((a: string) : number => Number(a)),
+            target: Number(args[2])
+        }
+    } else {
+        throw new Error('Provided values were not numbers!');
+    }
+}
+
 type Rating = 1 | 2 | 3;
 
 interface ExerciseResult {
@@ -49,7 +69,9 @@ const calculateExercises = (hours: Array<number>, target: number): ExerciseResul
 }
 
 try {
-    console.log(calculateExercises([], 2))
+    const { hours, target } = parseArguments(process.argv);
+
+    console.log(calculateExercises(hours, target))
 } catch (error: unknown) {
     let errorMessage = 'Something went wrong: '
     if (error instanceof Error) {

@@ -1,3 +1,24 @@
+import { isNotNumber } from "./utils";
+
+interface BMIValues {
+    height: number;
+    weight: number;
+}
+
+const parseArguments = (args: string[]): BMIValues => {
+    if (args.length < 4) throw new Error('Not enough arguments');
+    if (args.length > 4) throw new Error('Too many arguments');
+
+    if (!args.slice(2).some(v => isNotNumber(v))) {
+        return {
+            height: Number(args[2]),
+            weight: Number(args[3])
+        }
+    } else {
+        throw new Error('Provided values were not numbers!');
+    }
+}
+
 /* Calculates the BMI given height in cm and weight in kg and returns a message conveying the result */
 const calculateBmi = (height : number, weight : number) : string => {
     if(height <= 0) throw new Error("Height must be greater than zero")
@@ -17,7 +38,9 @@ const calculateBmi = (height : number, weight : number) : string => {
 }
 
 try {
-    console.log(calculateBmi(180, 74));
+    const { height, weight } = parseArguments(process.argv);
+
+    console.log(calculateBmi(height, weight));
 } catch (error: unknown) {
     let errorMessage = 'Something went wrong: '
     if (error instanceof Error) {
