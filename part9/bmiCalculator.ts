@@ -35,6 +35,7 @@ const calculateBmi = (height : number, weight : number) : string => {
     else if (BMI >= 30.0 && BMI < 35.0) return "Obese (Class I)"
     else if (BMI >= 35.0 && BMI < 40.0) return "Obese (Class II)"
     else if (BMI >= 40.0) return "Obese (Class III)"
+    throw new Error("BMI range not found")
 }
 
 try {
