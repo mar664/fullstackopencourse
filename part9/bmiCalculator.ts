@@ -14,11 +14,11 @@ const parseArguments = (args: string[]): BMIValues => {
         return {
             height: Number(args[2]),
             weight: Number(args[3])
-        }
+        };
     } else {
         throw new Error('Provided values were not numbers!');
     }
-}
+};
 
 
 try {
@@ -26,7 +26,7 @@ try {
 
     console.log(calculateBmi(height, weight));
 } catch (error: unknown) {
-    let errorMessage = 'Something went wrong: '
+    let errorMessage = 'Something went wrong: ';
     if (error instanceof Error) {
         errorMessage += error.message;
     }
