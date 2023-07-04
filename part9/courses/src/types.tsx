@@ -1,8 +1,3 @@
-export interface Course {
-  name: string;
-  exerciseCount: number;
-}
-
 export interface CoursePartBase {
   name: string;
   exerciseCount: number;
@@ -26,7 +21,13 @@ export interface CoursePartBackground extends CoursePartWithDescription {
   kind: "background";
 }
 
+export interface CoursePartWithRequirements extends CoursePartWithDescription {
+  requirements: string[];
+  kind: "special";
+}
+
 export type CoursePart =
   | CoursePartBasic
   | CoursePartGroup
-  | CoursePartBackground;
+  | CoursePartBackground
+  | CoursePartWithRequirements;

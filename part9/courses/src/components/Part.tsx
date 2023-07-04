@@ -6,13 +6,17 @@ interface PartProps {
 }
 
 const Part = ({ coursePart }: PartProps) => {
+  const coursePartTitle = (
+    <b>
+      {coursePart.name} {coursePart.kind}
+    </b>
+  );
+
   switch (coursePart.kind) {
     case "basic":
       return (
         <p>
-          <b>
-            {coursePart.name} {coursePart.kind}
-          </b>
+          {coursePartTitle}
           <br />
           <i>{coursePart.description}</i>
         </p>
@@ -20,9 +24,7 @@ const Part = ({ coursePart }: PartProps) => {
     case "group":
       return (
         <p>
-          <b>
-            {coursePart.name} {coursePart.kind}
-          </b>
+          {coursePartTitle}
           <br />
           project exercises {coursePart.groupProjectCount}
         </p>
@@ -30,11 +32,21 @@ const Part = ({ coursePart }: PartProps) => {
     case "background":
       return (
         <p>
-          <b>
-            {coursePart.name} {coursePart.kind}
-          </b>
+          {coursePartTitle}
+          <br />
+          <i>{coursePart.description}</i>
           <br />
           submit to {coursePart.backgroundMaterial}
+        </p>
+      );
+    case "special":
+      return (
+        <p>
+          {coursePartTitle}
+          <br />
+          <i>{coursePart.description}</i>
+          <br />
+          required skills: {coursePart.requirements.join(", ")}
         </p>
       );
     default:
