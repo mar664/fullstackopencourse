@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Gender, Patient } from "../../types";
+import { Diagnosis, Gender, Patient } from "../../types";
 import patientService from "../../services/patients";
 
 import MaleIcon from "@mui/icons-material/Male";
@@ -9,9 +9,10 @@ import TransgenderIcon from "@mui/icons-material/Transgender";
 import EntryComponent from "./EntryComponent";
 interface Props {
   patientId: string | undefined;
+  diagnoses: Map<string, Diagnosis>;
 }
 
-const PatientInformationPage = ({ patientId }: Props) => {
+const PatientInformationPage = ({ patientId, diagnoses }: Props) => {
   const [patient, setPatient] = useState<Patient | null>(null);
 
   useEffect(() => {
@@ -41,7 +42,7 @@ const PatientInformationPage = ({ patientId }: Props) => {
         <Box>date of birth: {patient.dateOfBirth}</Box>
         <Typography variant="h5">entries</Typography>
         {patient.entries.map((entry) => (
-          <EntryComponent key={entry.id} entry={entry} />
+          <EntryComponent key={entry.id} entry={entry} diagnoses={diagnoses} />
         ))}
       </Box>
     </div>
