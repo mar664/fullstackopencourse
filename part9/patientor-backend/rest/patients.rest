@@ -1,0 +1,13 @@
+GET http://localhost:3001/api/patients
+###
+
+POST http://localhost:3001/api/patients
+Content-Type: application/json
+
+{
+    "name": "Billy Jones",
+    "dateOfBirth": "1974-04-25",
+    "gender": "male",
+    "occupation": "Computer Man",
+    "ssn": "fdfsdfsd-455454"
+}

@@ -9,7 +9,7 @@ interface BaseEntry {
   description: string;
   date: string;
   specialist: string;
-  diagnosisCodes?: string[];
+  diagnosisCodes?: Diagnose["code"][];
 }
 
 export enum HealthCheckRating {
@@ -53,6 +53,21 @@ export interface Patient {
 export type NonSensitivePatient = Omit<Patient, "ssn" | "entries">;
 
 export type NewPatient = Omit<Patient, "id">;
+
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown
+  ? Omit<T, K>
+  : never;
+
+export type NewEntry = UnionOmit<Entry, "id">;
+
+export type NewHealthCheckEntry = Omit<HealthCheckEntry, "id">;
+
+export type NewHospitalEntry = Omit<HospitalEntry, "id">;
+
+export type NewOccupationalHealthcareEntry = Omit<
+  OccupationalHealthcareEntry,
+  "id"
+>;
 
 export enum Gender {
   Male = "male",
