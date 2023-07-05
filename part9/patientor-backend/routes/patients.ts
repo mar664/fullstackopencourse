@@ -5,7 +5,7 @@ import patientUtils from "../utils/patients";
 const router = express.Router();
 
 router.get("/", (_req, res) => {
-  res.send(patientService.getNonSentitivePatients());
+  res.send(patientService.getNonSensitivePatients());
 });
 
 router.post("/", (req, res) => {
@@ -22,6 +22,13 @@ router.post("/", (req, res) => {
     }
     res.status(400).send(errorMessage);
   }
+});
+
+router.get("/:id", (req, res) => {
+  const { id } = req.params;
+  const patient = patientService.getPatient(id);
+  if (patient) res.json(patient);
+  else res.status(400).send("Error: patient not found");
 });
 
 export default router;
