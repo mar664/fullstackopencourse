@@ -10,20 +10,31 @@ interface DiaryEntryFormProps {
 
 const DiaryEntryForm = ({ addNewDiary }: DiaryEntryFormProps) => {
   const [date, setDate] = useState<string>("");
-  const [visibility, setVisibility] = useState<Visibility>(Visibility.Ok);
-  const [weather, setWeather] = useState<Weather>(Weather.Cloudy);
+  const [visibility, setVisibility] = useState<Visibility | null>(null);
+  const [weather, setWeather] = useState<Weather | null>(null);
   const [comment, setComment] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const onSubmitForm = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    const newDiaryEntry = { date, visibility, weather, comment };
+    if (visibility === null)
+      return setErrorMessage("Error: visibility must be chosen");
+    if (weather === null)
+      return setErrorMessage("Error: weather must be chosen");
+
+    const newDiaryEntry = {
+      date,
+      visibility,
+      weather,
+      comment,
+    };
+
     try {
       const diaryResult = await addDiaryEntry(newDiaryEntry);
       addNewDiary(diaryResult);
       setDate("");
-      setVisibility(Visibility.Ok);
-      setWeather(Weather.Cloudy);
+      setVisibility(null);
+      setWeather(null);
       setComment("");
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -39,31 +50,35 @@ const DiaryEntryForm = ({ addNewDiary }: DiaryEntryFormProps) => {
       <Notification message={errorMessage} />
       <form onSubmit={onSubmitForm} onFocus={() => setErrorMessage(null)}>
         date
-        <input value={date} onChange={({ target }) => setDate(target.value)} />
+        <input
+          type="date"
+          value={date}
+          onChange={({ target }) => setDate(target.value)}
+        />
         <br />
-        visibility
-        <select
-          value={visibility}
-          onChange={({ target }) => setVisibility(target.value as Visibility)}
-        >
-          {Object.entries(Visibility).map((e) => (
-            <option key={e[1]} value={e[1]}>
-              {e[0]}
-            </option>
-          ))}
-        </select>
+        visibility:{" "}
+        {Object.entries(Visibility).map((e) => (
+          <span key={e[1]}>
+            {e[0]}{" "}
+            <input
+              type="radio"
+              name="visibility"
+              onChange={() => setVisibility(e[1])}
+            />
+          </span>
+        ))}
         <br />
-        weather
-        <select
-          value={weather}
-          onChange={({ target }) => setWeather(target.value as Weather)}
-        >
-          {Object.entries(Weather).map((e) => (
-            <option key={e[1]} value={e[1]}>
-              {e[0]}
-            </option>
-          ))}
-        </select>{" "}
+        weather:{" "}
+        {Object.entries(Weather).map((e) => (
+          <span key={e[1]}>
+            {e[0]}{" "}
+            <input
+              type="radio"
+              name="weather"
+              onChange={() => setWeather(e[1])}
+            />
+          </span>
+        ))}
         <br />
         comment
         <input
