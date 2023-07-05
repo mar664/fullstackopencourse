@@ -6,6 +6,7 @@ import patientService from "../../services/patients";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
+import EntryComponent from "./EntryComponent";
 interface Props {
   patientId: string | undefined;
 }
@@ -38,6 +39,10 @@ const PatientInformationPage = ({ patientId }: Props) => {
         <Box>ssn: {patient.ssn}</Box>
         <Box>occupation: {patient.occupation}</Box>
         <Box>date of birth: {patient.dateOfBirth}</Box>
+        <Typography variant="h5">entries</Typography>
+        {patient.entries.map((entry) => (
+          <EntryComponent key={entry.id} entry={entry} />
+        ))}
       </Box>
     </div>
   );
