@@ -1,5 +1,7 @@
 import { TextField, InputLabel } from "@mui/material";
 import { OccupationalHealthcareEntry } from "../../types";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs, { Dayjs } from "dayjs";
 interface Props {
   employerName: string;
   setEmployerName: React.Dispatch<React.SetStateAction<string>>;
@@ -24,29 +26,49 @@ const OccupationalHealthcareFields = ({
         onChange={({ target }) => setEmployerName(target.value)}
       />
       <InputLabel style={{ marginTop: 20 }}>Sickleave</InputLabel>
-      <TextField
-        label="Date"
-        placeholder="YYYY-MM-DD"
-        fullWidth
-        value={sickLeave && "startDate" in sickLeave ? sickLeave.startDate : ""}
-        onChange={({ target }) => {
-          if (sickLeave) {
-            setSickLeave({ ...sickLeave, startDate: target.value });
-          } else {
-            setSickLeave({ endDate: "", startDate: target.value });
+      <DatePicker
+        label="StartDate"
+        value={
+          sickLeave && "startDate" in sickLeave && sickLeave.startDate
+            ? dayjs(sickLeave.startDate)
+            : null
+        }
+        onChange={(value: Dayjs | null) => {
+          if (value) {
+            if (sickLeave) {
+              setSickLeave({
+                ...sickLeave,
+                startDate: value.format("DD/MM/YYYY"),
+              });
+            } else {
+              setSickLeave({
+                endDate: "",
+                startDate: value.format("DD/MM/YYYY"),
+              });
+            }
           }
         }}
       />
-      <TextField
-        label="Date"
-        placeholder="YYYY-MM-DD"
-        fullWidth
-        value={sickLeave && "endDate" in sickLeave ? sickLeave.endDate : ""}
-        onChange={({ target }) => {
-          if (sickLeave) {
-            setSickLeave({ ...sickLeave, endDate: target.value });
-          } else {
-            setSickLeave({ startDate: "", endDate: target.value });
+      <DatePicker
+        label="EndDate"
+        value={
+          sickLeave && "endDate" in sickLeave && sickLeave.endDate
+            ? dayjs(sickLeave.endDate)
+            : null
+        }
+        onChange={(value: Dayjs | null) => {
+          if (value) {
+            if (sickLeave) {
+              setSickLeave({
+                ...sickLeave,
+                endDate: value.format("DD/MM/YYYY"),
+              });
+            } else {
+              setSickLeave({
+                startDate: "",
+                endDate: value.format("DD/MM/YYYY"),
+              });
+            }
           }
         }}
       />
