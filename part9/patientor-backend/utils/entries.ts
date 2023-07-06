@@ -18,7 +18,7 @@ const parseType = (type: unknown): string => {
 
 const parseDescription = (description: unknown): string => {
   if (!description || !isString(description)) {
-    throw new Error("Incorrect or missing gender");
+    throw new Error("Incorrect or missing description");
   }
 
   return description;
@@ -96,9 +96,13 @@ const parseDischarge = (
     !("date" in discharge && "criteria" in discharge)
   ) {
     return undefined;
-  } else if (!isString(discharge.date) || !isDate(discharge.date)) {
-    throw new Error("Incorrect or missing date");
-  } else if (!isString(discharge.criteria)) {
+  } else if (
+    !discharge.date ||
+    !isString(discharge.date) ||
+    !isDate(discharge.date)
+  ) {
+    throw new Error("Incorrect or missing discharge date");
+  } else if (!discharge.criteria || !isString(discharge.criteria)) {
     throw new Error("Incorrect or missing criteria");
   }
 
@@ -129,9 +133,11 @@ const toNewEntry = (object: unknown): NewEntry => {
           };
           return newEntry;
         }
-        throw new Error("Incorrect HealthCheck data: some fields are missing");
+        throw new Error(
+          "Incorrect HealthCheck data: healthCheckRating missing"
+        );
       case "OccupationalHealthcare":
-        if ("employerName" in object && "sickLeave" in object) {
+        if ("employerName" in object) {
           const newEntry: NewOccupationalHealthcareEntry = {
             type: "OccupationalHealthcare",
             description: parseDescription(object.description),
@@ -139,26 +145,29 @@ const toNewEntry = (object: unknown): NewEntry => {
             specialist: parseSpecialist(object.specialist),
             diagnosisCodes: parseDiagnosisCodes(object.diagnosisCodes),
             employerName: parseEmployerName(object.employerName),
-            sickLeave: parseSickLeave(object.sickLeave),
           };
+
+          if ("sickLeave" in object) {
+            return { ...newEntry, sickLeave: parseSickLeave(object.sickLeave) };
+          }
           return newEntry;
         }
         throw new Error(
-          "Incorrect OccupationalHealthcare data: some fields are missing"
+          "Incorrect OccupationalHealthcare data: employerName missing"
         );
       case "Hospital":
+        const newEntry: NewHospitalEntry = {
+          type: "Hospital",
+          description: parseDescription(object.description),
+          date: parseDate(object.date),
+          specialist: parseSpecialist(object.specialist),
+          diagnosisCodes: parseDiagnosisCodes(object.diagnosisCodes),
+        };
         if ("discharge" in object) {
-          const newEntry: NewHospitalEntry = {
-            type: "Hospital",
-            description: parseDescription(object.description),
-            date: parseDate(object.date),
-            specialist: parseSpecialist(object.specialist),
-            diagnosisCodes: parseDiagnosisCodes(object.diagnosisCodes),
-            discharge: parseDischarge(object.discharge),
-          };
-          return newEntry;
+          return { ...newEntry, discharge: parseDischarge(object) };
         }
-        throw new Error("Incorrect Hospital data: some fields are missing");
+
+        return newEntry;
       default:
         assertNever(object.type as never);
     }
