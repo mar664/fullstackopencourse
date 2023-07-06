@@ -23,6 +23,7 @@ import {
   OccupationalHealthcareEntry,
 } from "../../types";
 import { assertNever } from "../../helpers";
+import HospitalEntryFields from "./HospitalEntryFields";
 
 interface Props {
   onCancel: () => void;
@@ -56,6 +57,7 @@ const AddEntryForm = ({ onCancel, onSubmit, diagnoses }: Props) => {
   );
   const [discharge, setDischarge] =
     useState<HospitalEntry["discharge"]>(undefined);
+
   const [employerName, setEmployerName] = useState("");
   const [sickLeave, setSickLeave] =
     useState<OccupationalHealthcareEntry["sickLeave"]>(undefined);
@@ -117,36 +119,10 @@ const AddEntryForm = ({ onCancel, onSubmit, diagnoses }: Props) => {
         );
       case "Hospital":
         return (
-          <>
-            <InputLabel style={{ marginTop: 20 }}>Discharge</InputLabel>
-            <TextField
-              label="Date"
-              placeholder="YYYY-MM-DD"
-              fullWidth
-              value={discharge && "date" in discharge ? discharge.date : ""}
-              onChange={({ target }) => {
-                if (discharge) {
-                  setDischarge({ ...discharge, date: target.value });
-                } else {
-                  setDischarge({ criteria: "", date: target.value });
-                }
-              }}
-            />
-            <TextField
-              label="Critieria"
-              fullWidth
-              value={
-                discharge && "criteria" in discharge ? discharge.criteria : ""
-              }
-              onChange={({ target }) => {
-                if (discharge) {
-                  setDischarge({ ...discharge, criteria: target.value });
-                } else {
-                  setDischarge({ date: "", criteria: target.value });
-                }
-              }}
-            />
-          </>
+          <HospitalEntryFields
+            discharge={discharge}
+            setDischarge={setDischarge}
+          />
         );
       case "OccupationalHealthcare":
         return (
