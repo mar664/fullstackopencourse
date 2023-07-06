@@ -24,27 +24,14 @@ import {
 } from "../../types";
 import { assertNever } from "../../helpers";
 import HospitalEntryFields from "./HospitalEntryFields";
+import OccupationalHealthcareFields from "./OccupationalHealthcareFields";
+import HealthCheckFields from "./HealthCheckFields";
 
 interface Props {
   onCancel: () => void;
   onSubmit: (values: EntryFormValues) => void;
   diagnoses: Map<string, Diagnosis>;
 }
-
-interface HealthCheckRatingOption {
-  value: number;
-  label: string;
-}
-
-// Since typescript Enums are reversible when values are numbers, need to filter when value is key
-const healthCheckOptions: HealthCheckRatingOption[] = Object.entries(
-  HealthCheckRating
-)
-  .filter((v) => isNaN(Number(v[0])))
-  .map((v) => ({
-    value: Number(v[1]),
-    label: v[0].toString(),
-  }));
 
 const AddEntryForm = ({ onCancel, onSubmit, diagnoses }: Props) => {
   const [type, setType] = useState("HealthCheck");
@@ -79,43 +66,14 @@ const AddEntryForm = ({ onCancel, onSubmit, diagnoses }: Props) => {
     setDiagnosisCodes(typeof value === "string" ? value.split(",") : value);
   };
 
-  const handleCheckCheckRatingChange = (
-    event: SelectChangeEvent<typeof healthCheckRating>
-  ) => {
-    event.preventDefault();
-    const value = event.target.value;
-    // Check value is a number and exists in HealthCheckRating enum
-    if (typeof value === "number") {
-      const rating = Object.values(HealthCheckRating).find(
-        (r) => typeof r === "number" && r === value
-      );
-      if (rating) {
-        setHealthCheckRating(value);
-      }
-    }
-  };
-
   const extraFields = (): JSX.Element => {
     switch (type) {
       case "HealthCheck":
         return (
-          <>
-            <InputLabel style={{ marginTop: 20 }}>
-              Health Check Rating
-            </InputLabel>
-            <Select
-              label="Health Check Rating"
-              fullWidth
-              value={healthCheckRating}
-              onChange={handleCheckCheckRatingChange}
-            >
-              {healthCheckOptions.map((option) => (
-                <MenuItem key={option.label} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </>
+          <HealthCheckFields
+            healthCheckRating={healthCheckRating}
+            setHealthCheckRating={setHealthCheckRating}
+          />
         );
       case "Hospital":
         return (
@@ -126,46 +84,12 @@ const AddEntryForm = ({ onCancel, onSubmit, diagnoses }: Props) => {
         );
       case "OccupationalHealthcare":
         return (
-          <>
-            <TextField
-              label="EmployerName"
-              placeholder="YYYY-MM-DD"
-              fullWidth
-              value={employerName}
-              onChange={({ target }) => setEmployerName(target.value)}
-            />
-            <InputLabel style={{ marginTop: 20 }}>Sickleave</InputLabel>
-            <TextField
-              label="Date"
-              placeholder="YYYY-MM-DD"
-              fullWidth
-              value={
-                sickLeave && "startDate" in sickLeave ? sickLeave.startDate : ""
-              }
-              onChange={({ target }) => {
-                if (sickLeave) {
-                  setSickLeave({ ...sickLeave, startDate: target.value });
-                } else {
-                  setSickLeave({ endDate: "", startDate: target.value });
-                }
-              }}
-            />
-            <TextField
-              label="Date"
-              placeholder="YYYY-MM-DD"
-              fullWidth
-              value={
-                sickLeave && "endDate" in sickLeave ? sickLeave.endDate : ""
-              }
-              onChange={({ target }) => {
-                if (sickLeave) {
-                  setSickLeave({ ...sickLeave, endDate: target.value });
-                } else {
-                  setSickLeave({ startDate: "", endDate: target.value });
-                }
-              }}
-            />
-          </>
+          <OccupationalHealthcareFields
+            employerName={employerName}
+            setEmployerName={setEmployerName}
+            sickLeave={sickLeave}
+            setSickLeave={setSickLeave}
+          />
         );
       default:
         return assertNever(type as never);
