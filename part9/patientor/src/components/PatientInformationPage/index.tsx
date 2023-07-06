@@ -1,12 +1,13 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Diagnosis, Gender, Patient } from "../../types";
+import { Diagnosis, EntryFormValues, Gender, Patient } from "../../types";
 import patientService from "../../services/patients";
-
+import axios from "axios";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
 import EntryComponent from "./EntryComponent";
+import AddEntryModal from "../AddEntryModal";
 interface Props {
   patientId: string | undefined;
   diagnoses: Map<string, Diagnosis>;
@@ -14,6 +15,41 @@ interface Props {
 
 const PatientInformationPage = ({ patientId, diagnoses }: Props) => {
   const [patient, setPatient] = useState<Patient | null>(null);
+
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [error, setError] = useState<string>();
+
+  const openModal = (): void => setModalOpen(true);
+
+  const closeModal = (): void => {
+    setModalOpen(false);
+    setError(undefined);
+  };
+
+  const submitNewEntry = async (values: EntryFormValues) => {
+    try {
+      if (!patientId) throw new Error("Patient id is missing");
+      const entry = await patientService.createEntry(patientId, values);
+      //setPatients(patients.concat(patient));
+      setModalOpen(false);
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        if (e?.response?.data && typeof e?.response?.data === "string") {
+          const message = e.response.data.replace(
+            "Something went wrong. Error: ",
+            ""
+          );
+          console.error(message);
+          setError(message);
+        } else {
+          setError("Unrecognized axios error");
+        }
+      } else {
+        console.error("Unknown error", e);
+        setError("Unknown error");
+      }
+    }
+  };
 
   useEffect(() => {
     if (patientId) {
@@ -44,6 +80,16 @@ const PatientInformationPage = ({ patientId, diagnoses }: Props) => {
         {patient.entries.map((entry) => (
           <EntryComponent key={entry.id} entry={entry} diagnoses={diagnoses} />
         ))}
+        <AddEntryModal
+          modalOpen={modalOpen}
+          onSubmit={submitNewEntry}
+          error={error}
+          onClose={closeModal}
+          diagnoses={diagnoses}
+        />
+        <Button variant="contained" onClick={() => openModal()}>
+          Add New Entry
+        </Button>
       </Box>
     </div>
   );
