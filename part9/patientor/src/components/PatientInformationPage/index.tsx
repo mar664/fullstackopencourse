@@ -28,9 +28,14 @@ const PatientInformationPage = ({ patientId, diagnoses }: Props) => {
 
   const submitNewEntry = async (values: EntryFormValues) => {
     try {
-      if (!patientId) throw new Error("Patient id is missing");
+      if (!patientId || !patient)
+        throw new Error("Patient id or patient is missing");
       const entry = await patientService.createEntry(patientId, values);
-      //setPatients(patients.concat(patient));
+      const updatedPatient = {
+        ...patient,
+        entries: patient.entries.concat(entry),
+      };
+      setPatient(updatedPatient);
       setModalOpen(false);
     } catch (e: unknown) {
       if (axios.isAxiosError(e)) {
