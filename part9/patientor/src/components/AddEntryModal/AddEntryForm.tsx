@@ -1,5 +1,6 @@
 import { useState, SyntheticEvent } from "react";
-
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs, { Dayjs } from "dayjs";
 import {
   TextField,
   InputLabel,
@@ -159,12 +160,14 @@ const AddEntryForm = ({ onCancel, onSubmit, diagnoses }: Props) => {
           value={description}
           onChange={({ target }) => setDescription(target.value)}
         />
-        <TextField
+        <DatePicker
           label="Date"
-          placeholder="YYYY-MM-DD"
-          fullWidth
-          value={date}
-          onChange={({ target }) => setDate(target.value)}
+          value={date ? dayjs(date) : null}
+          onChange={(value: Dayjs | null) => {
+            if (value) {
+              setDate(value.format("DD/MM/YYYY"));
+            }
+          }}
         />
         <TextField
           label="Specialist"
