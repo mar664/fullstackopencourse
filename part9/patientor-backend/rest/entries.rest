@@ -1,0 +1,90 @@
+# @name createPatient
+
+POST http://localhost:3001/api/patients
+Content-Type: application/json
+
+{
+    "name": "Billy Jones",
+    "dateOfBirth": "1974-04-25",
+    "gender": "male",
+    "occupation": "Computer Man",
+    "ssn": "fdfsdfsd-455454"
+}
+
+###
+@patientId = {{createPatient.response.body.$.id}
+
+POST http://localhost:3001/api/patients/{{patientId}}/entries
+Content-Type: application/json
+
+{
+    "type": "HealthCheck",
+    "description": "Yearly Check",
+    "date": "2020-01-10",
+    "specialist": "Dr Jones",
+    "diagnosisCodes": ["S03.5"],
+    "healthCheckRating": 2
+}
+
+###
+@patientId = {{createPatient.response.body.$.id}
+
+POST http://localhost:3001/api/patients/{{patientId}}/entries
+Content-Type: application/json
+
+{
+    "type": "OccupationalHealthcare",
+    "description": "Hurt back",
+    "date": "2010-01-10",
+    "specialist": "Dr Smith",
+    "diagnosisCodes": ["J10.1"],
+    "employerName": "Smiths",
+    "sickLeave": null
+}
+
+###
+
+@patientId = {{createPatient.response.body.$.id}
+
+POST http://localhost:3001/api/patients/{{patientId}}/entries
+Content-Type: application/json
+
+{
+    "type": "OccupationalHealthcare",
+    "description": "Hurt back",
+    "date": "2009-01-10",
+    "specialist": "Dr Smith",
+    "diagnosisCodes": ["J10.1"],
+    "employerName": "Smiths",
+    "sickLeave": {"startDate": "2009-01-10", "endDate": "2010-01-10"}
+}
+
+###
+@patientId = {{createPatient.response.body.$.id}
+
+POST http://localhost:3001/api/patients/{{patientId}}/entries
+Content-Type: application/json
+
+{
+    "type": "Hospital",
+    "description": "Broken Hip",
+    "date": "2000-01-10",
+    "specialist": "Dr Smith",
+    "diagnosisCodes": ["J10.1"],
+    "discharge": null
+}
+
+###
+@patientId = {{createPatient.response.body.$.id}
+
+POST http://localhost:3001/api/patients/{{patientId}}/entries
+Content-Type: application/json
+
+{
+    "type": "Hospital",
+    "description": "Broken Hip",
+    "date": "2000-01-10",
+    "specialist": "Dr Smith",
+    "diagnosisCodes": ["J10.1"],
+    "discharge": {"date": "2000-01-10", "criteria": "Healed"}
+}
