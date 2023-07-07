@@ -1,4 +1,4 @@
-import { View, StyleSheet, Image, Button } from "react-native";
+import { View, StyleSheet, Image } from "react-native";
 import Text from "./Text";
 import { IRepositoryItem } from "../types";
 
@@ -31,7 +31,6 @@ interface RepositoryItemProps {
 }
 
 const RepositoryItem = ({ item }: RepositoryItemProps) => {
-  console.log(item);
   return (
     <>
       <View style={styles.container}>
