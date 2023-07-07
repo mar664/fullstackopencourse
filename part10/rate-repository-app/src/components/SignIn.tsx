@@ -2,6 +2,7 @@ import { Alert, View } from "react-native";
 import { Formik, FormikProps } from "formik";
 import * as yup from "yup";
 import SignInFields from "./SignInFields";
+import useSignIn from "../hooks/useSignIn";
 
 const validationSchema = yup.object().shape({
   username: yup.string().required("Username is required"),
@@ -14,8 +15,17 @@ interface IValues {
 }
 
 const SignIn = () => {
-  const onSubmit = (values: IValues) => {
-    Alert.alert(JSON.stringify(values));
+  const [signIn] = useSignIn();
+
+  const onSubmit = async (values: IValues) => {
+    const { username, password } = values;
+
+    try {
+      const { data } = await signIn({ username, password });
+      console.log(data);
+    } catch (e) {
+      console.log(e);
+    }
   };
   return (
     <View style={{ padding: 10 }}>

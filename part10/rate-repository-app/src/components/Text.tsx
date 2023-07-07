@@ -55,7 +55,6 @@ const Text = ({
   blueBackground,
   ...props
 }: ITextProps) => {
-  console.log(props);
   const textStyle = [
     styles.text,
     color === "textSecondary" && styles.colorTextSecondary,
