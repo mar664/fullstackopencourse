@@ -1,7 +1,8 @@
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView, Pressable } from "react-native";
 import Constants from "expo-constants";
 import Text from "./Text";
 import { Link } from "react-router-native";
+import { useAuthStorage } from "../contexts/AuthStorageContext";
 
 const styles = StyleSheet.create({
   container: {
@@ -13,34 +14,58 @@ const styles = StyleSheet.create({
   },
 });
 
-const AppBar = () => {
+const AppBar = ({ loggedIn, setLoggedIn }) => {
+  console.log(loggedIn);
+  const authStorage = useAuthStorage();
+
+  const signout = async () => {
+    await authStorage.removeAccessToken();
+    setLoggedIn(null);
+  };
   return (
     <View style={styles.container}>
       <ScrollView horizontal>
-        <Link to="/">
-          <Text
-            style={{
-              color: "white",
-              fontWeight: "bold",
-              fontSize: 20,
-              padding: 20,
-            }}
-          >
-            Repositories
-          </Text>
-        </Link>
-        <Link to="/signin">
-          <Text
-            style={{
-              color: "white",
-              fontWeight: "bold",
-              fontSize: 20,
-              padding: 20,
-            }}
-          >
-            Sign In
-          </Text>
-        </Link>
+        {loggedIn ? (
+          <>
+            <Link to="/repositories">
+              <Text
+                style={{
+                  color: "white",
+                  fontWeight: "bold",
+                  fontSize: 20,
+                  padding: 20,
+                }}
+              >
+                Repositories
+              </Text>
+            </Link>
+            <Pressable onPress={signout}>
+              <Text
+                style={{
+                  color: "white",
+                  fontWeight: "bold",
+                  fontSize: 20,
+                  padding: 20,
+                }}
+              >
+                Signout
+              </Text>
+            </Pressable>
+          </>
+        ) : (
+          <Link to="/signin">
+            <Text
+              style={{
+                color: "white",
+                fontWeight: "bold",
+                fontSize: 20,
+                padding: 20,
+              }}
+            >
+              Sign In
+            </Text>
+          </Link>
+        )}
       </ScrollView>
     </View>
   );

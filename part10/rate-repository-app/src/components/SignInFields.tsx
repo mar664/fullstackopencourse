@@ -8,9 +8,19 @@ interface IValues {
   password: string;
 }
 
-const SignInFields = ({ handleSubmit }: FormikProps<IValues>) => {
+const SignInFields = ({
+  error,
+  handleSubmit,
+}: FormikProps<IValues> & { error: string }) => {
   return (
     <>
+      {error ? (
+        <Text style={{ padding: 10, textAlign: "center", color: "red" }}>
+          {error.graphQLErrors[0].message}
+        </Text>
+      ) : (
+        ""
+      )}
       <FormikTextInput
         style={{
           marginTop: 10,

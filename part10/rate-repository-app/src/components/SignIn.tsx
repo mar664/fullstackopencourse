@@ -3,6 +3,9 @@ import { Formik, FormikProps } from "formik";
 import * as yup from "yup";
 import SignInFields from "./SignInFields";
 import useSignIn from "../hooks/useSignIn";
+import { useAuthStorage } from "../contexts/AuthStorageContext";
+import { useNavigate } from "react-router-native";
+import { useState } from "react";
 
 const validationSchema = yup.object().shape({
   username: yup.string().required("Username is required"),
@@ -14,17 +17,22 @@ interface IValues {
   password: string;
 }
 
-const SignIn = () => {
+const SignIn = ({ setLoggedIn }) => {
+  const [error, setError] = useState<string | null>(null);
   const [signIn] = useSignIn();
-
+  const authStorage = useAuthStorage();
+  const navigate = useNavigate();
   const onSubmit = async (values: IValues) => {
     const { username, password } = values;
 
     try {
       const { data } = await signIn({ username, password });
-      console.log(data);
+      await authStorage.setAccessToken(data.authenticate.accessToken);
+      setLoggedIn(data.authenticate.accessToken);
+      navigate("/repositories");
     } catch (e) {
       console.log(e);
+      setError(e)
     }
   };
   return (
@@ -35,7 +43,7 @@ const SignIn = () => {
         validationSchema={validationSchema}
       >
         {(props: FormikProps<IValues>) => {
-          return <SignInFields {...props} />;
+          return <SignInFields error={error} {...props} />;
         }}
       </Formik>
     </View>

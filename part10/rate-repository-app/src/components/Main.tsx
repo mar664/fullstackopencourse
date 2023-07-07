@@ -5,6 +5,8 @@ import AppBar from "./AppBar";
 
 import RepositoryList from "./RepositoryList";
 import SignIn from "./SignIn";
+import { useEffect, useState } from "react";
+import { useAuthStorage } from "../contexts/AuthStorageContext";
 
 const styles = StyleSheet.create({
   container: {
@@ -15,13 +17,28 @@ const styles = StyleSheet.create({
 });
 
 const Main = () => {
+  const authStorage = useAuthStorage();
+  const [loggedIn, setLoggedIn] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = await authStorage.getAccessToken();
+
+      if (token) setLoggedIn(token);
+    };
+    fetchData();
+  }, [loggedIn]);
   return (
     <View style={styles.container}>
-      <AppBar />
+      <AppBar loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
       <Routes>
-        <Route path="/" element={<RepositoryList />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        {loggedIn ? (
+          <Route path="/repositories" element={<RepositoryList />} />
+        ) : (
+          ""
+        )}{" "}
+        <Route path="/signin" element={<SignIn setLoggedIn={setLoggedIn} />} />
+        <Route path="*" element={<Navigate to="/signin" replace />} />
       </Routes>
     </View>
   );
