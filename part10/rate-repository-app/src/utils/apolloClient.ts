@@ -1,8 +1,9 @@
 import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
-console.log(process.env.EXPO_PUBLIC_API_URL);
+import { API_URL } from "@env";
+
 const httpLink = createHttpLink({
   // Replace the IP address part with your own IP address!
-  uri: `http://192.168.86.85:5001/graphql`,
+  uri: `${API_URL}/graphql`,
 });
 
 const createApolloClient = () => {
