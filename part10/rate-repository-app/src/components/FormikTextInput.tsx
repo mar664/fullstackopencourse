@@ -1,3 +1,5 @@
+import React from "react";
+
 import { StyleSheet, TextInputProps, TextStyle } from "react-native";
 import { useField } from "formik";
 

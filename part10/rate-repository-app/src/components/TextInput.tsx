@@ -1,3 +1,5 @@
+import React from "react";
+
 import { TextInput as NativeTextInput, TextStyle } from "react-native";
 import { TextInputProps } from "react-native";
 

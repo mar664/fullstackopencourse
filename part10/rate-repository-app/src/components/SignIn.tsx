@@ -1,7 +1,3 @@
-import { View } from "react-native";
-import { Formik, FormikProps } from "formik";
-import * as yup from "yup";
-import SignInFields from "./SignInFields";
 import useSignIn from "../hooks/useSignIn";
 import { useAuthStorage } from "../contexts/AuthStorageContext";
 import { useNavigate } from "react-router-native";
@@ -9,16 +5,14 @@ import { useState } from "react";
 import { useApolloClient } from "@apollo/client";
 import { IGraphQLError } from "../types";
 import { parseGraphQLError } from "../utils/errors";
-
-const validationSchema = yup.object().shape({
-  username: yup.string().required("Username is required"),
-  password: yup.string().required("Password is required"),
-});
+import SignInContainer from "./SignInContainer";
 
 interface IValues {
   username: string;
   password: string;
 }
+
+import React from "react";
 
 const SignIn = () => {
   const [error, setError] = useState<IGraphQLError | undefined>(undefined);
@@ -38,19 +32,8 @@ const SignIn = () => {
       if (parsedError) setError(parsedError);
     }
   };
-  return (
-    <View style={{ padding: 10 }}>
-      <Formik
-        initialValues={{ username: "", password: "" }}
-        onSubmit={onSubmit}
-        validationSchema={validationSchema}
-      >
-        {(props: FormikProps<IValues>) => {
-          return <SignInFields error={error} {...props} />;
-        }}
-      </Formik>
-    </View>
-  );
+
+  return <SignInContainer onSubmit={onSubmit} error={error} />;
 };
 
 export default SignIn;
