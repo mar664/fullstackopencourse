@@ -3,6 +3,8 @@ import Constants from "expo-constants";
 import Text from "./Text";
 import { Link } from "react-router-native";
 import { useAuthStorage } from "../contexts/AuthStorageContext";
+import { useApolloClient, useQuery } from "@apollo/client";
+import { GET_CURRENT_USER } from "../graphql/queries";
 
 const styles = StyleSheet.create({
   container: {
@@ -14,18 +16,24 @@ const styles = StyleSheet.create({
   },
 });
 
-const AppBar = ({ loggedIn, setLoggedIn }) => {
-  console.log(loggedIn);
+const AppBar = () => {
+  const apolloClient = useApolloClient();
+
+  const { data, error, loading } = useQuery(GET_CURRENT_USER, {
+    fetchPolicy: "cache-and-network",
+  });
+  if (loading) return <></>;
+  if (error) return <></>;
   const authStorage = useAuthStorage();
 
   const signout = async () => {
     await authStorage.removeAccessToken();
-    setLoggedIn(null);
+    apolloClient.resetStore();
   };
   return (
     <View style={styles.container}>
       <ScrollView horizontal>
-        {loggedIn ? (
+        {data.me ? (
           <>
             <Link to="/repositories">
               <Text

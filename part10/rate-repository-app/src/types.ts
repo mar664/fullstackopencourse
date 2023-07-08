@@ -9,3 +9,7 @@ export interface IRepositoryItem {
   reviewCount: number;
   ownerAvatarUrl: string;
 }
+
+export interface IGraphQLError {
+  message: string;
+}

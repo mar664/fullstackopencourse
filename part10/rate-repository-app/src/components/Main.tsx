@@ -5,8 +5,8 @@ import AppBar from "./AppBar";
 
 import RepositoryList from "./RepositoryList";
 import SignIn from "./SignIn";
-import { useEffect, useState } from "react";
-import { useAuthStorage } from "../contexts/AuthStorageContext";
+import { useQuery } from "@apollo/client";
+import { GET_CURRENT_USER } from "../graphql/queries";
 
 const styles = StyleSheet.create({
   container: {
@@ -17,31 +17,33 @@ const styles = StyleSheet.create({
 });
 
 const Main = () => {
-  const authStorage = useAuthStorage();
-  const [loggedIn, setLoggedIn] = useState<string | null>(null);
+  const { data, error, loading } = useQuery(GET_CURRENT_USER, {
+    fetchPolicy: "cache-and-network",
+  });
+  if (loading) return <></>;
+  if (error) return <></>;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const token = await authStorage.getAccessToken();
-
-      if (token) setLoggedIn(token);
-    };
-    fetchData();
-  }, [loggedIn]);
-  return (
-    <View style={styles.container}>
-      <AppBar loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
-      <Routes>
-        {loggedIn ? (
+  if (data.me) {
+    return (
+      <View style={styles.container}>
+        <AppBar />
+        <Routes>
           <Route path="/repositories" element={<RepositoryList />} />
-        ) : (
-          ""
-        )}{" "}
-        <Route path="/signin" element={<SignIn setLoggedIn={setLoggedIn} />} />
-        <Route path="*" element={<Navigate to="/signin" replace />} />
-      </Routes>
-    </View>
-  );
+          <Route path="*" element={<Navigate to="/repositories" replace />} />
+        </Routes>
+      </View>
+    );
+  } else {
+    return (
+      <View style={styles.container}>
+        <AppBar />
+        <Routes>
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="*" element={<Navigate to="/signin" replace />} />
+        </Routes>
+      </View>
+    );
+  }
 };
 
 export default Main;

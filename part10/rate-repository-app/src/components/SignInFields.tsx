@@ -2,6 +2,7 @@ import { Pressable } from "react-native";
 import FormikTextInput from "./FormikTextInput";
 import Text from "./Text";
 import { FormikProps } from "formik";
+import { IGraphQLError } from "../types";
 
 interface IValues {
   username: string;
@@ -11,12 +12,12 @@ interface IValues {
 const SignInFields = ({
   error,
   handleSubmit,
-}: FormikProps<IValues> & { error: string }) => {
+}: FormikProps<IValues> & { error: IGraphQLError | undefined }) => {
   return (
     <>
       {error ? (
         <Text style={{ padding: 10, textAlign: "center", color: "red" }}>
-          {error.graphQLErrors[0].message}
+          {error.message}
         </Text>
       ) : (
         ""

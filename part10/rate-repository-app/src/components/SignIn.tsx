@@ -1,4 +1,4 @@
-import { Alert, View } from "react-native";
+import { View } from "react-native";
 import { Formik, FormikProps } from "formik";
 import * as yup from "yup";
 import SignInFields from "./SignInFields";
@@ -6,6 +6,9 @@ import useSignIn from "../hooks/useSignIn";
 import { useAuthStorage } from "../contexts/AuthStorageContext";
 import { useNavigate } from "react-router-native";
 import { useState } from "react";
+import { useApolloClient } from "@apollo/client";
+import { IGraphQLError } from "../types";
+import { parseGraphQLError } from "../utils/errors";
 
 const validationSchema = yup.object().shape({
   username: yup.string().required("Username is required"),
@@ -17,22 +20,22 @@ interface IValues {
   password: string;
 }
 
-const SignIn = ({ setLoggedIn }) => {
-  const [error, setError] = useState<string | null>(null);
+const SignIn = () => {
+  const [error, setError] = useState<IGraphQLError | undefined>(undefined);
   const [signIn] = useSignIn();
   const authStorage = useAuthStorage();
   const navigate = useNavigate();
+  const apolloClient = useApolloClient();
   const onSubmit = async (values: IValues) => {
     const { username, password } = values;
-
     try {
       const { data } = await signIn({ username, password });
       await authStorage.setAccessToken(data.authenticate.accessToken);
-      setLoggedIn(data.authenticate.accessToken);
+      apolloClient.resetStore();
       navigate("/repositories");
-    } catch (e) {
-      console.log(e);
-      setError(e)
+    } catch (error) {
+      const parsedError = parseGraphQLError(error);
+      if (parsedError) setError(parsedError);
     }
   };
   return (
