@@ -18,13 +18,13 @@ const styles = StyleSheet.create({
 
 const AppBar = () => {
   const apolloClient = useApolloClient();
+  const authStorage = useAuthStorage();
 
   const { data, error, loading } = useQuery(GET_CURRENT_USER, {
     fetchPolicy: "cache-and-network",
   });
   if (loading) return <></>;
   if (error) return <></>;
-  const authStorage = useAuthStorage();
 
   const signout = async () => {
     await authStorage.removeAccessToken();

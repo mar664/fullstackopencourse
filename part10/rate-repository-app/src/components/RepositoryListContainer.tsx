@@ -1,8 +1,8 @@
 import React from "react";
 
-import { FlatList, View, StyleSheet } from "react-native";
+import { FlatList, View, StyleSheet, Pressable } from "react-native";
 import RepositoryItem from "./RepositoryItem";
-import { IRepositoryItem } from "../types";
+import { IRepositoryBaseItem } from "../types";
 
 const styles = StyleSheet.create({
   separator: {
@@ -13,16 +13,20 @@ const styles = StyleSheet.create({
 const ItemSeparator = () => <View style={styles.separator} />;
 
 interface IEdge {
-  node: IRepositoryItem;
+  node: IRepositoryBaseItem;
 }
 
 interface IRepositoryListContainerProps {
   repositories: { edges: IEdge[] };
+  // eslint-disable-next-line no-unused-vars
+  pressHandler: (item: IRepositoryBaseItem) => void;
 }
 
 export const RepositoryListContainer = ({
   repositories,
+  pressHandler,
 }: IRepositoryListContainerProps) => {
+  console.log(repositories);
   const repositoryNodes = repositories
     ? repositories.edges.map((edge) => edge.node)
     : [];
@@ -31,7 +35,11 @@ export const RepositoryListContainer = ({
     <FlatList
       data={repositoryNodes}
       ItemSeparatorComponent={ItemSeparator}
-      renderItem={({ item }) => <RepositoryItem item={item} />}
+      renderItem={({ item }) => (
+        <Pressable onPress={() => pressHandler(item)}>
+          <RepositoryItem item={item} />
+        </Pressable>
+      )}
     />
   );
 };

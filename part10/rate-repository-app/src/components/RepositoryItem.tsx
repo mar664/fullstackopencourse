@@ -1,7 +1,8 @@
 import React from "react";
-import { View, StyleSheet, Image } from "react-native";
+import { View, StyleSheet, Image, Pressable } from "react-native";
 import Text from "./Text";
-import { IRepositoryItem } from "../types";
+import { IRepositoryBaseItem, IRepositoryPageItem } from "../types";
+import * as Linking from "expo-linking";
 
 const styles = StyleSheet.create({
   container: {
@@ -28,10 +29,14 @@ const styles = StyleSheet.create({
 });
 
 interface RepositoryItemProps {
-  item: IRepositoryItem;
+  item: IRepositoryPageItem | IRepositoryBaseItem;
+  repositoryButton?: boolean;
 }
 
-const RepositoryItem = ({ item }: RepositoryItemProps) => {
+const RepositoryItem = ({
+  item,
+  repositoryButton = false,
+}: RepositoryItemProps) => {
   return (
     <View testID="repositoryItem">
       <View style={styles.container}>
@@ -97,6 +102,19 @@ const RepositoryItem = ({ item }: RepositoryItemProps) => {
           <Text alignCenter>Rating</Text>
         </View>
       </View>
+      {repositoryButton && "url" in item ? (
+        <Pressable
+          testID="repositoryItemButton"
+          onPress={async () => {
+            console.log("pressed");
+            await Linking.openURL(item.url);
+          }}
+        >
+          <Text style={{ padding: 10, textAlign: "center" }} blueBackground>
+            Open in GitHub
+          </Text>
+        </Pressable>
+      ) : null}
     </View>
   );
 };

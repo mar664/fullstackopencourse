@@ -1,4 +1,4 @@
-export interface IRepositoryItem {
+export interface IRepositoryBaseItem {
   id: string;
   fullName: string;
   description: string;
@@ -8,6 +8,10 @@ export interface IRepositoryItem {
   ratingAverage: number;
   reviewCount: number;
   ownerAvatarUrl: string;
+}
+
+export interface IRepositoryPageItem extends IRepositoryBaseItem {
+  url: string;
 }
 
 export interface IGraphQLError {

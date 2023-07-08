@@ -1,7 +1,7 @@
 import { render, screen, within } from "@testing-library/react-native";
 import React from "react";
 import { RepositoryListContainer } from "../components/RepositoryListContainer";
-import { IRepositoryItem } from "../types";
+import { IRepositoryBaseItem } from "../types";
 import { ReactTestInstance } from "react-test-renderer";
 
 const toAbbreviatedForm = (count: number): string => {
@@ -9,7 +9,7 @@ const toAbbreviatedForm = (count: number): string => {
 };
 
 const expectRepository = (
-  rTtem: IRepositoryItem,
+  rTtem: IRepositoryBaseItem,
   repositoryItem: ReactTestInstance
 ): boolean => {
   {
@@ -96,8 +96,14 @@ describe("RepositoryList", () => {
           },
         ],
       };
+      const onPress = jest.fn();
 
-      render(<RepositoryListContainer repositories={repositories} />);
+      render(
+        <RepositoryListContainer
+          repositories={repositories}
+          pressHandler={onPress}
+        />
+      );
 
       const repositoryItems = screen.getAllByTestId("repositoryItem");
       const [firstRepositoryItem, secondRepositoryItem] = repositoryItems;

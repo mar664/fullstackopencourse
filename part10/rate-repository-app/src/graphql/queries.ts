@@ -37,3 +37,13 @@ export const GET_CURRENT_USER = gql`
     }
   }
 `;
+
+export const GET_REPOSITORY = gql`
+  ${REPOSITORY_INFO}
+  query Query($repositoryId: ID!) {
+    repository(id: $repositoryId) {
+      ...CoreRepositoryInfo
+      url
+    }
+  }
+`;
