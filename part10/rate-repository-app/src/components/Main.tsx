@@ -10,6 +10,7 @@ import { GET_CURRENT_USER } from "../graphql/queries";
 import RepositoryItemPage from "./repository/RepositoryItemPage";
 import ReviewForm from "./review/ReviewForm";
 import SignUp from "./signup/SignUp";
+import MyReviewList from "./myreviews/MyReviewList";
 
 const styles = StyleSheet.create({
   container: {
@@ -33,6 +34,7 @@ const Main = () => {
         <Routes>
           <Route path="/repositories/:id" element={<RepositoryItemPage />} />
           <Route path="/repositories" element={<RepositoryList />} />
+          <Route path="/my_reviews" element={<MyReviewList />} />
           <Route path="/review" element={<ReviewForm />} />
           <Route path="*" element={<Navigate to="/repositories" replace />} />
         </Routes>

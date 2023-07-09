@@ -37,11 +37,32 @@ export const GET_REPOSITORIES = gql`
   }
 `;
 
+const REVIEW_INFO = gql`
+  fragment CoreReviewInfo on Review {
+    id
+    text
+    rating
+    createdAt
+  }
+`;
+
 export const GET_CURRENT_USER = gql`
-  query {
+  ${REVIEW_INFO}
+  query getCurrentUser($includeReviews: Boolean = false) {
     me {
       id
       username
+      reviews @include(if: $includeReviews) {
+        edges {
+          node {
+            ...CoreReviewInfo
+            user {
+              id
+              username
+            }
+          }
+        }
+      }
     }
   }
 `;
@@ -53,15 +74,6 @@ export const GET_REPOSITORY = gql`
       ...CoreRepositoryInfo
       url
     }
-  }
-`;
-
-const REVIEW_INFO = gql`
-  fragment CoreReviewInfo on Review {
-    id
-    text
-    rating
-    createdAt
   }
 `;
 

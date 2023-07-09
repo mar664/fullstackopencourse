@@ -59,6 +59,18 @@ const AppBar = () => {
                 Create new review
               </Text>
             </Link>
+            <Link to="/my_reviews">
+              <Text
+                style={{
+                  color: "white",
+                  fontWeight: "bold",
+                  fontSize: 20,
+                  padding: 20,
+                }}
+              >
+                My reviews
+              </Text>
+            </Link>
             <Pressable onPress={signout}>
               <Text
                 style={{
