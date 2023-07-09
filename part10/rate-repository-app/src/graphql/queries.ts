@@ -17,8 +17,8 @@ const REPOSITORY_INFO = gql`
 
 export const GET_REPOSITORIES = gql`
   ${REPOSITORY_INFO}
-  query {
-    repositories {
+  query ($orderBy: AllRepositoriesOrderBy, $orderDirection: OrderDirection) {
+    repositories(orderBy: $orderBy, orderDirection: $orderDirection) {
       edges {
         node {
           ...CoreRepositoryInfo

@@ -1,11 +1,16 @@
+import React, { useState } from "react";
+
 import { useNavigate } from "react-router-native";
 import useRepositories from "../../hooks/useRepositories";
-import { IRepositoryBaseItem } from "../../types";
+import { IRepositoryBaseItem, RepositorySortType } from "../../types";
 import { RepositoryListContainer } from "./RepositoryListContainer";
 
 const RepositoryList = () => {
+  const [sortBy, setSortBy] = useState<RepositorySortType>(
+    RepositorySortType.LowestRated
+  );
   const navigate = useNavigate();
-  const { data, error, loading } = useRepositories();
+  const { data, error, loading } = useRepositories(sortBy);
   if (loading) return <></>;
   if (error) return <></>;
 
@@ -17,6 +22,7 @@ const RepositoryList = () => {
     <RepositoryListContainer
       repositories={data.repositories}
       pressHandler={pressHandler}
+      sort={[sortBy, setSortBy]}
     />
   );
 };

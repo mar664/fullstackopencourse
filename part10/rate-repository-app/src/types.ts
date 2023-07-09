@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 export interface IRepositoryBaseItem {
   id: string;
   fullName: string;
@@ -48,3 +49,19 @@ export type ISignupFormSubmitValues = Omit<
   ISignupFormValues,
   "passwordConfirm"
 >;
+
+export enum RepositorySortType {
+  Latest = "Latest repositories",
+  HighestRated = "Highest rated Repositories",
+  LowestRated = "Lowest rated repositories",
+}
+
+export enum OrderBy {
+  CREATED_AT = "CREATED_AT",
+  RATING_AVERAGE = "RATING_AVERAGE",
+}
+
+export enum OrderDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}

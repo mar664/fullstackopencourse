@@ -2,8 +2,9 @@ import React from "react";
 
 import { FlatList, View, StyleSheet, Pressable } from "react-native";
 import RepositoryItem from "./RepositoryItem";
-import { IRepositoryBaseItem } from "../../types";
+import { IRepositoryBaseItem, RepositorySortType } from "../../types";
 import theme from "../../theme";
+import RepositorySortSelection from "./RepositorySortSelection";
 
 const styles = StyleSheet.create({
   separator: theme.separator,
@@ -19,11 +20,16 @@ interface IRepositoryListContainerProps {
   repositories: { edges: IEdge[] };
   // eslint-disable-next-line no-unused-vars
   pressHandler: (item: IRepositoryBaseItem) => void;
+  sort: [
+    RepositorySortType,
+    React.Dispatch<React.SetStateAction<RepositorySortType>>,
+  ];
 }
 
 export const RepositoryListContainer = ({
   repositories,
   pressHandler,
+  sort,
 }: IRepositoryListContainerProps) => {
   console.log(repositories);
   const repositoryNodes = repositories
@@ -39,6 +45,7 @@ export const RepositoryListContainer = ({
           <RepositoryItem item={item} />
         </Pressable>
       )}
+      ListHeaderComponent={<RepositorySortSelection sort={sort} />}
     />
   );
 };

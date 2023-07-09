@@ -1,7 +1,7 @@
 import { render, screen, within } from "@testing-library/react-native";
 import React from "react";
 import { RepositoryListContainer } from "../components/repository/RepositoryListContainer";
-import { IRepositoryBaseItem } from "../types";
+import { IRepositoryBaseItem, RepositorySortType } from "../types";
 import { ReactTestInstance } from "react-test-renderer";
 
 const toAbbreviatedForm = (count: number): string => {
@@ -98,10 +98,15 @@ describe("RepositoryList", () => {
       };
       const onPress = jest.fn();
 
+      const setStateMock = jest.fn();
+
+      const useStateMock: any = (useState: any) => [useState, setStateMock];
+
       render(
         <RepositoryListContainer
           repositories={repositories}
           pressHandler={onPress}
+          sort={useStateMock(RepositorySortType.Latest)}
         />
       );
 
