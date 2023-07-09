@@ -1,10 +1,10 @@
-import useSignIn from "../hooks/useSignIn";
-import { useAuthStorage } from "../contexts/AuthStorageContext";
+import useSignIn from "../../hooks/useSignIn";
+import { useAuthStorage } from "../../contexts/AuthStorageContext";
 import { useNavigate } from "react-router-native";
 import { useState } from "react";
 import { useApolloClient } from "@apollo/client";
-import { IGraphQLError } from "../types";
-import { parseGraphQLError } from "../utils/errors";
+import { IGraphQLError } from "../../types";
+import { parseGraphQLError } from "../../utils/errors";
 import SignInContainer from "./SignInContainer";
 
 interface IValues {

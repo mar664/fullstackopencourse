@@ -37,3 +37,14 @@ export interface IReviewFormValues {
   rating: number;
   text?: string;
 }
+
+export interface ISignupFormValues {
+  username: string;
+  password: string;
+  passwordConfirm: string;
+}
+
+export type ISignupFormSubmitValues = Omit<
+  ISignupFormValues,
+  "passwordConfirm"
+>;

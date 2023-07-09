@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-native";
-import useRepositories from "../hooks/useRepositories";
-import { IRepositoryBaseItem } from "../types";
+import useRepositories from "../../hooks/useRepositories";
+import { IRepositoryBaseItem } from "../../types";
 import { RepositoryListContainer } from "./RepositoryListContainer";
 
 const RepositoryList = () => {

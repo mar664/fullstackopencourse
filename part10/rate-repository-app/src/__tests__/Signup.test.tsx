@@ -6,17 +6,21 @@ import {
   fireEvent,
   waitFor,
 } from "@testing-library/react-native";
-import SignInContainer from "../components/signin/SignInContainer";
+import SignUpContainer from "../components/signup/SignUpContainer";
 
-describe("SignIn", () => {
-  describe("SignInContainer", () => {
+describe("SignUp", () => {
+  describe("SignUpContainer", () => {
     it("calls onSubmit function with correct arguments when a valid form is submitted", async () => {
       const onSubmit = jest.fn();
-      render(<SignInContainer onSubmit={onSubmit} error={undefined} />);
+      render(<SignUpContainer onSubmit={onSubmit} error={undefined} />);
 
       // render the SignInContainer component, fill the text inputs and press the submit button
       fireEvent.changeText(screen.getByPlaceholderText("Username"), "kalle");
       fireEvent.changeText(screen.getByPlaceholderText("Password"), "password");
+      fireEvent.changeText(
+        screen.getByPlaceholderText("Confirm Password"),
+        "password"
+      );
       fireEvent.press(screen.getByText("Submit"));
 
       await waitFor(() => {
@@ -27,6 +31,7 @@ describe("SignIn", () => {
         expect(onSubmit.mock.calls[0][0]).toEqual({
           username: "kalle",
           password: "password",
+          passwordConfirm: "password",
         });
       });
     });

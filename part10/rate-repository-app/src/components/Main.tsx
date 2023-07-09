@@ -3,12 +3,13 @@ import { StyleSheet, View } from "react-native";
 import { Route, Routes, Navigate } from "react-router-native";
 import AppBar from "./AppBar";
 
-import RepositoryList from "./RepositoryList";
-import SignIn from "./SignIn";
+import RepositoryList from "./repository/RepositoryList";
+import SignIn from "./signin/SignIn";
 import { useQuery } from "@apollo/client";
 import { GET_CURRENT_USER } from "../graphql/queries";
-import RepositoryItemPage from "./RepositoryItemPage";
-import ReviewForm from "./ReviewForm";
+import RepositoryItemPage from "./repository/RepositoryItemPage";
+import ReviewForm from "./review/ReviewForm";
+import SignUp from "./signup/SignUp";
 
 const styles = StyleSheet.create({
   container: {
@@ -43,6 +44,7 @@ const Main = () => {
         <AppBar />
         <Routes>
           <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="*" element={<Navigate to="/signin" replace />} />
         </Routes>
       </View>

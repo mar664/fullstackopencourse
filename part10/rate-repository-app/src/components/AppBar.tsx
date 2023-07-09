@@ -73,18 +73,32 @@ const AppBar = () => {
             </Pressable>
           </>
         ) : (
-          <Link to="/signin">
-            <Text
-              style={{
-                color: "white",
-                fontWeight: "bold",
-                fontSize: 20,
-                padding: 20,
-              }}
-            >
-              Sign In
-            </Text>
-          </Link>
+          <>
+            <Link to="/signin">
+              <Text
+                style={{
+                  color: "white",
+                  fontWeight: "bold",
+                  fontSize: 20,
+                  padding: 20,
+                }}
+              >
+                Sign In
+              </Text>
+            </Link>
+            <Link to="/signup">
+              <Text
+                style={{
+                  color: "white",
+                  fontWeight: "bold",
+                  fontSize: 20,
+                  padding: 20,
+                }}
+              >
+                Sign Up
+              </Text>
+            </Link>
+          </>
         )}
       </ScrollView>
     </View>

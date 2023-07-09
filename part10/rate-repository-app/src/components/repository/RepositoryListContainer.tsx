@@ -2,8 +2,8 @@ import React from "react";
 
 import { FlatList, View, StyleSheet, Pressable } from "react-native";
 import RepositoryItem from "./RepositoryItem";
-import { IRepositoryBaseItem } from "../types";
-import theme from "../theme";
+import { IRepositoryBaseItem } from "../../types";
+import theme from "../../theme";
 
 const styles = StyleSheet.create({
   separator: theme.separator,

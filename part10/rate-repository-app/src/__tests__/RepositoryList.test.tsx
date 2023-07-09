@@ -1,6 +1,6 @@
 import { render, screen, within } from "@testing-library/react-native";
 import React from "react";
-import { RepositoryListContainer } from "../components/RepositoryListContainer";
+import { RepositoryListContainer } from "../components/repository/RepositoryListContainer";
 import { IRepositoryBaseItem } from "../types";
 import { ReactTestInstance } from "react-test-renderer";
 

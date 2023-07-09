@@ -2,7 +2,7 @@ import { render, screen, within } from "@testing-library/react-native";
 import React from "react";
 import { IRepositoryPageItem, IReviewItem } from "../types";
 import { ReactTestInstance } from "react-test-renderer";
-import RepositoryItemPageContainer from "../components/RepositoryItemPageContainer";
+import RepositoryItemPageContainer from "../components/repository/RepositoryItemPageContainer";
 import dayjs from "dayjs";
 
 const toAbbreviatedForm = (count: number): string => {

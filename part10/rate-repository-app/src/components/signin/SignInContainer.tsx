@@ -2,7 +2,7 @@ import { View } from "react-native";
 import { Formik, FormikProps } from "formik";
 import * as yup from "yup";
 import SignInFields from "./SignInFields";
-import { IGraphQLError } from "../types";
+import { IGraphQLError } from "../../types";
 
 import React from "react";
 

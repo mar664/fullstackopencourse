@@ -1,10 +1,10 @@
 import React from "react";
 
 import { Pressable } from "react-native";
-import FormikTextInput from "./FormikTextInput";
-import Text from "./Text";
+import FormikTextInput from "../FormikTextInput";
+import Text from "../Text";
 import { FormikProps } from "formik";
-import { IGraphQLError } from "../types";
+import { IGraphQLError } from "../../types";
 
 interface IValues {
   username: string;

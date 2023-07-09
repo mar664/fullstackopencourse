@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet, Image, Pressable } from "react-native";
-import Text from "./Text";
-import { IRepositoryBaseItem, IRepositoryPageItem } from "../types";
+import Text from "../Text";
+import { IRepositoryBaseItem, IRepositoryPageItem } from "../../types";
 import * as Linking from "expo-linking";
 
 const styles = StyleSheet.create({

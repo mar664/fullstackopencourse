@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
-import Text from "./Text";
-import { IReviewItem } from "../types";
+import Text from "../Text";
+import { IReviewItem } from "../../types";
 import dayjs from "dayjs";
 const styles = StyleSheet.create({
   container: {

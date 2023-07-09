@@ -1,9 +1,9 @@
 import React from "react";
 import RepositoryItem from "./RepositoryItem";
-import { IRepositoryPageItem, IReviewItem } from "../types";
+import { IRepositoryPageItem, IReviewItem } from "../../types";
 import { FlatList, View, StyleSheet } from "react-native";
-import ReviewItem from "./ReviewItem";
-import theme from "../theme";
+import ReviewItem from "../review/ReviewItem";
+import theme from "../../theme";
 
 const styles = StyleSheet.create({
   separator: theme.separator,

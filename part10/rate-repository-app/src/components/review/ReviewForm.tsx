@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-native";
 import { useState } from "react";
 import { useApolloClient } from "@apollo/client";
-import { IGraphQLError, IReviewFormValues } from "../types";
-import { parseGraphQLError } from "../utils/errors";
+import { IGraphQLError, IReviewFormValues } from "../../types";
+import { parseGraphQLError } from "../../utils/errors";
 
 import React from "react";
 import ReviewFormContainer from "./ReviewFormContainer";
-import useNewReview from "../hooks/useNewReview";
+import useNewReview from "../../hooks/useNewReview";
 
 const ReviewForm = () => {
   const [error, setError] = useState<IGraphQLError | undefined>(undefined);

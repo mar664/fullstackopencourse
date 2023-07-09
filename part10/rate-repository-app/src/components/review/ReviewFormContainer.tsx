@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { Formik, FormikProps } from "formik";
 import * as yup from "yup";
-import { IGraphQLError, IReviewFormValues } from "../types";
+import { IGraphQLError, IReviewFormValues } from "../../types";
 
 import React from "react";
 import ReviewFormFields from "./ReviewFormFields";
