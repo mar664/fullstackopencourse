@@ -6,9 +6,10 @@ import { assertNever } from "../utils";
 interface ISortVariables {
   orderBy?: OrderBy;
   orderDirection?: OrderDirection;
+  searchKeyword?: string;
 }
 
-const useRepositories = (sortBy: RepositorySortType) => {
+const useRepositories = (sortBy: RepositorySortType, searchBy: string) => {
   const variables: ISortVariables = {};
   switch (sortBy) {
     case RepositorySortType.Latest:
@@ -26,13 +27,16 @@ const useRepositories = (sortBy: RepositorySortType) => {
     default:
       assertNever(sortBy);
   }
-
+  if (searchBy) {
+    variables.searchKeyword = searchBy;
+  }
+  console.log(variables);
   const { data, error, loading } = useQuery(GET_REPOSITORIES, {
     fetchPolicy: "cache-and-network",
     variables,
   });
 
-  return { data, error, loading };
+  return { repositories: data ? data.repositories : undefined };
 };
 
 export default useRepositories;

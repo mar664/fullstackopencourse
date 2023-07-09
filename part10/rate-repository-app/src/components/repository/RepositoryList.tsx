@@ -9,20 +9,23 @@ const RepositoryList = () => {
   const [sortBy, setSortBy] = useState<RepositorySortType>(
     RepositorySortType.LowestRated
   );
-  const navigate = useNavigate();
-  const { data, error, loading } = useRepositories(sortBy);
-  if (loading) return <></>;
-  if (error) return <></>;
 
+  const [searchBy, setSearchBy] = useState<string>("");
+
+  const navigate = useNavigate();
+  const { repositories } = useRepositories(sortBy, searchBy);
+  console.log(repositories);
   const pressHandler = (item: IRepositoryBaseItem) => {
     navigate(`/repositories/${item.id}`);
   };
 
   return (
     <RepositoryListContainer
-      repositories={data.repositories}
+      repositories={repositories}
       pressHandler={pressHandler}
-      sort={[sortBy, setSortBy]}
+      sortBy={sortBy}
+      setSortBy={setSortBy}
+      setSearchBy={setSearchBy}
     />
   );
 };

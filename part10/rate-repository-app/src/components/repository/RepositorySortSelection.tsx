@@ -3,14 +3,14 @@ import { Picker } from "@react-native-picker/picker";
 import { RepositorySortType } from "../../types";
 
 interface IRepositorySortSelectionProps {
-  sort: [
-    RepositorySortType,
-    React.Dispatch<React.SetStateAction<RepositorySortType>>,
-  ];
+  sortBy: RepositorySortType;
+  setSortBy: React.Dispatch<React.SetStateAction<RepositorySortType>>;
 }
 
-const RepositorySortSelection = ({ sort }: IRepositorySortSelectionProps) => {
-  const [sortBy, setSortBy] = sort;
+const RepositorySortSelection = ({
+  sortBy,
+  setSortBy,
+}: IRepositorySortSelectionProps) => {
   return (
     <Picker
       selectedValue={sortBy}
