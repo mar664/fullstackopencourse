@@ -1,4 +1,4 @@
-import { ColorValue, Platform, TextStyle } from "react-native";
+import { ColorValue, Platform, TextStyle, ViewStyle } from "react-native";
 interface ITheme {
   fontWeights: {
     [index: string]: TextStyle["fontWeight"];
@@ -12,6 +12,7 @@ interface ITheme {
   fonts: {
     [index: string]: TextStyle["fontFamily"];
   };
+  separator: ViewStyle;
 }
 
 const theme: ITheme = {
@@ -35,6 +36,10 @@ const theme: ITheme = {
   fontWeights: {
     normal: "400",
     bold: "700",
+  },
+  separator: {
+    height: 10,
+    backgroundColor: "lightgray",
   },
 };
 

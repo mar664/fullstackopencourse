@@ -47,3 +47,34 @@ export const GET_REPOSITORY = gql`
     }
   }
 `;
+
+const REVIEW_INFO = gql`
+  fragment CoreReviewInfo on Review {
+    id
+    text
+    rating
+    createdAt
+  }
+`;
+
+export const GET_REPOSITORY_AND_REVIEWS = gql`
+  ${REPOSITORY_INFO}
+  ${REVIEW_INFO}
+  query Query($repositoryId: ID!) {
+    repository(id: $repositoryId) {
+      ...CoreRepositoryInfo
+      url
+      reviews {
+        edges {
+          node {
+            ...CoreReviewInfo
+            user {
+              id
+              username
+            }
+          }
+        }
+      }
+    }
+  }
+`;

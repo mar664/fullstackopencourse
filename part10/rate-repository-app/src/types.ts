@@ -17,3 +17,16 @@ export interface IRepositoryPageItem extends IRepositoryBaseItem {
 export interface IGraphQLError {
   message: string;
 }
+
+export interface IUser {
+  id: string;
+  username: string;
+}
+
+export interface IReviewItem {
+  id: string;
+  text: string;
+  rating: number;
+  createdAt: string;
+  user: IUser;
+}
