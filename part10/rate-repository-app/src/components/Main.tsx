@@ -8,6 +8,7 @@ import SignIn from "./SignIn";
 import { useQuery } from "@apollo/client";
 import { GET_CURRENT_USER } from "../graphql/queries";
 import RepositoryItemPage from "./RepositoryItemPage";
+import ReviewForm from "./ReviewForm";
 
 const styles = StyleSheet.create({
   container: {
@@ -31,6 +32,7 @@ const Main = () => {
         <Routes>
           <Route path="/repositories/:id" element={<RepositoryItemPage />} />
           <Route path="/repositories" element={<RepositoryList />} />
+          <Route path="/review" element={<ReviewForm />} />
           <Route path="*" element={<Navigate to="/repositories" replace />} />
         </Routes>
       </View>
