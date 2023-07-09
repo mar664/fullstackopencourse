@@ -96,21 +96,20 @@ describe("RepositoryList", () => {
           },
         ],
       };
-      const onPress = jest.fn();
 
-      const setStateMock = jest.fn();
+      const onPressMock = jest.fn();
 
-      const useStateMock: any = (useState: any) => [useState, setStateMock];
-      pressHandler: (item: IRepositoryBaseItem) => void;
-      sortBy: RepositorySortType;
-      setSortBy: React.Dispatch<React.SetStateAction<RepositorySortType>>;
-      setSearchBy: React.Dispatch<React.SetStateAction<string>>;
+      const setSortByMock = jest.fn();
+
+      const setSearchByMock = jest.fn();
+
       render(
         <RepositoryListContainer
           repositories={repositories}
-          pressHandler={onPress}
+          pressHandler={onPressMock}
           sortBy={RepositorySortType.Latest}
-          setSortBy
+          setSortBy={setSortByMock}
+          setSearchBy={setSearchByMock}
         />
       );
 

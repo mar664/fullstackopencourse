@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Searchbar } from "react-native-paper";
 import RepositorySortSelection from "./RepositorySortSelection";
 import { RepositorySortType } from "../../types";
@@ -14,13 +14,23 @@ const RepositoryListHeader = ({
   setSortBy,
   setSearchBy,
 }: IRepositoryRepositoryListHeaderProps) => {
+  // Manage search bar text separately from the text used for search
+  const [searchBy, _setSearchBy] = useState<string>("");
+
   const onChangeSearch = useDebouncedCallback((query: string) => {
     setSearchBy(query);
   }, 500);
 
   return (
     <>
-      <Searchbar placeholder="Search" onChangeText={onChangeSearch} />
+      <Searchbar
+        value={searchBy}
+        placeholder="Search"
+        onChangeText={(value) => {
+          _setSearchBy(value);
+          onChangeSearch(value);
+        }}
+      />
       <RepositorySortSelection sortBy={sortBy} setSortBy={setSortBy} />
     </>
   );

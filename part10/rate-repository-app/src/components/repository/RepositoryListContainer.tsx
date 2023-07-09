@@ -26,9 +26,6 @@ interface IRepositoryListContainerProps {
 }
 
 export class RepositoryListContainer extends React.Component<IRepositoryListContainerProps> {
-  componentWillUnmount(): void {
-    console.log("bye5");
-  }
   renderHeader = () => {
     return (
       <RepositoryListHeader
@@ -38,6 +35,7 @@ export class RepositoryListContainer extends React.Component<IRepositoryListCont
       />
     );
   };
+  
   render = () => {
     const repositoryNodes = this.props.repositories
       ? this.props.repositories.edges.map((edge) => edge.node)
