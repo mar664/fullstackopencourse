@@ -1,0 +1,21 @@
+# @name allTodos
+GET http://localhost:3000/todos
+Content-Type: application/json
+
+###
+PUT  http://localhost:3000/todos/{{allTodos.response.body.$[0]._id}}
+Content-Type: application/json
+
+{ 
+    "text": "Write code",
+    "done": false
+} 
+
+###
+POST http://localhost:3000/todos
+Content-Type: application/json
+
+{ 
+    "text": "Write new code",
+    "done": false
+} 
