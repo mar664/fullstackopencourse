@@ -7,16 +7,32 @@ import { RepositoryListContainer } from "./RepositoryListContainer";
 
 const RepositoryList = () => {
   const [sortBy, setSortBy] = useState<RepositorySortType>(
-    RepositorySortType.LowestRated
+    RepositorySortType.Latest
   );
 
   const [searchBy, setSearchBy] = useState<string>("");
 
   const navigate = useNavigate();
-  const { repositories } = useRepositories(sortBy, searchBy);
+  const { repositories, fetchMore, refetch } = useRepositories(
+    sortBy,
+    searchBy,
+    4
+  );
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+
   console.log(repositories);
   const pressHandler = (item: IRepositoryBaseItem) => {
     navigate(`/repositories/${item.id}`);
+  };
+
+  const onEndReach = () => {
+    fetchMore();
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
   };
 
   return (
@@ -26,6 +42,9 @@ const RepositoryList = () => {
       sortBy={sortBy}
       setSortBy={setSortBy}
       setSearchBy={setSearchBy}
+      onEndReach={onEndReach}
+      onRefresh={onRefresh}
+      refreshing={refreshing}
     />
   );
 };

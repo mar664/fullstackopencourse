@@ -23,6 +23,9 @@ interface IRepositoryListContainerProps {
   sortBy: RepositorySortType;
   setSortBy: React.Dispatch<React.SetStateAction<RepositorySortType>>;
   setSearchBy: React.Dispatch<React.SetStateAction<string>>;
+  onEndReach: () => void;
+  onRefresh: () => void;
+  refreshing: boolean;
 }
 
 export class RepositoryListContainer extends React.Component<IRepositoryListContainerProps> {
@@ -35,7 +38,7 @@ export class RepositoryListContainer extends React.Component<IRepositoryListCont
       />
     );
   };
-  
+
   render = () => {
     const repositoryNodes = this.props.repositories
       ? this.props.repositories.edges.map((edge) => edge.node)
@@ -50,6 +53,10 @@ export class RepositoryListContainer extends React.Component<IRepositoryListCont
             <RepositoryItem item={item} />
           </Pressable>
         )}
+        onEndReached={this.props.onEndReach}
+        refreshing={this.props.refreshing}
+        onRefresh={this.props.onRefresh}
+        onEndReachedThreshold={0.5}
         ListHeaderComponent={this.renderHeader}
       />
     );

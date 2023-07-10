@@ -7,10 +7,16 @@ interface ISortVariables {
   orderBy?: OrderBy;
   orderDirection?: OrderDirection;
   searchKeyword?: string;
+  first?: number;
 }
 
-const useRepositories = (sortBy: RepositorySortType, searchBy: string) => {
+const useRepositories = (
+  sortBy: RepositorySortType,
+  searchBy: string,
+  first: number
+) => {
   const variables: ISortVariables = {};
+  if (first) variables.first = first;
   switch (sortBy) {
     case RepositorySortType.Latest:
       variables.orderBy = OrderBy.CREATED_AT;
@@ -31,12 +37,36 @@ const useRepositories = (sortBy: RepositorySortType, searchBy: string) => {
     variables.searchKeyword = searchBy;
   }
   console.log(variables);
-  const { data, error, loading } = useQuery(GET_REPOSITORIES, {
-    fetchPolicy: "cache-and-network",
-    variables,
-  });
+  const { data, error, loading, fetchMore, ...result } = useQuery(
+    GET_REPOSITORIES,
+    {
+      fetchPolicy: "cache-and-network",
+      variables,
+    }
+  );
 
-  return { repositories: data ? data.repositories : undefined };
+  const handleFetchMore = () => {
+    const canFetchMore = !loading && data?.repositories.pageInfo.hasNextPage;
+
+    if (!canFetchMore) {
+      return;
+    }
+
+    fetchMore({
+      variables: {
+        after: data.repositories.pageInfo.endCursor,
+        ...variables,
+      },
+    });
+  };
+
+  return {
+    repositories: data?.repositories,
+    error,
+    loading,
+    fetchMore: handleFetchMore,
+    ...result,
+  };
 };
 
 export default useRepositories;

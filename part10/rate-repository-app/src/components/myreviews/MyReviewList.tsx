@@ -4,7 +4,7 @@ import useMyReviews from "../../hooks/useMyReviews";
 const MyReviewList = () => {
   const { reviews, refetch } = useMyReviews();
 
-  return <MyReviewListContainer reviews={reviews} refetchReviews={refetch}/>;
+  return <MyReviewListContainer reviews={reviews} refetchReviews={refetch} />;
 };
 
 export default MyReviewList;

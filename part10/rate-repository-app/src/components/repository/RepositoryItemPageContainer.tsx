@@ -16,30 +16,37 @@ interface IEdge {
 interface IRepositoryItemPageProps {
   repository: IRepositoryPageItem;
   reviews: { edges: IEdge[] };
+  onEndReach: () => void;
+  refreshing: boolean;
+  onRefresh: () => void;
 }
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-const RepositoryItemPageContainer = ({
-  repository,
-  reviews,
-}: IRepositoryItemPageProps) => {
-  const reviewNodes = reviews ? reviews.edges.map((edge) => edge.node) : [];
-  const { id: repositoryId } = repository;
-  return (
-    <FlatList
-      data={reviewNodes}
-      renderItem={({ item }) => (
-        <ReviewItem repositoryId={repositoryId} review={item} />
-      )}
-      keyExtractor={({ id }) => id}
-      ItemSeparatorComponent={ItemSeparator}
-      ListHeaderComponent={() => (
-        <RepositoryItem item={repository} repositoryButton />
-      )}
-      // ...
-    />
-  );
-};
-
-export default RepositoryItemPageContainer;
+export class RepositoryItemPageContainer extends React.Component<IRepositoryItemPageProps> {
+  renderHeader = () => {
+    return <RepositoryItem item={this.props.repository} repositoryButton />;
+  };
+  
+  render = () => {
+    const reviewNodes = this.props.reviews
+      ? this.props.reviews.edges.map((edge) => edge.node)
+      : [];
+    const { id: repositoryId } = this.props.repository;
+    return (
+      <FlatList
+        data={reviewNodes}
+        renderItem={({ item }) => (
+          <ReviewItem repositoryId={repositoryId} review={item} />
+        )}
+        keyExtractor={({ id }) => id}
+        ItemSeparatorComponent={ItemSeparator}
+        onEndReached={this.props.onEndReach}
+        onEndReachedThreshold={0.5}
+        refreshing={this.props.refreshing}
+        onRefresh={this.props.onRefresh}
+        ListHeaderComponent={this.renderHeader}
+      />
+    );
+  };
+}

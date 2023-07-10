@@ -22,7 +22,7 @@ const ReviewFormContainer = ({ onSubmit, error }: ISignInContainerProps) => {
   return (
     <View style={{ padding: 10 }}>
       <Formik
-        initialValues={{ ownerName: "", repositoryName: "", rating: 0 }}
+        initialValues={{ ownerName: "", repositoryName: "", rating: "0" }}
         onSubmit={onSubmit}
         validationSchema={validationSchema}
       >
