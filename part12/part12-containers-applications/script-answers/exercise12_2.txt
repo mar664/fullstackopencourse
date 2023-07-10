@@ -1,0 +1,14 @@
+﻿PS C:\Users\matth\fullstackopen\fullstackopencourse\part12\part12-containers-applications\script-answers> Start-transcript exercise12_2.txt
+Transcript started, output file is exercise12_2.txt
+PS C:\Users\matth\fullstackopen\fullstackopencourse\part12\part12-containers-applications\script-answers> docker container run -it ubuntu bash
+Unable to find image 'ubuntu:latest' locally
+latest: Pulling from library/ubuntu
+3153aa388d02: Pull complete
+Digest: sha256:0bced47fffa3361afa981854fcabcd4577cd43cebbb808cea2b1f33a3dd7f508
+Status: Downloaded newer image for ubuntu:latest
+root@e88987f9c526:/# mkdir /usr/src/app
+root@e88987f9c526:/# touch /usr/src/app/index.js
+root@e88987f9c526:/# exit
+exit
+PS C:\Users\matth\fullstackopen\fullstackopencourse\part12\part12-containers-applications\script-answers> Stop-Transcript
+Transcript stopped, output file is C:\Users\matth\fullstackopen\fullstackopencourse\part12\part12-containers-applications\script-answers\exercise12_2.txt
