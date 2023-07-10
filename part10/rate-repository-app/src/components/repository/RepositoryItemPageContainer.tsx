@@ -25,11 +25,13 @@ const RepositoryItemPageContainer = ({
   reviews,
 }: IRepositoryItemPageProps) => {
   const reviewNodes = reviews ? reviews.edges.map((edge) => edge.node) : [];
-
+  const { id: repositoryId } = repository;
   return (
     <FlatList
       data={reviewNodes}
-      renderItem={({ item }) => <ReviewItem review={item} />}
+      renderItem={({ item }) => (
+        <ReviewItem repositoryId={repositoryId} review={item} />
+      )}
       keyExtractor={({ id }) => id}
       ItemSeparatorComponent={ItemSeparator}
       ListHeaderComponent={() => (

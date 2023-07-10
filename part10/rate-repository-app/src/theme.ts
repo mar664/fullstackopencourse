@@ -20,6 +20,7 @@ const theme: ITheme = {
     textPrimary: "#24292e",
     textSecondary: "#586069",
     primary: "#0366d6",
+    warning: "#FF0000",
   },
   fontSizes: {
     body: 14,

@@ -56,6 +56,7 @@ export const GET_CURRENT_USER = gql`
         edges {
           node {
             ...CoreReviewInfo
+            repositoryId
             user {
               id
               username

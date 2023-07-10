@@ -36,6 +36,12 @@ const styles = StyleSheet.create({
     padding: 2,
     borderRadius: 4,
   },
+  redBackground: {
+    backgroundColor: theme.colors.warning,
+    color: "white",
+    padding: 2,
+    borderRadius: 4,
+  },
 });
 
 interface ITextProps extends TextProps {
@@ -45,6 +51,7 @@ interface ITextProps extends TextProps {
   style?: TextStyle;
   alignCenter?: boolean;
   blueBackground?: boolean;
+  redBackground?: boolean;
 }
 
 const Text = ({
@@ -54,6 +61,7 @@ const Text = ({
   style,
   alignCenter,
   blueBackground,
+  redBackground,
   ...props
 }: ITextProps) => {
   const textStyle = [
@@ -64,6 +72,7 @@ const Text = ({
     bold && styles.fontWeightBold,
     alignCenter && styles.alignCenter,
     blueBackground && styles.blueBackground,
+    redBackground && styles.redBackground,
     style,
   ];
 

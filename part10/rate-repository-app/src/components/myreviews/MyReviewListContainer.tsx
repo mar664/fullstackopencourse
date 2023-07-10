@@ -17,6 +17,7 @@ interface IEdge {
 
 interface IReviewListContainerProps {
   reviews: { edges: IEdge[] };
+  refetchReviews: any;
 }
 
 export class MyReviewListContainer extends React.Component<IReviewListContainerProps> {
@@ -30,7 +31,14 @@ export class MyReviewListContainer extends React.Component<IReviewListContainerP
         data={repositoryNodes}
         keyExtractor={({ id }) => id}
         ItemSeparatorComponent={ItemSeparator}
-        renderItem={({ item }) => <ReviewItem review={item} />}
+        renderItem={({ item }) => (
+          <ReviewItem
+            repositoryId={item.repositoryId}
+            review={item}
+            myReview
+            refetchReviews={this.props.refetchReviews}
+          />
+        )}
       />
     );
   };

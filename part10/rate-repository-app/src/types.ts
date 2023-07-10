@@ -30,6 +30,7 @@ export interface IReviewItem {
   rating: number;
   createdAt: string;
   user: IUser;
+  repositoryId: string;
 }
 
 export interface IReviewFormValues {
