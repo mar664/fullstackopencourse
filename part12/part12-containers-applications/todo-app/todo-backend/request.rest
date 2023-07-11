@@ -19,3 +19,6 @@ Content-Type: application/json
     "text": "Write new code",
     "done": false
 } 
+
+###
+GET http://localhost:3000/statistics
