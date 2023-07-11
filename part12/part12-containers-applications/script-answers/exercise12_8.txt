@@ -1,0 +1,52 @@
+PS C:\Users\matth\fullstackopen\fullstackopencourse\part12\part12-containers-applications\todo-app\todo-backend> docker compose -f docker-compose.dev.yml up -d
+PS C:\Users\matth\fullstackopen\fullstackopencourse> docker exec -it todo-backend-mongo-1 mongosh -u root -p example
+Current Mongosh Log ID: 64aca029755100bd4b29652c
+Connecting to:          mongodb://<credentials>@127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.10.1
+Using MongoDB:          6.0.7
+Using Mongosh:          1.10.1
+
+For mongosh info see: https://docs.mongodb.com/mongodb-shell/
+
+------
+   The server generated these startup warnings when booting
+   2023-07-11T00:17:22.829+00:00: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine. See http://dochub.mongodb.org/core/prodnotes-filesystem
+   2023-07-11T00:17:23.462+00:00: /sys/kernel/mm/transparent_hugepage/enabled is 'always'. We suggest setting it to 'never'
+   2023-07-11T00:17:23.462+00:00: vm.max_map_count is too low
+------
+
+test> show dbs
+admin         100.00 KiB
+config         12.00 KiB
+local          72.00 KiB
+the_database   40.00 KiB
+test> use the_database
+switched to db the_database
+the_database> show collections
+todos
+the_database> db.todos.find({})
+[
+  {
+    _id: ObjectId("64ac9f913a52ed86a30d407e"),
+    text: 'Write code',
+    done: true
+  },
+  {
+    _id: ObjectId("64ac9f913a52ed86a30d407f"),
+    text: 'Learn about containers',
+    done: false
+  }
+]
+the_database> db.todos.insertOne(
+mber of tools in my toolbelt',
+    done: false
+...   {
+
+...     text: 'Increase the number of tools in my toolbelt',
+...     done: false
+...   }
+... )
+{
+  acknowledged: true,
+  insertedId: ObjectId("64aca079755100bd4b29652d")
+}
+the_database>
