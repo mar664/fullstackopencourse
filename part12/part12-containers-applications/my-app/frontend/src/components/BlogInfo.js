@@ -7,18 +7,18 @@ import {
 import blogService from "../services/blogs";
 import { useUserValue } from "../contexts/userContext";
 import CommentsForm from "./CommentsForm";
-import {
-  // ...
-  useNavigate,
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
 
 const BlogInfo = ({ blog }) => {
-  if (!blog) return;
   const user = useUserValue();
   const navigate = useNavigate();
 
   const queryClient = useQueryClient();
+
+  const deleteBlogMutation = useMutation(blogService.remove);
+
+  const dispatch = useNotificationDispatch();
 
   const updateBlogMutation = useMutation(blogService.update, {
     onSuccess: (updatedBlog) => {
@@ -34,10 +34,6 @@ const BlogInfo = ({ blog }) => {
       showErrorMessage(dispatch, error.response.data.error);
     },
   });
-
-  const deleteBlogMutation = useMutation(blogService.remove);
-
-  const dispatch = useNotificationDispatch();
 
   const incrementLikes = (blog) => {
     updateBlogMutation.mutate({
@@ -70,6 +66,8 @@ const BlogInfo = ({ blog }) => {
       });
     }
   };
+
+  if (!blog) return;
 
   return (
     <div className="blog-info">
