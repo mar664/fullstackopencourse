@@ -3,11 +3,9 @@ const app = express();
 require('express-async-errors');
 const blogsRouter = require('./controllers/blogs');
 const usersRouter = require('./controllers/users');
-const cors = require('cors');
 const middleware = require('./utils/middleware');
 const loginRouter = require('./controllers/login');
 
-app.use(cors());
 app.use(express.json());
 if (process.env.NODE_ENV !== 'production') {
   app.use(middleware.requestLogger);
