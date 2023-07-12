@@ -1,4 +1,63 @@
+###
+# @name user
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+    "username": "m.r@gmail.com",
+    "name": "Matthew Ruse"
+}
+
+###
+# @name user2
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+    "username": "mr@gmail.com",
+    "name": "Matthew Ruse"
+}
+
+###
+GET http://localhost:3001/api/users
+
+###
+PUT http://localhost:3001/api/users/{{user.response.body.$.username}}
+Authorization: Bearer {{login.response.body.$.token}}
+Content-Type: application/json
+
+{
+    "username": "mynewusername"
+}
+
+###
+# @name login
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+    "username": "m.r@gmail.com",
+    "password": "secret"
+}
+
+###
+# @name login2
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+    "username": "mr@gmail.com",
+    "password": "secret"
+}
+
+###
+GET http://localhost:3001/api/blogs
+Authorization: Bearer {{login.response.body.$.token}}
+
+###
+# @name blog
 POST http://localhost:3001/api/blogs
+Authorization: Bearer {{login.response.body.$.token}}
 Content-Type: application/json
 
 {
@@ -8,12 +67,14 @@ Content-Type: application/json
 }
 
 ###
-DELETE  http://localhost:3001/api/blogs/2
-
-###
-PUT http://localhost:3001/api/blogs/3
+PUT http://localhost:3001/api/blogs/{{blog.response.body.$.id}}
+Authorization: Bearer {{login.response.body.$.token}}
 Content-Type: application/json
 
 {
-    "likesd": 5
+    "likes": 5
 }
+
+###
+DELETE  http://localhost:3001/api/blogs/{{blog.response.body.$.id}}
+Authorization: Bearer {{login2.response.body.$.token}}

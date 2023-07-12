@@ -12,4 +12,23 @@ class BlogRequestMalformed extends Error {
   }
 }
 
-module.exports = { BlogNotFound, BlogRequestMalformed };
+class UserRequestMalformed extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "UserRequestMalformedError";
+  }
+}
+
+class UnauthorizedError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "UnauthorizedError";
+  }
+}
+
+module.exports = {
+  UnauthorizedError,
+  BlogNotFound,
+  BlogRequestMalformed,
+  UserRequestMalformed,
+};

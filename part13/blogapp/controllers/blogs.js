@@ -1,7 +1,12 @@
 const router = require("express").Router();
 
-const { Blog } = require("../models");
-const { BlogNotFound, BlogRequestMalformed } = require("../util/errorTypes");
+const { Blog, User } = require("../models");
+const {
+  BlogNotFound,
+  BlogRequestMalformed,
+  UnauthorizedError,
+} = require("../util/errorTypes");
+const { tokenExtractor, userExtractor } = require("../util/middleware");
 
 const blogFinder = async (req, res, next) => {
   req.blog = await Blog.findByPk(req.params.id);
@@ -12,22 +17,39 @@ const blogFinder = async (req, res, next) => {
 };
 
 router.get("/", async (req, res) => {
-  const blogs = await Blog.findAll();
+  const blogs = await Blog.findAll({
+    attributes: { exclude: ["userId"] },
+    include: {
+      model: User,
+      attributes: ["name", "username", "id"],
+    },
+  });
   res.json(blogs);
 });
 
-router.post("/", async (req, res) => {
-  const blog = await Blog.create(req.body);
-  res.json(blog);
+router.post("/", userExtractor, async (req, res) => {
+  try {
+    const blog = await Blog.create({
+      ...req.body,
+      userId: req.user.id,
+    });
+    res.json(blog);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ error });
+  }
 });
 
 router.get("/:id", blogFinder, async (req, res) => {
   res.json(req.blog);
 });
 
-router.delete("/:id", blogFinder, async (req, res) => {
-  await req.blog.destroy();
-  res.status(204).end();
+router.delete("/:id", userExtractor, blogFinder, async (req, res) => {
+  if (req.blog.userId === req.user.id) {
+    await req.blog.destroy();
+    return res.status(204).end();
+  }
+  throw new UnauthorizedError("Only user who created can delete blog");
 });
 
 router.put("/:id", blogFinder, async (req, res) => {
