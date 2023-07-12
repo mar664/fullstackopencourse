@@ -75,6 +75,19 @@ Content-Type: application/json
 }
 
 ###
+# @name blog2
+POST http://localhost:3001/api/blogs
+Authorization: Bearer {{login.response.body.$.token}}
+Content-Type: application/json
+
+{
+    "author": "Bill Jones",
+    "url": "http://billyjones.com/blogpost2",
+    "title": "My newest blog 2"
+}
+
+
+###
 PUT http://localhost:3001/api/blogs/{{blog.response.body.$.id}}
 Authorization: Bearer {{login.response.body.$.token}}
 Content-Type: application/json
