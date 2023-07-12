@@ -1,0 +1,11 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+    "author": "Bill Jones",
+    "url": "http://billyjones.com/blogpost",
+    "title": "My newest blog"
+}
+
+###
+DELETE  http://localhost:3001/api/blogs/1
