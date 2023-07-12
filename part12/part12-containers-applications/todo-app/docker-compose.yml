@@ -1,0 +1,46 @@
+services:
+  mongo_prod:
+    image: mongo
+    env_file:
+    - production_mongo.env
+    volumes: 
+      - ./todo-backend/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+      - mongo_data_prod:/data/db
+    hostname: mongodb_prod
+  redis_prod:
+    image: redis
+    command: ['redis-server', '--appendonly', 'yes']
+    volumes: 
+      - redis_data_prod:/data
+    hostname: redis_prod
+  server_prod:
+    image: todo-backend-prod
+    build:
+      context: ./todo-backend # The context will pick this directory as the "build context"
+      dockerfile: Dockerfile # This will simply tell which dockerfile to read
+    env_file:
+    - production_server.env
+    hostname: server_prod
+  app_prod:
+    image: todo-frontend-prod
+    build:
+      context: ./todo-frontend # The context will pick this directory as the "build context"
+      dockerfile: Dockerfile # This will simply tell which dockerfile to read
+      args:
+      - REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}
+    env_file:
+    - production.env #REACT_APP_BACKEND_URL
+    container_name: todo-frontend-prod-app # This will name the container hello-front-dev
+    hostname: app_prod
+  nginx_prod:
+    image: nginx:1.20.1
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:80
+    container_name: reverse-proxy-prod
+    depends_on:
+      - app_prod # wait for the frontend container to be started
+volumes:
+  mongo_data_prod:
+  redis_data_prod:

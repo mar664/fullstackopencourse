@@ -1,5 +1,6 @@
-import './App.css';
-import TodoView from './Todos/TodoView'
+import React from "react";
+import "./App.css";
+import TodoView from "./Todos/TodoView";
 
 function App() {
   return (
