@@ -8,9 +8,10 @@ const middleware = require('./utils/middleware');
 const loginRouter = require('./controllers/login');
 
 app.use(cors());
-app.use(express.static('build'));
 app.use(express.json());
-app.use(middleware.requestLogger);
+if (process.env.NODE_ENV !== 'production') {
+  app.use(middleware.requestLogger);
+}
 app.use(middleware.tokenExtractor);
 
 app.use('/api/login', loginRouter);
