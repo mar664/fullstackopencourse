@@ -18,5 +18,11 @@ WORKDIR /usr/src/app
 COPY --from=base /usr/src/app /usr/src/app
 RUN npm ci --production
 RUN npm run build
-RUN npm install -g serve
-CMD ["serve", "build"]
+
+FROM nginx:alpine
+
+WORKDIR /app
+
+COPY --from=prod /usr/src/app/build /app/static
+
+COPY ./nginx.conf /etc/nginx/nginx.conf
