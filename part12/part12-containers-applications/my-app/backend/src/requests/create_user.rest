@@ -1,4 +1,4 @@
-@baseUrl = http://localhost:3003/api
+@baseUrl = http://localhost:8080/api
 
 POST {{baseUrl}}/users
 Content-Type: application/json
