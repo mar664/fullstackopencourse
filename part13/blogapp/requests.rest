@@ -25,6 +25,12 @@ GET http://localhost:3001/api/users
 GET http://localhost:3001/api/users/{{user.response.body.$.id}}
 
 ###
+GET http://localhost:3001/api/users/{{user.response.body.$.id}}?read=true
+
+###
+GET http://localhost:3001/api/users/{{user.response.body.$.id}}?read=false
+
+###
 PUT http://localhost:3001/api/users/{{user.response.body.$.username}}
 Authorization: Bearer {{login.response.body.$.token}}
 Content-Type: application/json
@@ -128,7 +134,7 @@ Authorization: Bearer {{login.response.body.$.token}}
 Content-Type: application/json
 
 {
-    "userId": "{{user2.response.body.$.id}}",
+    "userId": "{{user.response.body.$.id}}",
     "blogId": "{{blog.response.body.$.id}}"
 }
 
