@@ -26,9 +26,17 @@ class UnauthorizedError extends Error {
   }
 }
 
+class ReadingNotFound extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "ReadingNotFoundError";
+  }
+}
+
 module.exports = {
   UnauthorizedError,
   BlogNotFound,
   BlogRequestMalformed,
   UserRequestMalformed,
+  ReadingNotFound,
 };

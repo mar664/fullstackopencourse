@@ -133,6 +133,7 @@ Content-Type: application/json
 }
 
 ###
+# @name reading
 POST http://localhost:3001/api/readingLists
 Authorization: Bearer {{login.response.body.$.token}}
 Content-Type: application/json
@@ -141,3 +142,10 @@ Content-Type: application/json
     "userId": 1,
     "blogId": 3
 }
+
+###
+PUT http://localhost:3001/api/readingLists/{{reading.response.body.$.id}}
+Authorization: Bearer {{login.response.body.$.token}}
+Content-Type: application/json
+
+{ "read": true }

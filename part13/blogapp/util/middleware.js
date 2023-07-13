@@ -16,6 +16,8 @@ const errorHandler = (error, request, response, next) => {
       return response.status(400).send({ error: error.message });
     case "UnauthorizedError":
       return response.status(400).send({ error: error.message });
+    case "ReadingNotFoundError":
+      return response.status(400).send({ error: error.message });
   }
   next(error);
 };
