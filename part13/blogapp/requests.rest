@@ -71,7 +71,8 @@ Content-Type: application/json
 {
     "author": "Bill Jones",
     "url": "http://billyjones.com/blogpost",
-    "title": "My newest blog"
+    "title": "My newest blog",
+    "year": 2001
 }
 
 ###
@@ -83,7 +84,8 @@ Content-Type: application/json
 {
     "author": "Bill Jones",
     "url": "http://billyjones.com/blogpost2",
-    "title": "My newest blog 2"
+    "title": "My newest blog 2",
+    "year": 1983
 }
 
 ###

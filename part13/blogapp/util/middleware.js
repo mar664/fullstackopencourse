@@ -12,6 +12,8 @@ const errorHandler = (error, request, response, next) => {
       return response.status(400).send({ error: "blog request malformed" });
     case "SequelizeValidationError":
       return response.status(400).send({ error: error.message });
+    case "ValidationError":
+      return response.status(400).send({ error: error.message });
     case "UnauthorizedError":
       return response.status(400).send({ error: error.message });
   }
