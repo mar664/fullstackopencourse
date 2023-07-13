@@ -60,6 +60,10 @@ Content-Type: application/json
 }
 
 ###
+DELETE http://localhost:3001/api/logout
+Authorization: Bearer {{login.response.body.$.token}}
+
+###
 GET http://localhost:3001/api/blogs
 Authorization: Bearer {{login.response.body.$.token}}
 

@@ -7,7 +7,6 @@ const {
   BlogRequestMalformed,
   UnauthorizedError,
 } = require("../util/errorTypes");
-const { tokenExtractor, userExtractor } = require("../util/middleware");
 
 const blogFinder = async (req, res, next) => {
   req.blog = await Blog.findByPk(req.params.id);
@@ -45,7 +44,7 @@ router.get("/", async (req, res) => {
   res.json(blogs);
 });
 
-router.post("/", userExtractor, async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const blog = await Blog.create({
       ...req.body,
@@ -62,7 +61,7 @@ router.get("/:id", blogFinder, async (req, res) => {
   res.json(req.blog);
 });
 
-router.delete("/:id", userExtractor, blogFinder, async (req, res) => {
+router.delete("/:id", blogFinder, async (req, res) => {
   if (req.blog.userId === req.user.id) {
     await req.blog.destroy();
     return res.status(204).end();
