@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const { User, Blog } = require("../models");
+const { User, Blog, ReadingList, ReadingListItem } = require("../models");
 const { UserRequestMalformed } = require("../util/errorTypes");
 const { tokenExtractor, userExtractor } = require("../util/middleware");
 
@@ -20,7 +20,17 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/:id", async (req, res) => {
-  const user = await User.findByPk(req.params.id);
+  const user = await User.findByPk(req.params.id, {
+    include: [
+      {
+        model: Blog,
+        as: "readings",
+        through: {
+          attributes: ["isRead", "id"],
+        },
+      },
+    ],
+  });
   if (user) {
     res.json(user);
   } else {
